@@ -1,0 +1,559 @@
+ 2.7
+    #343 - Can't upload photo with Recipe
+    #348 - Allow DOB/DOD to be empty
+    #386 - Allow non-members to have empty DOB and DOD
+    #391 - Can't run Get Latest Awards (2.6)
+    #393 - Family News - Undefined variable: date
+    #353 - Last 5 View not working
+    #377 - Import Instagram photos
+    #390 - Add Country to Address
+    #392 - Smiley's doesn't work - Wrong include path
+    #394 - Sort Admin: Members page by member/non-member
+
+ 2.6
+    #22  - Video Section (YouTube)
+    #233 - Show avatar changes in What's New
+    #309 - Create better PM notification
+    #314 - Rename Where Is Everyone Admin
+    #338 - Show specific address/contact info changes
+    #351 - Better family news import
+    #381 - Facebook updates have \"
+    #344 - Add cron jobs (FCMS Scheduler)
+    #349 - Show photos on Family Tree
+    #361 - Adding Images to Message Board / Family News not working
+    #364 - Better error handling when connecting with Foursquare
+    #366 - Usernames with ' apostrophe causes photo tagging javascript to crash
+ 
+ 2.5.4
+    #382 - English MO displaying messed up dates
+    #383 - Automatic Upgrade from 2.5.3 to 2.6 not working
+
+ 2.5.3
+    #353 - Last 5 View not working
+    #354 - Slideshow not working
+    #356 - Blank state needed for Social Media page
+    #357 - Undefined variable: year in install.php
+    #358 - Undefined variable: currentUserId in prayers.php
+    #359 - Errors on Private Messages
+    #362 - Undefined index: thumbnail in recipes.php
+    #363 - Admin: Facebook nav missing from fresh install
+    #367 - Register not working without facebook integration
+    #368 - Gravatar does not work
+
+ 2.5.2
+    #353 - Last 5 View not working
+
+ 2.5.1
+    #352 - Login page doesn't work without Facebook setup
+
+ 2.5
+    #141 - Status Updates
+    #209 - Link user's bday with calendar event
+    #224 - Automatic Upgrade
+    #263 - Add facebook login/registration
+    #299 - Photo View: make tagged members' names a link
+    #330 - Infinite parent of family member
+    #335 - Update Last 5 by Section view
+    #269 - Family tree, sex-independent parents
+    #312 - Better blank state (new user welcome message)
+    #325 - Change unambiguous spouses to ambiguous
+    #326 - Same sex parents
+    #346 - Administrate thread does not delete
+
+ 2.4.1
+    #319 - RSS Feed broken
+    #327 - Can't send mass email
+    #328 - Changing Theme default in the Admin Configuration not working
+    #331 - Install doesn't work without "Where is Everyone"
+    #333 - Form legend display problems
+
+ 2.4
+    #143 - Invite Only Registration
+    #145 - Creat JS function for delete confirmation
+    #175 - php-gettext: undefined index: messages
+    #183 - Message Board Search
+    #190 - Rename Toolbar to be more generic
+    #194 - Make displayWhatsNewXXX functions static
+    #195 - Classes should create their own DB Objects
+    #196 - Create a global displayHeader() and displayFooter()
+    #217 - Photo Upload Class
+    #220 - Photo Gallery check all/none needs made unobtrusive
+    #222 - Member Lists need to be Autocomplete fields
+    #223 - Break up My Settings into smaller sections
+    #228 - Activating members should notify that member through email
+    #229 - Separate content from member data
+    #234 - Recipes comments missing from What's New page
+    #236 - Cannot edit/delete Recipe Categories
+    #237 - Date of Death
+    #239 - Cannot uncheck the Select All box in the Address Book
+    #243 - Allow birth/death years to be older than 1900
+    #247 - Mass photo tagging
+    #251 - Family Tree members messing up Address Book
+    #252 - Create new category still not working Advanced Uploader
+    #253 - lostpw.php missing utf-8 charset
+    #254 - translations not working on register page
+    #255 - calendar only prints in english
+    #257 - lostpw.php email_headers
+    #258 - "Language" not included in .po file
+    #259 - Dates not being translated correctly.
+    #260 - Words not included in translation
+    #262 - Gender missing from Admin: Member creation
+    #264 - Event Invitations
+    #267 - Next/Previous buttons should cycle through photos
+    #268 - Show "Who is in this Photo" on photo view
+    #271 - Small Calendar Enhancements
+    #272 - Update Merge process to handle new fields
+    #273 - Fix ___ has updated his/her address.
+    #274 - Calendar event view
+    #275 - Foursquare integration (Where is Everyone)
+    #276 - Separate profile from settings
+    #277 - Import blogs to Family News
+    #279 - Family Tree enhancements
+    #281 - Implement AJAX Chat
+    #285 - Screenshot Preview for Theme Selection
+    #287 - Create a new non-editable user type
+    #288 - Constants class
+    #289 - Chat Bar
+    #291 - Navigation Configuration/Display Updates
+    #294 - Rename Locale Class
+    #296 - Category view needs to show all photos
+    #297 - Tagged member search pagination broken
+    #298 - Include members tagged in photos, in category view
+    #302 - open_basedir restriction language error
+    #305 - 'subject' Parameter HTML Injection Vulnerability
+
+ 2.3.2
+    #231 - Advanced Uploader not working with IE
+    #238 - What's New Calendar date is wrong
+    #242 - Photo Gallery captions not cleaned properly
+    #232 - New recipe link on What's New page doesn't link to recipe
+    #240 - Install doesn't use calendar widget for bday
+    #245 - Full sized images not working with Advanced Uploader
+    #246 - This and next month events out of order
+
+ 2.3.1
+    #218 - Avatar doesn't allow all cap file extensions
+    #219 - Family Tree - no female members causes errors
+    #221 - Latest Comments doesn't work
+    #225 - Install doesn't properly delete existing tables
+    #226 - Registration email_header issue
+    #227 - User Auto Account Activation not working
+
+ 2.3
+    #16 - Relationships (geneology)
+    #30 - Add/edit catagories to recipies
+    #40 - Comments on the recipe section
+    #41 - Ability to add/edit calendar categories
+    #60 - Magic Quotes function
+    #65 - Encourage users to create a category when uploading new photos
+    #66 - Use Gravatar's
+    #104 - Revamp the Ranks & Awards
+    #113 - Add time for calendar entries
+    #117 - Fix/update the Profile page
+    #121 - Admin: Delete multiple Photos
+    #148 - Remove Administration: Message Board
+    #150 - Separate Category / Repeating
+    #151 - Create a generic Category table
+    #155 - RLS7 admin_class: spelling
+    #162 - Poll: voting with out an option selected causes error
+    #169 - members_class.php: Mixed up user string...
+    #177 - Small Calendar (today links)
+    #184 - Can't get Latest Awards (2.2.3)
+    #185 - April Abbreviation
+    #186 - Can't Export Calendar (undefined tz_offset)
+    #187 - 'Matuer Adult' translation issue
+    #188 - Family Connections 2.2.3 Multiple Remote Vulnerabilities
+    #189 - Merge Members
+    #193 - Memebers cannot edit Address information
+    #199 - Better user input validation
+    #201 - Can't upload Photos with uppercase file extensions
+    #202 - Document section will override existing files
+    #203 - Firefox download causes invalid document uploads
+    #204 - Remove Family News Comments popup
+    #207 - Recipe email is messed up for some users
+    #208 - Message Board email is messed up for some users
+    #210 - Allow new Family Tree members to be added without Email
+    #213 - Seperate profile page into profile and member pages
+    #216 - Slideshow for Photo Gallery
+
+ 2.2.3
+    #171 - Invalid password in session/cookie prevents login
+    #172 - undefined escape_string during Installation
+    #173 - Add Comment Error File: gallery/index.php [423]
+    #174 - Calendar dates don't obey timezones
+    #175 - Avatar too big on Family News comments
+    #181 - php-gettext as failback solution
+
+ 2.2.2
+    #165 - Login ID SQL Injections
+    #166 - File Upload Vulnerability
+    #167 - Directory Traversal Vulnerability
+    #168 - Audit sql queries for SQL Injections
+
+ 2.2.1
+    #158 - Register SQL Injections
+    #159 - upimages.php Arbitrary Code Execution
+    #160 - Theme Settings Vulnerability
+    #161 - Secunia Advisory SA35039
+    #157 - FCMS 2.2: bad link on calendar...
+
+ 2.2
+    #29 - Date and time format change
+    #70 - Better Section Order
+    #94 - Private Address Book Entries
+    #103 - Multiple File Upload
+    #106 - Add standard sections nav to Profile/PM/Awards
+    #114 - Update the Address Book
+    #116 - Homepage Last 5 missing info
+    #120 - Top Drop Down Navigation
+    #132 - Most Viewed Photo for Members incorrect order
+    #133 - Use gettext for translations
+    #134 - Incorrect links in RSS Feed
+    #136 - Show new PM count on nav menu
+    #137 - Family Connections <= 2.1.3 Multiple Remote Vulnerabilities
+    #139 - Update Toolbar (RTE)
+    #140 - Search Photo Gallery (pt 1)
+    #144 - Sent folder for PM
+    #152 - 2.2(RC)6 gettext.php: Eval systanx errro
+    #153 - 2.2(RC)6 gettext.php: eregi depercated
+
+ 2.1.3 
+    #123 - Edit Category deletes the category 
+    #124 - Admin Members - selected buttons cause errors when no member selected 
+    #122 - Incorrect integer value: 'yes' for column 'showavatar' 
+    #125 - Duplicate Announcements 
+    #129 - Email Updates - Message Board bugs 
+    #130 - Various alpha/beta style issues 
+
+ 2.1.2 
+    #123 - Edit Category deletes the category 
+    #124 - Admin Members - selected buttons cause errors when no member selected 
+
+ 2.1.1
+    #119 - FCMS 2.1 installation issues
+
+ 2.1
+    #5 - Import/Export Address Book in CSV
+    #18 - Add info note on Poll Admin page
+    #19 - Add welcome note to frontpage after install
+    #35 - Standardize side navigation in Family News
+    #39 - New users should show only show up after activation
+    #49 - Face Lift
+    #50 - Fix blank value submit buttons
+    #62 - Simple Registration / Install
+    #67 - Unobtrusive delete confirmation
+    #73 - Allow site to be Turned Off/Closed.
+    #81 - Easier Private Messages
+    #83 - Expand comments input field
+    #88 - "RE:" on message board doesn't follow sort order
+    #93 - Poll Addons
+    #95 - Tag User box needs to display first and last name
+    #96 - Create alert system
+    #100 - Latest Version check not working
+    #102 - Change the way Quoting works on MB
+    #105 - Prevent empty comments on Photo Gallery
+    #107 - Cross browser JavaScript issues
+    #109 - Better Documents Error Messages
+    #110 - Prevent blank title on Private Messages
+    #111 - View Photos of User Broken
+
+ 2.0.3
+    #98 - Upgrade errors out upgrading chat
+    #97 - Alpha / Beta Themes Issues
+
+ 2.0.2
+    #91 - undefined function: stripos()
+    #86 - Undefined var: edit_del_options
+    #87 - Names are messed up with the "Email Members on Updates"
+    #85 - Can't change default timezone to GMT
+    #89 - Undefined variable: photo_arr on Photo Edit
+    #90 - Dupe email address gives no error on Admin Create
+    #92 - Large Tall photos not displaying properly
+
+ 2.0.1
+    - fixed "Upgrading to 2.0 can cause some members themes not to work" Ticket #76
+    - fixed "Upgrading to 2.0 can prevent users from editing settings" Ticket #78
+    - fixed "Admin members doesn't show all members" Ticket #74
+    - fixed "Chat Room doesn't ouput username" Ticket #75
+    - fixed "Upgrading to 2.0 doesn't include Chat" Ticket #77
+    - fixed "Uploading photos tall photos causes errors" Ticket #79
+    - fixed "Alpha and Beta themes don't include Chat" Ticket #84
+    - fixed Download link on upgrade screen
+    - added "Show users online in Chat" Ticket #80
+
+ 2.0
+    - fixed "Documents with spaces doesn't always work" Ticket #1
+    - fixed "May - short/long version translation" Ticket #2
+    - fixed "Pages on Documents messed up" Ticket #59
+    - added "Add ability to remove tagged members" Ticket #3
+    - added "Allow admin to reset user's password" Ticket #9
+    - added "Chat Room" Ticket #13
+    - added "Change default member settings" Ticket #14
+    - added "Show more photo detail in Photo Gallery" Ticket #23
+    - added "Easier entries into recipies section" Ticket #24
+    - added "Add Select All to Mass Email" Ticket #25
+    - added "Change Default Theme Choice in Admin" Ticket #26
+    - added "Daily Calendar View" Ticket #31
+    - added "Update Themes" Ticket #37
+    - added "Show caption on mouseover" Ticket #44
+    - added "Export/Import Calendar in *.ics format" Ticket #47
+    - added "Fix .link_block" Ticket #54
+    - added "Email members on update" Ticket #56
+    - added "Allow youtube clips to be inserted in Message Board/Family News" Ticket #57
+    - added "Easier Photo Gallery Options" Ticket #64
+
+ 1.9
+    - fixed "Can't turn off multiple sections once they've been turned on" bug id 2644006
+    - fixed "Error upgrading auto activation (1.7.1)" bug id 2723720
+    - fixed "Missing wording from language file" bug id 2635448
+    - fixed "Latest Calendar entries not displaying properly" bug id 2627814
+    - fixed "Calendar add button has extra padding-right" bug id 2647260
+    - fixed "<br/> code showing up in Quotes" Ticket #32
+    - added "Better Themes" feature request id 2646780 / Ticket #10
+    - updated to DateChooser 2.9i
+
+ 1.8
+    - fixed "Cannot edit Address Book entries" bug id 2540797
+    - fixed "Cannot vote for photo when viewing Latest Comments" bug id 2531076
+    - fixed "Pages on Top Rated and Most Viewed don't work" bug id 2531146
+    - fixed "Captions disappear when editing" bug id 2540787
+    - fixed "Recipe title disppears when editing recipe" bug id 2528700
+    - fixed "Sending email from FCMS has escaped quotes" bug id 2562008
+    - fixed "Pages links on Tagged Photos view don't work" bug id 2549701
+    - fixed "Special characters cause error on registration" bug id 2549242
+    - fixed "Member ID is wrong on Prayer Concerns" bug id 2512258
+    - fixed "Popups missing sitename and version" bug id 2563999
+    - added "Lock account after 5 failed login attempts" feature request id 2524376
+    - added "Add additional notifications to the homepage" feature request id 2187394
+    - added "Add documents to the site?" feature request id 1816831
+    - added "Private Messages (PM)" feature request id 1850324
+
+
+ 1.7.4
+    - fixed "Photo Gallery display problems in IE7" bug id 2309109 
+    - fixed "Footer display problems in FF 3" bug id 2309036
+    - fixed "Undefined var on password reset" bug id 2371816 
+    - fixed "Various Theme issues" bug id 2392772 
+    - added "Add additional classes for theme creation" feature request id 2153279 
+
+
+ 1.7.3
+    - fixed "Deleting comments in the Latest Comment view causes errors" bug id 2255695
+    - fixed "Error deleting photo" bug id 2255671 
+    - fixed "Cannot de-activate members" bug id 2225757  
+    - fixed "No confimation given when deleting family news" bug id 2234868  
+
+
+ 1.7.2
+    - fixed "Latest Comments showing wrong member name" bug id 2211964 
+    - fixed "Ampersand breaks RSS Feeds" bug id 2185062 
+    - fixed "Can't vote for pic in Top Rated view (1.7.1)" bug id 2184446 
+    - fixed "Register: Email address already in use." bug id 2155485 
+
+
+ 1.7.1
+    - fixed "Timezones in PHP5" bug id 2136646 
+    - fixed "Auto Activate doesn't work on upgrade" bug id 2153255 
+    - added "Add additional classes for theme creation" feature request id 2153279 
+
+
+ 1.7
+    - fixed "Undefined variable/index" bug id 2136558 
+    - fixed "Rotating Photo doesn't rotate thumbnail" bug id 2082344
+    - fixed "New Photos displaying wrong when displaying last 5 on home" bug id 2112468 
+    - added "Tag photos on Photo Gallery" feature request id 1990107 
+    - added "Auto Activation of Members" feature request id 2106223
+    - added "Full Size Photos (3 sizes total)" feature request id 1943152 
+    - added "Make polls optional" feature request id 2109460
+    - added "Custom Error Handling" feature request id 2095601 
+    - added "RSS Feed" feature request id 2006842 
+    - added "Remove meta refresh on admin/member.php" feature request id 2112806
+
+
+ 1.6.4
+    - fixed "Undefined $cfg_sitename in home.php" bug id 2112416 
+
+
+ 1.6.3
+   - fixed "Access Denied page problems" bug id 2046762 
+   - fixed "topmenu displaying offscreen in FF2" bug id 2047877 
+   - fixed "Upgrade to 1.6 code error" bug id 2041620 
+
+
+ 1.6.2
+   - fixed "Fatal Error on installation" bug id 2037719 
+   - fixed "Parse Error: admin/members.php" bug id 2037718 
+
+
+ 1.6.1
+   - fixed "Contact and Mass Email not working" bug id 2034316 
+   - fixed "Missing Sitename" bug id 2034212 
+   - added download latest version link on upgrade page.
+
+
+ 1.6
+  - fixed "Guest can't access Photo Gallery" bug id 2031350 
+  - fixed "Notice: Undefined variable: birthday" bug id 2028203 
+  - fixed "Multiple SQL Injection Vulnerabilities" bug id 2019933 
+  - fixed "Language File defects" bug id 2020728 
+  - added "New optional Recipes section" feature request id 1782730
+  - added "Admin: Configuration" feature request id 2007820
+  - added "Themes: CSS Cleanup" feature request id 2014385 
+  - added "Change default member settings" feature request id 1992905 
+
+
+ 1.5
+  - fixed "Sitename: special characters" bug id 1991922 
+  - fixed "Multi-language - Character Encoding" bug id 1993128 
+  - fixed "Magic Quotes causes default "A" as caption in Gallery" bug id 1992332 
+  - fixed "(Profile) Last Visited date not working" bug id 1992291 
+  - fixed "PHP Notices (Gallery and Calendar)" bug id 1993876 
+  - added "Easy Installation" feature request id 1995356 
+  - added "Move some configuration to DB" feature request id 1993883 
+  - added "Optimize Photo Gallery Design" feature request id 1990146 
+  - added "Help Integration" feature request id 1839811 
+  - added "Reply link at bottom of post list" feature request id 1992902 
+
+
+ 1.4
+  - fixed "Can't install Address Book (MySQL 5)" bug id 1974803 
+  - fixed "Message Board: edited by date doesn't work in PHP5" bug id 1963793 
+  - fixed "Pages Links cut off in Most Viewed Photos" bug id 1963282
+  - fixed "Private event links show up on small calendar" bug id 1967207 
+  - fixed "Most View/Top Rated pages links don't work" bug id 1975039 
+  - added "Create more user-friendly and personal messages." request id 1969879 
+  - added "Force and/or check Installation" request id 1970517 
+  - added "Use LiveValidation" request id 1969905 
+  - added "Fix misc. sorting problems" feature request id 1963263
+  - added "Code Cleanup" feature request id 1986752 
+
+
+ 1.3.1
+  - fixed "Profile.php: DST error in last visited" bug id 1963148 
+
+
+ 1.3
+  - fixed "CSS problems in non IE browsers" bug id 1943132 
+  - fixed "Misc. date problems" bug id 1960265 
+  - fixed "Missing </div> tag on Family News page" bug id 1960243
+  - fixed "Not all members showing up in Address Book / Profiles pages" bug id 1961544 
+  - added "Inline Comments - Remove popup window" feature request id 1958744 
+  - added "Change Family News Frontpage Links" feature request id 1956121 
+  - added "5 Latest Family News entries - Remove My News Link" feature request id 1960234 
+  - added "Names in Members Online are getting cut off" feature request id 1960236 
+
+
+ 1.2
+  - fixed "Magic Quotes problems" bug id 1945794 
+  - added "Guest account" feature request id 1858175 
+  - added "Create different user access levels." feature request id 1822305 
+  - added Part 1 of "Import / Export Address Book Contacts" feature request id 1909002 
+
+
+ 1.1.2
+  - fixed "Install: sitename doesn't allow for special chars" bug id 1942054 
+  - fixed "Calendar doesn't allow for special chars" bug id 1942052 
+  - fixed "Family News Date not showing properly" bug id 1942050 
+
+
+ 1.1.1
+  - fixed problem with non english letters displaying properly from db
+
+
+ 1.1
+  - added "Internationalize II: Language File" feature request id 1812285 
+  - fixed "Cannot Edit/Delete Prayers - Needs Multiple pages" bug id 1872751
+  - created FCMS favicon
+  - updated the way Awards are calculated
+
+
+ 1.0
+  - added "Emailing multiple people in the address book" feature request id 1790477
+  - added "Minor Usability Updates" feature request id 1868472
+  - added "Calendar: Private Events" feature request id 1803588
+  - added "Email user when activated " feature request id 1900324 
+  - fixed "Cannot Edit/Delete Prayers - Needs Multiple pages" bug id 1872751
+  - fixed "Times are off when frontpage view is set to All (by date)" bug id 1884659
+  - renamed tables in db to be more uniform
+  - updated themes
+  - included form validation on the message board and family news sections
+
+
+
+ 0.9.9
+  - fixed "Thumbnail of comment not showing on home.php" bug id 1844410 
+  - fixed "Edit poll: adding new option with apostrophe causes error" bug id 1848866 
+  - fixed "Wrong Category Names showing up in Photo Gallery" bug id 1850834 
+  - added "Help Integration" feature request id 1839811 
+  - updated themes
+  - updated latest info on home.php
+  - updated latest photo gallery info on home.php
+  - updated profile.php
+
+
+
+ 0.9.8
+  - fixed "Multiple bugs found in pre MySQL 4.1.1" bug id 1833299 
+  - fixed "Last 5 Photos not showing up" bug id 1834562 
+  - fixed "Changing password causes unexpected errors" bug id 1820760 
+  - fixed "Photos not displaying in Most Viewed/Top Rated" bug id 1828386 
+  - changed the layout of the addressbook and the profile
+  - updated latest news addressbook info on home.php
+  - created new theme (fcms2.0)
+
+
+ 0.9.5
+  - fixed "MISC. photo gallery bugs" bug id 1808283
+  - fixed "Stripslashes issues" bug id 1810924
+  - fixed "MySQL 5.0 - Null values in non null fields" bug id 1811526 
+  - added "Create member dir for phot gallery" feature request id 1782727 
+  - added "Internationalize" feature request id 1804694 
+
+
+ 0.9.2
+  - added "Most View/Top Rated -- more detailed" feature request id 1794931
+  - fixed "People without last names don't show up in Address Book" bug id 1752346 
+  - fixed "Upload Images - message board or family news" bug id 1804473 
+  - fixed "Admin: Delete members not working" bug id 1806313 
+  - fixed "Family News - stripslashes" bug id 1806372 
+  - added "Family News - view individual entry" feature request id 1767259 
+
+
+  0.9.1
+  - fixed "Make an announcement a thread" bug id 1764691 
+  - fixed "Awards not working" bug id 1790321 
+  - updated the display of latest news on homepage
+  - added "Edit / Delete Family News" feature request id 1782867
+  - added "Create more user friendly error messages. " feature request id 1789696 
+
+
+  0.9
+  - fixed "Bypass Vulnerability" bug id 1778696 
+  - fixed "Null Comments" bug id 1764686 
+  - updated message board administration
+
+
+  0.8
+  - fixed "Field validation doesn't work" bug id 1775623.
+  - updated installation
+  - updated how awards work
+
+
+  0.6
+  - added smileys
+  - fixed second part of "Edit photos not working" bug id 1764727.
+  - fixed "Add new address not working" bug id 1766098.
+  - fixed "Not able to activate members" bug id 1766100.
+
+
+  0.5
+  - fixed "Various Photo Gallery/Settings Bugs" bug id 1765673.
+  - added register functionality
+  - added password reset functionality
+  - fixed "Edit photos not working" bug id 1764727.
+
+
+  0.1.2
+
+  - fixed "After installation, passwords won't work" bug id 1765251.
+  - fixed "Fatal error: Cannot redeclare gettheme()" bug id 1765301.
