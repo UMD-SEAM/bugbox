@@ -16,7 +16,7 @@ main:exploit=exploit.new()
 main:engine.new(exploit)
 engine:attributes=exploit.
 engine:targets.get_target_module(attributes)
-engine:targets.get_plugin(name)
+engine:targets.get_plugin(pname)
 
 [c:start]
 main:engine.parse_args(sys.argv)
@@ -50,12 +50,16 @@ main:engine.parse_args(sys.argv)
 engine:engine.shutdown()
 engine:exploit.cleanup()
 exploit:os.
-engine:os.
 *2 os
+remove payload files
+...
+*2
+engine:os.
+*3 os
 ...
 stop Apache
 umount chroot
-*2
+*3
 [/c]
 ]]></source>
 <configuration>
