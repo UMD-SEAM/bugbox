@@ -7,7 +7,7 @@ main:Main[rx] "Main"
 /exploit:Exploit[rx] "NewExploit(Exploit)"
 targets:Targets[ra] "Targets"
 /sedriver:SeleniumDriver[rx] "SeleniumDriver"
-/aux:aux[rax] "Auxiliary"
+/aux:aux[rax] "(Auxiliary)"
 os:Os[ra] "OS"
 
 
@@ -33,7 +33,13 @@ start Apache
 main:engine.parse_args(sys.argv)
 engine:exploit.exploit()
 exploit:sedriver.new()
-exploit:sedriver.get, get_element, get_cookies, ...
+exploit:sedriver.
+*4 sedriver
+get()
+get_element()
+get_cookies()
+...
+*4
 exploit:aux.new()
 exploit:aux.
 *1 aux
