@@ -28,7 +28,7 @@
 \date{}
 
 %make title bold and 14 pt font (Latex default is non-bold, 16 pt)
-\title{\Large \bf Wonderful : A Terrific Application and Fascinating Paper}
+\title{\Large \bf BugBox : A Vulnerability Corpus for PHP Web Applications}
 
 %for single author (just remove % characters)
 \author{
@@ -56,7 +56,10 @@ Key qualities:\\
  \begin{tabular}{ l }
    $\bullet$ Quantity of vunlerabilities\\
    $\bullet$ Diversity of applications\\
+   $\bullet$ Automation of trace collection\\
    $\bullet$ Collaboration from other researchers\\
+   $\bullet$ Ease of exploit implementation\\
+
  \end{tabular}
 \\
 Applications:\\
@@ -73,16 +76,46 @@ Exploit Sources:\\
    $\bullet$ Vulnerability Frameworks (Metasploit, etc...)\\
  \end{tabular}
 \\
-Key Questions:\\
+Characteristices:\\
+ \begin{tabular} { l }
+   -Collecting Vulnerable Application source code
+   -Collecting vulnerability details
+     a) line-based
+     b) run-based
+       i. trace-based
+ \end{tabular}
+
+Remaining Questions:\\
  \begin{tabular} { l }
    $\bullet$ What is the correct level of virtualization for\\ each system component?\\
    $\bullet$ (open question) Why run Selenium/Mysql in VM\\ vs a chroot jail?\\
    $\bullet$ Isolating attack event \\(with xdebug manually/cookies/etc...)\\
  \end{tabular}
 
-
-
 \subsection*{Abstract}
+
+This paper covers the motivation and architecture behind BugBox, an open-source collection and management framework for PHP web application vulnerabilities. It is recognized that obtaining an adequate vulnerability dataset is a significant hurdle in empirical vulnerability research. Many studies suffer from using vulnerability data-sets that are too small, and they are rarely made publicly available [ref]. The purpose of BugBox is to fill this void, and in doing so encourage the quality and repeatability of results. Example uses include testing vulnerability indicators and metrics, developing vulnerability definition representations, testing intrusion detection systems, or creating demonstrations for training purposes. 
+
+
+
+Repeatability
+encourage similar research
+ 
+Special consideration has been made to  
+ 
+ that includes the software in which a vulnerability resides, the configuration of the software in it's vulnerable state, exploit code that will trigger the security breach, and any other relavant attributes
+
+
+
+
+
+
+
+
+archtitecture, use-cases
+
+Vulnerability indicators, definition representations 
+
 
 The abstract goes here. \\
 
@@ -93,7 +126,7 @@ text. \\
 
 More fascinating text. Features\endnote{Remember to use endnotes, not footnotes!} galore, plethora of promises.\\
 
-\section{This is Another Section}
+\section{Related Work}
 
 Some embedded literal typset code might 
 look like the following :
@@ -123,7 +156,7 @@ in the source means a non-breaking space.  This way, your reference will
 always be attached to the word that preceded it, instead of going to the
 next line.
 
-\section{This Section has SubSections}
+\section{Design and Implementation}
 \subsection{First SubSection}
 
 Here's a typical figure reference.  The figure is centered at the
