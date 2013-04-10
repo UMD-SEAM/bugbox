@@ -144,12 +144,12 @@ These three elements are maintained with the following folders: backups, exploit
 [Talk about why Virtual Machine]
 
 % you can also use the wonderful epsfig package...
-% {\special{psfile = system_diagram.ps hscale = 50 vscale = 50}}
+
 \begin{figure}[t]
 \begin{center}
 \begin{picture}(300,150)(0,15) %(0,200)
-%\put(-15,-30){\includegraphics[]{system_diagram}}
-\put(0,0){\includegraphics[scale=1.17]{system_diagram.ps}}
+{\special{psfile = system_diagram.ps hscale = 50 vscale = 50}}
+%\put(0,0){\includegraphics[scale=1.17]{system_diagram.ps}}
 \end{picture}\\
 \end{center}
 \caption{System Diagram}
