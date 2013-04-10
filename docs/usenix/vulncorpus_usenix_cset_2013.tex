@@ -22,6 +22,7 @@
 % This version uses the latex2e styles, not the very ancient 2.09 stuff.
 \documentclass[letterpaper,twocolumn,10pt]{article}
 \usepackage{usenix,epsfig,endnotes,graphicx}
+\usepackage{epstopdf}
 % \DeclareGraphicsExtensions{.eps}
 
 \begin{document}
@@ -149,7 +150,7 @@ These three elements are maintained with the following folders: backups, exploit
 \begin{center}
 \begin{picture}(300,150)(0,15) %(0,200)
 %{\special{psfile = system_diagram.ps hscale = 50 vscale = 50}}
-\put(0,0){\includegraphics[scale=1.17]{system_diagram.ps}}
+\put(0,0){\includegraphics[scale=1.17]{system_diagram.eps}}
 \end{picture}\\
 \end{center}
 \caption{System Diagram}
@@ -315,12 +316,12 @@ in the source means a non-breaking space.  This way, your reference will
 always be attached to the word that preceded it, instead of going to the
 next line.
 
-\section{Future Development}\\
+\section{Future Development}
  \begin{tabular} { l }
    $\bullet$ What is the correct level of virtualization for\\ each system component?\\
-   $\bullet$ (open question) Why run Selenium/Mysql in VM\\ vs a chroot jail?\\
-   $\bullet$ Isolating attack event \\(with xdebug manually/cookies/etc...)\\
-   $\bullet$ Payload standardization
+   $\bullet$ (open question) Why run Selenium/Mysql in VM vs a chroot jail?\\
+   $\bullet$ Isolating attack event (with xdebug manually/cookies/etc...)\\
+   $\bullet$ Payload standardization\\
  \end{tabular}
 
 
