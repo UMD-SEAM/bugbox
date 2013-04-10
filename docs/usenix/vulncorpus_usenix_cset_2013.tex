@@ -54,12 +54,9 @@ Computer Science Department\\University of Maryland
 % Comment it out when you first submit the paper for review.
 \thispagestyle{empty}
 
-Goal:
-
-
 \subsection*{Abstract}
 
-This paper covers the motivation and architecture behind BugBox, an open-source collection and management framework for PHP web application vulnerabilities. It is recognized that obtaining an adequate vulnerability dataset is a significant hurdle in empirical vulnerability research. Many studies suffer from using vulnerability data-sets that are too small, or the collections used are not made publicly available [ref]. The purpose of BugBox is to fill this void, and in doing so encourage the quality and repeatability of results. The goal is to collect a large number of vulnerabilities accross many applications, and make data available to the larger community. Example uses of BugBox include testing vulnerability indicators and metrics, developing vulnerability definition representations, testing intrusion detection systems, or creating demonstrations for training purposes. 
+This paper covers the motivation and architecture behind BugBox, an open-source collection and management framework for PHP web application vulnerabilities. It is recognized that obtaining an adequate vulnerability dataset is a significant hurdle in empirical vulnerability research. Many studies suffer from using vulnerability data-sets that are too small and often not made publicly available [ref]. The purpose of BugBox is to fill this void, and in doing so encourage the quality and repeatability of results. The goal is to collect a large number of vulnerabilities accross many applications, and make data available to the larger community. Example uses of BugBox include testing vulnerability indicators and metrics, developing vulnerability definition representations, testing intrusion detection systems, or creating demonstrations for training purposes. 
 
 \section{Introduction}
 (i.e. Introduction and Motivation)
@@ -68,6 +65,36 @@ This paper covers the motivation and architecture behind BugBox, an open-source 
  what should a corpus contain?
  what cool things can BugBox do?]
 
+A key question in empirical vulnerability research is how to determine which functionality, or piece of code creates a vulnerable condition in a program. In studying this problem, sometimes referred to as ``vulnerability localization'', it is necessary to have a large quantity of structured data on which one can formulate and test hypotheses. Since potential approaches include vulnerability definitions based both static and dynamic analysis of the software, it is important that the corpus include both the 
+
+PHP and web applications ..... 
+
+. In any case, an ideal vulnerability corpus would make it easy to explore each of these domains. 
+
+Demonstrate that BugBox ....
+
+Should be x, should be y, and should be z.
+
+ Predicting which metrics  
+
+The design a practical system for managing a database of exploits, along with their target environments. 
+
+Code inspection
+Trace-based vulnerability definitions
+System taint analysis
+
+
+``Vulnerability localization''
+
+Characteristics:\\
+ \begin{tabular} { l }
+   -Collecting Vulnerable Application source code\\
+   -Collecting vulnerability details\\
+     a) line-based\\
+     b) run-based\\
+      i. trace-based\\
+ \end{tabular}\\
+
 As researchers we can gain knowledge about vulnerable code through analyzing previously run exploits.  Understanding why code is vulnerable can lead to automated techniques in preventing future vulnerabilities.  In order to conduct this analysis, we must build a corpus.  
 
 Building a corpus is not usually the main focus in conducting research.  Typically researchers want to develop their corpus quickly so that they can move on to the more important work, research. 
@@ -75,10 +102,7 @@ Understanding the labor involved in developing a corpus that suits the needs of 
 Furthermore, we propose to increase our vulnerability corpus through a community approach and share our framework so that researchers will have a reference implementation.\endnote{Remember to use endnotes, not footnotes!}
 
 
-A useful corpus is one that has a diverse selection of applications in addition to a large sampling of vulnerabilities. However, quanitity is not the only important requirement. Special consideration is made so that all relavant details of a vulnerability are available to the researcher. 
-
-For a given application, the corpus includes the software in which a vulnerability exists, the configuration of the software in it's vulnerable state, exploit code that will trigger the security breach, and any other relavant attributes. 
-
+A useful corpus is one that has a diverse selection of applications in addition to a large sampling of vulnerabilities. However, quanitity is not the only important requirement. Special consideration is made so that all relavant details of a vulnerability are available to the researcher. For a given application, the corpus includes the software in which a vulnerability exists, the configuration of the software in it's vulnerable state, exploit code that will trigger the security breach, and any other relavant attributes.\\
 Through the use of abstraction and encapsulation, the management of application, environment, and exploitation can be streamlined. 
 
 [Diversity, Quantity, Automation, Ease-of-use, Collaboration]
@@ -108,15 +132,6 @@ Key qualities:\\
 \subsection{Empirical Vulnerability Research}
 
 [many things with with references go here]
-
-Characteristics:\\
- \begin{tabular} { l }
-   -Collecting Vulnerable Application source code\\
-   -Collecting vulnerability details\\
-     a) line-based\\
-     b) run-based\\
-      i. trace-based\\
- \end{tabular}\\
 
 \section{Framework}
 
@@ -208,6 +223,13 @@ driver.get("http://localhost/wordpress/?p=1")
 \subsection{File Structure}
 
 Submodules: (package corpus)\\
+ \begin{description}
+   \item[corpus.Targets]\\
+   \item[corpus.Engine]\\
+   \item[corpus.Exploit]\\
+   \item[corpus.SeleniumDriver]\\
+ \end{description}
+
  \begin{tabular}{ l }
    $\bullet$ corpus.Targets\\
    $\bullet$ corpus.Engine\\
@@ -233,6 +255,8 @@ Submodules: (package corpus.Targets)\\
 
 
 The file structure mimics the modularity of our corpus.  Currently we store backups of the Web Applications in the {\tt/backups} directory and the actual applications in the {\tt/packages} directory.  We store a separate backup in order to verify that the selenium scripts did not modify the Web Application in any way.  If the Web Application is corrupt, then we simply copy the web application from the backup folder to the package folder.  
+
+Currently as simple incremental backup system is used to ensure that each chroot jail remains un-tainted. Periodically, an original instance of a chroot system will overwrite the 
 
 Future implementations will store only the md5 hash of the program on the corpus server and the backups on an external server.  This will allow for a quick comparison followed by a remote copy if necessary.  This separation will ensure that backups will never be corrupted through use of the corpus.  
 
