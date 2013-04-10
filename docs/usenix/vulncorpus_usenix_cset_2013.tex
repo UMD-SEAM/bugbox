@@ -61,19 +61,33 @@ To collect a large number of vulnerabilities accross many applications, and make
 
 \subsection*{Abstract}
 
-This paper covers the motivation and architecture behind BugBox, an open-source collection and management framework for PHP web application vulnerabilities. It is recognized that obtaining an adequate vulnerability dataset is a significant hurdle in empirical vulnerability research. Many studies suffer from using vulnerability data-sets that are too small, and they are rarely made publicly available [ref]. The purpose of BugBox is to fill this void, and in doing so encourage the quality and repeatability of results. Example uses include testing vulnerability indicators and metrics, developing vulnerability definition representations, testing intrusion detection systems, or creating demonstrations for training purposes. 
-Special consideration is made so that all relavant details of a vulnerability are available to the researcher. For a given application, the corpus includes the software in which a vulnerability exists, the configuration of the software in it's vulnerable state, exploit code that will trigger the security breach, and any other relavant attributes. 
-
-We propose a scalable framework for corpus design that can be used to analyze vulnerabilities of Web Applications.    \\
+This paper covers the motivation and architecture behind BugBox, an open-source collection and management framework for PHP web application vulnerabilities. It is recognized that obtaining an adequate vulnerability dataset is a significant hurdle in empirical vulnerability research. Many studies suffer from using vulnerability data-sets that are too small, or from the fact that the vulnerabilities analyzed are rarely made publicly available [ref]. The purpose of BugBox is to fill this void, and in doing so encourage the quality and repeatability of results. Example uses include testing vulnerability indicators and metrics, developing vulnerability definition representations, testing intrusion detection systems, or creating demonstrations for training purposes. 
 
 \section{Introduction and Motivation}
 
 As researchers we can gain knowledge about vulnerable code through analyzing previously run exploits.  Understanding why code is vulnerable can lead to automated techniques in preventing future vulnerabilities.  In order to conduct this analysis, we must build a corpus.  
 
-Building a corpus is not usually the main focus in conducting research.  Typically researchers want to develop their corpus quickly so that they can move on to the more important work, research.  Understanding the labor involved in developing a corpus that suits the needs of a researcher, we propose an elegant [GJN!] framework using current tools in order to automate data collection in a simple and scalable way.  Furthermore, we propose to increase our vulnerability corpus through a community approach and share our framework so that researchers will have a reference implementation.\endnote{Remember to use endnotes, not footnotes!}
+Building a corpus is not usually the main focus in conducting research.  Typically researchers want to develop their corpus quickly so that they can move on to the more important work, research. 
+Understanding the labor involved in developing a corpus that suits the needs of a researcher, we propose an elegant [GJN!] framework using current tools in order to automate data collection in a simple and scalable way.  
+Furthermore, we propose to increase our vulnerability corpus through a community approach and share our framework so that researchers will have a reference implementation.\endnote{Remember to use endnotes, not footnotes!}
 
-A useful corpus is one that has a diverse amount of applications and a large amount of samples.
+
+A useful corpus is one that has a diverse selection of applications in addition to a large sampling of vulnerabilities. However, quanitity is not the only important requirement. Special consideration is made so that all relavant details of a vulnerability are available to the researcher. 
+
+For a given application, the corpus includes the software in which a vulnerability exists, the configuration of the software in it's vulnerable state, exploit code that will trigger the security breach, and any other relavant attributes. Through the use of abstraction and encapsulation, the management of application, environment, and exploitation can be streamlined. 
 [Diversity, Quantity, Automation, Ease-of-use, Collaboration]
+
+Why PHP?
+Why Python?
+
+
+
+Exploit Sources:\\
+ \begin{tabular} { l }
+   $\bullet$ Vulnerability Databases [Inj, NVD, OSVDB, exp]\\
+   $\bullet$ Vulnerability Frameworks (Metasploit, etc...)\\
+ \end{tabular}
+\\
 
 Key qualities:\\
  \begin{tabular}{ l }
@@ -101,7 +115,8 @@ Characteristics:\\
 
 \section{Framework}
 
-Our framework is composed of three main elements: Web Application Store, Testing Environment, and Testing Scripts.  These three elements are maintained with the following folders: backups, exploits, live systems, packages, and scripts. [GJN REFER TO DIAGRAM]
+Our framework is composed of three main elements: Web Application Store, Testing Environment, and Testing Scripts. 
+These three elements are maintained with the following folders: backups, exploits, live systems, packages, and scripts. [GJN REFER TO DIAGRAM]
 
 \subsection{Web Application}
 Currently the framework provides support for PHP Web Applications.  We are restricted to web applications because of the use of selenium scripts in our corpus. [GJN ADD NOTES FROM JEFF's PAPER ON THIS]  While we cannot alter the type of application, we do see future support for other languages [GJN YES].  We are currently tied to PHP because we use XDebug as our trace collector [GJN NO].  Our framework could be extended to any language that has a tool that trace the execution of the web application.  
@@ -131,12 +146,6 @@ In order to better isolate vulnerable code, we create a selenium script in Pytho
 
 By setting up the application loader engine, we are able to create concise python selenium scripts for data collection.  The following code shows how easy it is to run an automated exploit:
 
-Exploit Sources:\\
- \begin{tabular} { l }
-   $\bullet$ Vulnerability Databases\\
-   $\bullet$ Vulnerability Frameworks (Metasploit, etc...)\\
- \end{tabular}
-\\
 
 {\tt \footnotesize
 \begin{verbatim}
@@ -335,9 +344,10 @@ especially those who funded the work.
 
 It's great when this section says that MyWonderfulApp is free software, 
 available via anonymous FTP from
-
 \begin{center}
-{\tt ftp.site.dom/pub/myname/Wonderful}\\
+{\tt ftp://ftp.site.dom/pub/myname/Wonderful}\\
+{\tt git://bugbox.github.com/blahblah}\\
+
 \end{center}
 
 Also, it's even greater when you can write that information is also 
