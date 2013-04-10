@@ -104,7 +104,7 @@ Characteristics:\\
 Our framework is composed of three main elements: Web Application Store, Testing Environment, and Testing Scripts.  These three elements are maintained with the following folders: backups, exploits, live systems, packages, and scripts. [GJN REFER TO DIAGRAM]
 
 \subsection{Web Application}
-Currently the framework provides support for PHP Web Applications.  We are restricted to web applications because of the use of selenium scripts in our corpus. [GJN NOT TRUE, SEE JEFF's PAPER ON THIS]  While we cannot alter the type of application, we do see future support for other languages [GJN YES].  We are currently tied to PHP because we use XDebug as our trace collector [GJN NO].  Our framework could be extended to any language that has a tool that trace the execution of the web application.  
+Currently the framework provides support for PHP Web Applications.  We are restricted to web applications because of the use of selenium scripts in our corpus. [GJN ADD NOTES FROM JEFF's PAPER ON THIS]  While we cannot alter the type of application, we do see future support for other languages [GJN YES].  We are currently tied to PHP because we use XDebug as our trace collector [GJN NO].  Our framework could be extended to any language that has a tool that trace the execution of the web application.  
 All applications are currently package in a zip folder and are labeled by application name and version number. [GJN packaged as python modules that ]  
 
 Architecture:
@@ -191,14 +191,6 @@ By providing a corpus that explicitly logs the steps taken in accumulating the l
 \\\\
 While the above process is only shown in one iteration, most students know that this is not the case.  One hour of work can turn into a whole week of work without the proper framework in place.  The above situation also shows that the selenium script can be discussed with the professor to show validity of the data and provide talking points for how the exploit was applied.
 
-
-\section{Future Development}\\
- \begin{tabular} { l }
-   $\bullet$ What is the correct level of virtualization for\\ each system component?\\
-   $\bullet$ (open question) Why run Selenium/Mysql in VM\\ vs a chroot jail?\\
-   $\bullet$ Isolating attack event \\(with xdebug manually/cookies/etc...)\\
-   $\bullet$ Payload standardization
- \end{tabular}
 
 \section{Lessons Learned}
 
@@ -319,9 +311,24 @@ latex usenixTemplate
 Well, it's getting boring isn't it.  This is the last subsection
 before we wrap it up.
 
+
+\section{Conclusion}
+
+Conclusion
+
+
+\section{Future Development}\\
+ \begin{tabular} { l }
+   $\bullet$ What is the correct level of virtualization for\\ each system component?\\
+   $\bullet$ (open question) Why run Selenium/Mysql in VM\\ vs a chroot jail?\\
+   $\bullet$ Isolating attack event \\(with xdebug manually/cookies/etc...)\\
+   $\bullet$ Payload standardization
+ \end{tabular}
+
+
 \section{Acknowledgments}
 
-A polite author always includes acknowledgments.  Thank everyone,
+[Metasploit Framework] A polite author always includes acknowledgments.  Thank everyone,
 especially those who funded the work. 
 
 \section{Availability}
