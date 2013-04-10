@@ -55,14 +55,14 @@ Computer Science Department\\University of Maryland
 \thispagestyle{empty}
 
 Goal:
-To collect a large number of vulnerabilities accross many applications, and make data available to the larger community.\\
+
 
 \subsection*{Abstract}
 
-This paper covers the motivation and architecture behind BugBox, an open-source collection and management framework for PHP web application vulnerabilities. It is recognized that obtaining an adequate vulnerability dataset is a significant hurdle in empirical vulnerability research. Many studies suffer from using vulnerability data-sets that are too small, or from the fact that the vulnerabilities analyzed are rarely made publicly available [ref]. The purpose of BugBox is to fill this void, and in doing so encourage the quality and repeatability of results. Example uses include testing vulnerability indicators and metrics, developing vulnerability definition representations, testing intrusion detection systems, or creating demonstrations for training purposes. 
+This paper covers the motivation and architecture behind BugBox, an open-source collection and management framework for PHP web application vulnerabilities. It is recognized that obtaining an adequate vulnerability dataset is a significant hurdle in empirical vulnerability research. Many studies suffer from using vulnerability data-sets that are too small, or the collections used are not made publicly available [ref]. The purpose of BugBox is to fill this void, and in doing so encourage the quality and repeatability of results. The goal is to collect a large number of vulnerabilities accross many applications, and make data available to the larger community. Example uses of BugBox include testing vulnerability indicators and metrics, developing vulnerability definition representations, testing intrusion detection systems, or creating demonstrations for training purposes. 
 
-\section{Introduction and Motivation}
-
+\section{Introduction}
+(i.e. Introduction and Motivation)
 [what is a corpus?
  what is empirical vulnerability research?
  what should a corpus contain?
@@ -84,6 +84,7 @@ Through the use of abstraction and encapsulation, the management of application,
 [Diversity, Quantity, Automation, Ease-of-use, Collaboration]
 
 Why PHP?
+At it's core, the vulnerability engine is driven by Python. Python's modules and Packages form the organizational basis for the project, with exploits, applicaitons, and application plugins having been abstracted out .... blah blah
 Why Python?
 
 Exploit Sources:\\
@@ -122,6 +123,7 @@ Characteristics:\\
 Our framework is composed of three main elements: Web Application Store, Testing Environment, and Testing Scripts. 
 These three elements are maintained with the following folders: backups, exploits, live systems, packages, and scripts. [GJN REFER TO DIAGRAM]
 
+[Talk about why Virtual Machine]
 
 % you can also use the wonderful epsfig package...
 % {\special{psfile = system_diagram.ps hscale = 50 vscale = 50}}
@@ -205,6 +207,31 @@ driver.get("http://localhost/wordpress/?p=1")
 
 \subsection{File Structure}
 
+Submodules: (package corpus)\\
+ \begin{tabular}{ l }
+   $\bullet$ corpus.Targets\\
+   $\bullet$ corpus.Engine\\
+   $\bullet$ corpus.Exploit\\
+   $\bullet$ corpus.SeleniumDriver\\
+ \end{tabular}\\
+
+\noindent
+Submodules: (package corpus.Targets)\\
+ \begin{tabular}{ l }
+   $\bullet$ corpus.Targets.AjaXplorer\_2\_5\_1\\
+   $\bullet$ corpus.Targets.cuteflow\_2\_11\_2\\
+   $\bullet$ corpus.Targets.drupal\_6\_14\\
+   $\bullet$ corpus.Targets.eXtplorer\_2\_1\_0\\
+   $\bullet$ corpus.Targets.family\_connections\_2\_7\_1\\
+   $\bullet$ corpus.Targets.glossword\_1\_8\_12\\
+   $\bullet$ corpus.Targets.horde\_3\_3\_12\\
+   $\bullet$ corpus.Targets.wordpress\_3\_2\\
+   $\bullet$ corpus.Targets.wordpress\_3\_3\_1\\
+ \end{tabular}\\
+
+
+
+
 The file structure mimics the modularity of our corpus.  Currently we store backups of the Web Applications in the {\tt/backups} directory and the actual applications in the {\tt/packages} directory.  We store a separate backup in order to verify that the selenium scripts did not modify the Web Application in any way.  If the Web Application is corrupt, then we simply copy the web application from the backup folder to the package folder.  
 
 Future implementations will store only the md5 hash of the program on the corpus server and the backups on an external server.  This will allow for a quick comparison followed by a remote copy if necessary.  This separation will ensure that backups will never be corrupted through use of the corpus.  
@@ -257,81 +284,6 @@ in the source means a non-breaking space.  This way, your reference will
 always be attached to the word that preceded it, instead of going to the
 next line.
 
-\section{Design and Implementation}
-\subsection{First SubSection}
-
-Here's a typical figure reference.  The figure is centered at the
-top of the column.  It's scaled.  It's explicitly placed.  You'll
-have to tweak the numbers to get what you want.\\
-
-This text came after the figure, so we'll casually refer to Figure 1
-as we go on our merry way.
-
-\subsection{New Subsection}
-
-It can get tricky typesetting Tcl and C code in LaTeX because they share
-a lot of mystical feelings about certain magic characters.  You
-will have to do a lot of escaping to typeset curly braces and percent
-signs, for example, like this:
-``The {\tt \%module} directive
-sets the name of the initialization function.  This is optional, but is
-recommended if building a Tcl 7.5 module.
-Everything inside the {\tt \%\{, \%\}}
-block is copied directly into the output. allowing the inclusion of
-header files and additional C code." \\
-
-Sometimes you want to really call attention to a piece of text.  You
-can center it in the column like this:
-\begin{center}
-{\tt \_1008e614\_Vector\_p}
-\end{center}
-and people will really notice it.\\
-
-\noindent
-The noindent at the start of this paragraph makes it clear that it's
-a continuation of the preceding text, not a new para in its own right.
-
-
-Now this is an ingenious way to get a forced space.
-{\tt Real~$*$} and {\tt double~$*$} are equivalent. 
-
-Now here is another way to call attention to a line of code, but instead
-of centering it, we noindent and bold it.\\
-
-\noindent
-{\bf \tt size\_t : fread ptr size nobj stream } \\
-
-And here we have made an indented para like a definition tag (dt)
-in HTML.  You don't need a surrounding list macro pair.
-\begin{itemize}
-\item[]  {\tt fread} reads from {\tt stream} into the array {\tt ptr} at
-most {\tt nobj} objects of size {\tt size}.   {\tt fread} returns
-the number of objects read. 
-\end{itemize}
-This concludes the definitions tag.
-
-\subsection{How to Build Your Paper}
-
-You have to run {\tt latex} once to prepare your references for
-munging.  Then run {\tt bibtex} to build your bibliography metadata.
-Then run {\tt latex} twice to ensure all references have been resolved.
-If your source file is called {\tt usenixTemplate.tex} and your {\tt
-  bibtex} file is called {\tt usenixTemplate.bib}, here's what you do:
-{\tt \small
-\begin{verbatim}
-latex usenixTemplate
-bibtex usenixTemplate
-latex usenixTemplate
-latex usenixTemplate
-\end{verbatim}
-}
-
-
-\subsection{Last SubSection}
-
-Well, it's getting boring isn't it.  This is the last subsection
-before we wrap it up.
-
 \section{Future Development}\\
  \begin{tabular} { l }
    $\bullet$ What is the correct level of virtualization for\\ each system component?\\
@@ -347,8 +299,8 @@ Conclusion
 
 \section{Availability}
 
-It's great when this section says that MyWonderfulApp is free software, 
-available via anonymous FTP from
+[Available as a 10 GB virtual machine and as a standalone debian package]
+
 \begin{center}
 {\tt ftp://ftp.site.dom/pub/myname/Wonderful}\\
 {\tt git://bugbox.github.com/blahblah}\\
@@ -358,7 +310,7 @@ Also, it's even greater when you can write that information is also
 available on the Wonderful homepage at 
 
 \begin{center}
-{\tt http://www.site.dom/\~{}myname/SWIG}
+{\tt http://www.vulnerabilitywiki.com/\~{}myname/SWIG}
 \end{center}
 
 Now we get serious and fill in those references.  Remember you will
