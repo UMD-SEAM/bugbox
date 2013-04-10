@@ -54,16 +54,19 @@ Computer Science Department\\University of Maryland
 % Comment it out when you first submit the paper for review.
 \thispagestyle{empty}
 
-
 Goal:
 To collect a large number of vulnerabilities accross many applications, and make data available to the larger community.\\
-
 
 \subsection*{Abstract}
 
 This paper covers the motivation and architecture behind BugBox, an open-source collection and management framework for PHP web application vulnerabilities. It is recognized that obtaining an adequate vulnerability dataset is a significant hurdle in empirical vulnerability research. Many studies suffer from using vulnerability data-sets that are too small, or from the fact that the vulnerabilities analyzed are rarely made publicly available [ref]. The purpose of BugBox is to fill this void, and in doing so encourage the quality and repeatability of results. Example uses include testing vulnerability indicators and metrics, developing vulnerability definition representations, testing intrusion detection systems, or creating demonstrations for training purposes. 
 
 \section{Introduction and Motivation}
+
+[what is a corpus?
+ what is empirical vulnerability research?
+ what should a corpus contain?
+ what cool things can BugBox do?]
 
 As researchers we can gain knowledge about vulnerable code through analyzing previously run exploits.  Understanding why code is vulnerable can lead to automated techniques in preventing future vulnerabilities.  In order to conduct this analysis, we must build a corpus.  
 
@@ -74,13 +77,14 @@ Furthermore, we propose to increase our vulnerability corpus through a community
 
 A useful corpus is one that has a diverse selection of applications in addition to a large sampling of vulnerabilities. However, quanitity is not the only important requirement. Special consideration is made so that all relavant details of a vulnerability are available to the researcher. 
 
-For a given application, the corpus includes the software in which a vulnerability exists, the configuration of the software in it's vulnerable state, exploit code that will trigger the security breach, and any other relavant attributes. Through the use of abstraction and encapsulation, the management of application, environment, and exploitation can be streamlined. 
+For a given application, the corpus includes the software in which a vulnerability exists, the configuration of the software in it's vulnerable state, exploit code that will trigger the security breach, and any other relavant attributes. 
+
+Through the use of abstraction and encapsulation, the management of application, environment, and exploitation can be streamlined. 
+
 [Diversity, Quantity, Automation, Ease-of-use, Collaboration]
 
 Why PHP?
 Why Python?
-
-
 
 Exploit Sources:\\
  \begin{tabular} { l }
@@ -102,6 +106,8 @@ Key qualities:\\
 
 \subsection{Empirical Vulnerability Research}
 
+[many things with with references go here]
+
 Characteristics:\\
  \begin{tabular} { l }
    -Collecting Vulnerable Application source code\\
@@ -109,17 +115,32 @@ Characteristics:\\
      a) line-based\\
      b) run-based\\
       i. trace-based\\
- \end{tabular}
-
-
+ \end{tabular}\\
 
 \section{Framework}
 
 Our framework is composed of three main elements: Web Application Store, Testing Environment, and Testing Scripts. 
 These three elements are maintained with the following folders: backups, exploits, live systems, packages, and scripts. [GJN REFER TO DIAGRAM]
 
-\subsection{Web Application}
-Currently the framework provides support for PHP Web Applications.  We are restricted to web applications because of the use of selenium scripts in our corpus. [GJN ADD NOTES FROM JEFF's PAPER ON THIS]  While we cannot alter the type of application, we do see future support for other languages [GJN YES].  We are currently tied to PHP because we use XDebug as our trace collector [GJN NO].  Our framework could be extended to any language that has a tool that trace the execution of the web application.  
+
+% you can also use the wonderful epsfig package...
+% {\special{psfile = system_diagram.ps hscale = 50 vscale = 50}}
+\begin{figure}[t]
+\begin{center}
+\begin{picture}(300,150)(0,15) %(0,200)
+%\put(-15,-30){\includegraphics[]{system_diagram}}
+\put(0,0){\includegraphics[scale=1.17]{system_diagram.ps}}
+\end{picture}\\
+\end{center}
+\caption{System Diagram}
+\end{figure}
+
+\subsection{Vulnerability Engine}
+
+Currently the framework provides support for PHP Web Applications.  We are restricted to web applications because of the use of selenium scripts in our corpus. [GJN ADD NOTES FROM JEFF's PAPER ON THIS]  
+While we cannot alter the type of application, we do see future support for other languages [GJN YES].  
+We are currently tied to PHP because we use XDebug as our trace collector [GJN NO].  
+Our framework could be extended to any language that has a tool that trace the execution of the web application.  
 All applications are currently package in a zip folder and are labeled by application name and version number. [GJN packaged as python modules that ]  
 
 Architecture:
@@ -133,7 +154,18 @@ Architecture:
     Application Modules
     The Exploit
 
-\subsection{Scripts}
+
+\subsection{Environment}
+We use a virtual jail, the linux chroot environment.  Staging the application in the chroot environment provides locality, reproducibility, and stability.  
+
+{\bf The web application remains local}.  Many applications, such as wordpress, have a MYSQL backend.  If we were to host the application on a different server or VM we would have to ensure that the MYSQL database is properly setup each time.  With the chroot environment, the process is simplified, we keep a MYSQL database outside of the CHROOT Jail in order to facilitate MYSQL access.  
+
+{\bf Current tests are independent from future tests}.  We load a clean application into the chroot jail every time we wish to run a new test.  This ensures that there is no corruption of the original Web Application and provides reproducible results when testing.
+
+{\bf The web application cannot contaminate our testing environment}.  If a web application crashes due to the malicious script, we can ensure that it does not crash our corpus environment, worst case the chroot is corrupted, and we can ensure that the crash cannot have un-intended side effects in our testing environment.  
+
+
+\subsubsection{Exploits}
 
 \subsubsection{Environment Setup Scripts}
 The corpus contains a main engine, written in python, to load a web application, gather traces, run exploits, and cleanup.  We provide an engine to abstract away the details of the setup process so that contributors can focus on creating new exploit scripts.  This separation accomplished two tasks, it makes developing for the corpus more approachable for programmers that want to contribute and provides a robust framework that can provide more of a challenge to seasoned programmers.
@@ -170,15 +202,6 @@ driver.get("http://localhost/wordpress/?p=1")
 
 \end{verbatim}}
 
-\subsection{Environment}
-We use a virtual jail, the linux chroot environment.  Staging the application in the chroot environment provides locality, reproducibility, and stability.  
-
-{\bf The web application remains local}.  Many applications, such as wordpress, have a MYSQL backend.  If we were to host the application on a different server or VM we would have to ensure that the MYSQL database is properly setup each time.  With the chroot environment, the process is simplified, we keep a MYSQL database outside of the CHROOT Jail in order to facilitate MYSQL access.  
-
-{\bf Current tests are independent from future tests}.  We load a clean application into the chroot jail every time we wish to run a new test.  This ensures that there is no corruption of the original Web Application and provides reproducible results when testing.
-
-{\bf The web application cannot contaminate our testing environment}.  If a web application crashes due to the malicious script, we can ensure that it does not crash our corpus environment, worst case the chroot is corrupted, and we can ensure that the crash cannot have un-intended side effects in our testing environment.  
-
 
 \subsection{File Structure}
 
@@ -189,6 +212,7 @@ Future implementations will store only the md5 hash of the program on the corpus
 All the exploits that are available are located under the {\tt /scripts} folder.  While script is referenced as Selenium Script throughout the document, here scripts also include services such as: deploying the web application in the chroot jail, starting the trace collection, and running the script. All mounted chroot environments reside in {\tt /live\_systems}. 
 \\\\
 {\bf insert file system diagram}
+
 
 \section{Scalability}
 In order to create a system that can handle a growing amount of vulnerabilities that are independent from one another, we represent an exploit on an application through  Selenium scripts, as noted in the Framework section.  Selenium scripts allow us to perform operations on web applications without fear of working in an un-intended, compromised environment. 
@@ -239,18 +263,6 @@ next line.
 Here's a typical figure reference.  The figure is centered at the
 top of the column.  It's scaled.  It's explicitly placed.  You'll
 have to tweak the numbers to get what you want.\\
-
-% you can also use the wonderful epsfig package...
-% {\special{psfile = system_diagram.ps hscale = 50 vscale = 50}}
-\begin{figure}[t]
-\begin{center}
-\begin{picture}(300,150)(0,10) %(0,200)
-%\put(-15,-30){\includegraphics[]{system_diagram}}
-\put(-0,0){\includegraphics[scale=1.17]{system_diagram.ps}}
-\end{picture}\\
-\end{center}
-\caption{Wonderful Flowchart}
-\end{figure}
 
 This text came after the figure, so we'll casually refer to Figure 1
 as we go on our merry way.
@@ -320,12 +332,6 @@ latex usenixTemplate
 Well, it's getting boring isn't it.  This is the last subsection
 before we wrap it up.
 
-
-\section{Conclusion}
-
-Conclusion
-
-
 \section{Future Development}\\
  \begin{tabular} { l }
    $\bullet$ What is the correct level of virtualization for\\ each system component?\\
@@ -335,10 +341,9 @@ Conclusion
  \end{tabular}
 
 
-\section{Acknowledgments}
+\section{Conclusion}
 
-[Metasploit Framework] A polite author always includes acknowledgments.  Thank everyone,
-especially those who funded the work. 
+Conclusion
 
 \section{Availability}
 
@@ -347,7 +352,6 @@ available via anonymous FTP from
 \begin{center}
 {\tt ftp://ftp.site.dom/pub/myname/Wonderful}\\
 {\tt git://bugbox.github.com/blahblah}\\
-
 \end{center}
 
 Also, it's even greater when you can write that information is also 
