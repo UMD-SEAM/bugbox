@@ -22,13 +22,14 @@
 % This version uses the latex2e styles, not the very ancient 2.09 stuff.
 \documentclass[letterpaper,twocolumn,10pt]{article}
 \usepackage{usenix,epsfig,endnotes}
+
 \begin{document}
 
 %don't want date printed
 \date{}
 
 %make title bold and 14 pt font (Latex default is non-bold, 16 pt)
-\title{\Large \bf Wonderful : A Terrific Application and Fascinating Paper}
+\title{\Large On Creating a Scalable Web Application Corpus for Rapid Prototyping and Test Creation}
 
 %for single author (just remove % characters)
 \author{
@@ -84,16 +85,91 @@ Key Questions:\\
 
 \subsection*{Abstract}
 
-The abstract goes here. \\
+We propose a scalable framework for corpus design that can be used to analyze vulnerabilities of Web Applications.    \\
 
-\section{Introduction}
+\section{Introduction and Motivation}
 
-A paragraph of text goes here.  Lots of text.  Plenty of interesting
-text. \\
+As researchers we can gain knowledge about vulnerable code through analyzing previously run exploits.  Understanding why code is vulnerable can lead to automated techniques in preventing future vulnerabilities.  In order to conduct this analysis, we must build a corpus.  
 
-More fascinating text. Features\endnote{Remember to use endnotes, not footnotes!} galore, plethora of promises.\\
+Building a corpus is not usually the main focus in conducting research.  Typically researchers want to develop their corpus quickly so that they can move on to the more important work, research.  Understanding the labor involved in developing a corpus that suits the needs of a researcher, we propose an elegant framework using current tools in order to automate data collection in a simple and scalable way.  Furthermore, we propose to increase our vulnerability corpus through a community approach and share our framework so that researchers will have a reference implementation.\endnote{Remember to use endnotes, not footnotes!}
 
-\section{This is Another Section}
+A useful corpus is one that has a diverse amount of applications and a large amount of samples.
+
+\section{Framework}
+
+Our framework is composed of three main elements: Web Application Store, Testing Environment, and Testing Scripts.  These three elements are maintained with the following folders: backups, exploits, live systems, packages, and scripts.
+
+\subsection{Web Application}
+Currently the framework provides support for PHP Web Applications.  We are restricted to web applications because of the use of selenium scripts in our corpus.  While we cannot alter the type of application, we do see future support for other languages.  We are currently tied to PHP because we use XDebug as our trace collector.  Our framework could be extended to any language that has a tool that trace the execution of the web application.  
+All applications are currently package in a zip folder and are labeled by application name and version number.  
+
+\subsection{Scripts}
+
+\subsubsection{Environment Setup Scripts}
+The corpus contains a main engine, written in python, to load a web application, gather traces, run exploits, and cleanup.  We provide an engine to abstract away the details of the setup process so that contributors can focus on creating new exploit scripts.  This separation accomplished two tasks, it makes developing for the corpus more approachable for programmers that want to contribute and provides a robust framework that can provide more of a challenge to seasoned programmers.
+
+
+\subsubsection{Selenium Scripts}
+We aim to gather code that is vulnerable.  We drastically can reduce the amount of computation needed by reducing the code size that needs to be analyzed through the use of past, found exploits.  
+
+In order to better isolate vulnerable code, we create a selenium script in Python, replicating actions a user would take in performing an exploit on a web application.  While the script is running, we can have XDebug monitor the execution and output the final execution trace for the selenium script execution.  We can see future additions to this by turning XDebug on and off through cookie manipulation while the script is running, furthermore reducing the size of the vulnerable code.
+
+By setting up the application loader engine, we are able to create concise python selenium scripts for data collection.  The following code shows how easy it is to run an automated exploit:
+
+{\tt \footnotesize
+\begin{verbatim}
+
+payload = "XSS PAYLOAD"
+
+driver = self.create_selenium_driver()
+
+driver.get("http://localhost/wordpress/?p=1")
+
+%Selenium Actions preceded by
+% driver.find_element_by_id
+("author").clear()
+("author").send_keys("selenium script")
+("email").clear()
+("email").send_keys("selenium@python.org")
+("url").clear()
+("url").send_keys("www.python.org")
+("comment").clear()
+("comment").send_keys(payload)
+("submit").click()
+
+\end{verbatim}}
+
+\subsection{Environment}
+We use a virtual jail, the linux chroot environment.  Staging the application in the chroot environment provides locality, reproducibility, and stability.  
+
+{\bf The web application remains local}.  Many applications, such as wordpress, have a MYSQL backend.  If we were to host the application on a different server or VM we would have to ensure that the MYSQL database is properly setup each time.  With the chroot environment, the process is simplified, we keep a MYSQL database outside of the CHROOT Jail in order to facilitate MYSQL access.  
+
+{\bf Current tests are independent from future tests}.  We load a clean application into the chroot jail every time we wish to run a new test.  This ensures that there is no corruption of the original Web Application and provides reproducible results when testing.
+
+{\bf The web application cannot contaminate our testing environment}.  If a web application crashes due to the malicious script, we can ensure that it does not crash our corpus environment, worst case the chroot is corrupted, and we can ensure that the crash cannot have un-intended side effects in our testing environment.  
+
+
+\subsection{File Structure}
+
+The file structure mimics the modularity of our corpus.  Currently we store backups of the Web Applications in the {\tt/backups} directory and the actual applications in the {\tt/packages} directory.  We store a separate backup in order to verify that the selenium scripts did not modify the Web Application in any way.  If the Web Application is corrupt, then we simply copy the web application from the backup folder to the package folder.  
+
+Future implementations will store only the md5 hash of the program on the corpus server and the backups on an external server.  This will allow for a quick comparison followed by a remote copy if necessary.  This separation will ensure that backups will never be corrupted through use of the corpus.  
+
+All the exploits that are available are located under the {\tt /scripts} folder.  While script is referenced as Selenium Script throughout the document, here scripts also include services such as: deploying the web application in the chroot jail, starting the trace collection, and running the script. All mounted chroot environments reside in {\tt /live\_systems}. 
+\\\\
+{\bf insert file system diagram}
+
+\section{Scalability}
+In order to create a system that can handle a growing amount of vulnerabilities that are independent from one another, we represent an exploit on an application through  Selenium scripts, as noted in the Framework section.  Selenium scripts allow us to perform operations on web applications without fear of working in an un-intended, compromised environment. 
+
+\section{Usability}
+By providing a corpus that explicitly logs the steps taken in accumulating the log files, we have more flexibility.  This flexibility can be seen with the following example:  
+\\\\
+{\tt Jon is told by his advisor that he needs to collect more trace data in order to get a proper sample size for his research.  John quickly creates a selenium script for the exploit he wants to collect and shows the advisor his results.  The advisor was generally happy with the trace data that he collected, but instead wanted him to do a slight modification to the exploit.  If Jon did not have the selenium script at hand, he would have to duplicate all of the work previously done.  Since he does have the script on hand, he can quickly make a change to the script and re-run in seconds versus hours.}
+\\\\
+While the above process is only shown in one iteration, most students know that this is not the case.  One hour of work can turn into a whole week of work without the proper framework in place.  The above situation also shows that the selenium script can be discussed with the professor to show validity of the data and provide talking points for how the exploit was applied.
+
+\section{Lessons Learned}
 
 Some embedded literal typset code might 
 look like the following :
