@@ -21,7 +21,9 @@
 
 % This version uses the latex2e styles, not the very ancient 2.09 stuff.
 \documentclass[letterpaper,twocolumn,10pt]{article}
-\usepackage{usenix,epsfig,endnotes}
+\usepackage{usenix,epsfig,endnotes,graphicx}
+
+% \DeclareGraphicsExtensions{.eps}
 
 \begin{document}
 
@@ -35,11 +37,11 @@
 
 %for single author (just remove % characters)
 \author{
-{\rm Your N.\ Here}\\
-Your Institution
+{\rm Kent Wills}\\
+Computer Science Department\\University of Maryland
 \and
-{\rm Second Name}\\
-Second Institution
+{\rm Gary Nilson}\\
+Computer Science Department\\University of Maryland
 % copy the following lines to add more authors
 % \and
 % {\rm Name}\\
@@ -238,10 +240,12 @@ top of the column.  It's scaled.  It's explicitly placed.  You'll
 have to tweak the numbers to get what you want.\\
 
 % you can also use the wonderful epsfig package...
+% {\special{psfile = system_diagram.ps hscale = 50 vscale = 50}}
 \begin{figure}[t]
 \begin{center}
-\begin{picture}(300,150)(0,200)
-\put(-15,-30){\special{psfile = fig1.ps hscale = 50 vscale = 50}}
+\begin{picture}(300,150)(0,10) %(0,200)
+%\put(-15,-30){\includegraphics[]{system_diagram}}
+\put(-0,0){\includegraphics[scale=1.17]{system_diagram.ps}}
 \end{picture}\\
 \end{center}
 \caption{Wonderful Flowchart}
