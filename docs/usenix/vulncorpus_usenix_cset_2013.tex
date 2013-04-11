@@ -32,7 +32,7 @@
 
 %make title bold and 14 pt font (Latex default is non-bold, 16 pt)
 
-\title{\Large \bf BugBox : A Scalable Vulnerability Corpus for PHP Web Applications}
+\title{\Large \bf BugBox : A Vulnerability Corpus for PHP Web Applications}
 
 
 %for single author (just remove % characters)
@@ -56,9 +56,9 @@ Computer Science Department\\University of Maryland
 
 \subsection*{Abstract}
 
-This paper covers the motivation and architecture behind BugBox, an open-source collection and management framework for PHP web application vulnerabilities. It is recognized that obtaining an adequate vulnerability dataset is a significant hurdle in empirical vulnerability research. Many studies suffer from using vulnerability data-sets that are too small and often not made publicly available [ref]. The purpose of BugBox is to fill this void, and in doing so encourage the quality and repeatability of results. The goal is to collect a large number of vulnerabilities accross many applications, and make data available to the larger community. Example uses of BugBox include testing vulnerability indicators and metrics, developing vulnerability definition representations, testing intrusion detection systems, or creating demonstrations for training purposes. 
+This paper covers the motivation and architecture behind BugBox, an open-source collection and management framework for PHP web application vulnerabilities. It is recognized that obtaining an adequate vulnerability dataset is a major hurdle in empirical vulnerability research. Many studies suffer from using vulnerability data-sets that are too small and often not made publicly available [ref]. The purpose of BugBox is to fill this void, and in doing so encourage the quality and repeatability of results. The goal is to collect a large number of vulnerabilities accross many applications, and make data available to the larger community. Example uses of BugBox include testing vulnerability indicators and metrics, developing vulnerability definition representations, testing intrusion detection systems, or creating demonstrations for training purposes. 
 
-\section{Introduction}
+\section{Introduction}latex verbatim indentation
 (i.e. Introduction and Motivation)
 [what is a corpus?
  what is empirical vulnerability research?
@@ -98,7 +98,6 @@ Key qualities:\\
 
  \end{tabular}
 \\
-
 
 
 \subsection{Empirical Vulnerability Research}
@@ -142,10 +141,9 @@ Characteristics:\\
 
 \section{Framework}
 
-Our framework is composed of three main elements: Web Application Store, Testing Environment, and Testing Scripts. 
-These three elements are maintained with the following folders: backups, exploits, live systems, packages, and scripts. [GJN REFER TO DIAGRAM]
+Our framework has three main components: Web Application Store, Testing Environment, and Testing Scripts. 
+These elements are reside in the following folders: backups, exploits, live systems, packages, and scripts. [GJN REFER TO DIAGRAM]
 
-[Talk about why Virtual Machine]
 
 % you can also use the wonderful epsfig package...
 %{\special{psfile = system_diagram.ps hscale = 50 vscale = 50}}
@@ -181,6 +179,7 @@ Architecture:
 
 \subsection{Environment}
 
+Figure 1 illustrates general structure of the corpus environment. The system was designed to be modular. Being able to interchange every component from the application plugin level, all the way up to the engine, 
 
 \subsubsection{Environment Setup}
 
@@ -216,9 +215,34 @@ Submodules: (package corpus)\\
 
 \subsection{Exploit}
 
+Management actions, recording commands
+attributes, 
+
 \subsubsection{As a Standalone Application}
 
+Each exploit is defined in it's own python file as a module. In Python, modules can either be imported from other modules, or executed directly from the command-line. The exploits written for BugBox take advantage of this property to give the researcher the option of writing scripts to do work on a set of exploits, or to invoke one exploit at a time. When run from the command-line, the supplied arguments are passed directly to the vulnerability engine, which supports the options shown below: 
+
+
+{\tt \footnotesize
+\begin{verbatim}
+Usage: python OSVDB_89960.py [options]
+Options:
+    start:          Start exploit instance
+    stop:           Stop exploit instance
+    exploit:        Run the exploit
+    check:          Check if the corresponding 
+                    environment is running
+    xdebug_on:      Turn on xdebug autotrace
+    xdebug_off:     Turn off and collect 
+                    xdebug autotrace
+\end{verbatim}}
+
 \subsubsection{As a Python Module}
+
+
+
+corpus.Query interface
+
 
 \subsubsection{Selenium Scripts}
 
@@ -287,8 +311,6 @@ By providing a corpus that explicitly logs the steps taken in accumulating the l
 While the above process is only shown in one iteration, most students know that this is not the case.  One hour of work can turn into a whole week of work without the proper framework in place.  The above situation also shows that the selenium script can be discussed with the professor to show validity of the data and provide talking points for how the exploit was applied.
 
 
-\section{Lessons Learned}
-
 \section{Related Work}
 
 Some embedded literal typset code might 
@@ -320,12 +342,16 @@ always be attached to the word that preceded it, instead of going to the
 next line.
 
 \section{Future Development}
- \begin{tabular} { l }
-   $\bullet$ What is the correct level of virtualization for\\ each system component?\\
-   $\bullet$ (open question) Why run Selenium/Mysql in VM vs a chroot jail?\\
-   $\bullet$ Isolating attack event (with xdebug manually/cookies/etc...)\\
-   $\bullet$ Payload standardization\\
- \end{tabular}
+ \begin{description}
+   \item[Distribution]
+     Virtual machine v.s. debian package. Pre-built chroot jails v.s. build scripts.
+   \item[Services]
+     Why run Selenium/Mysql in VM vs a chroot jail?\\
+   \item[Isolating attack event]
+ (with xdebug manually/cookies/etc...)   
+   \item[Payload standardization]
+For each exploit currently in the corpus, there is no standard for the payload used in the attack. Since many studies may be sensitive to the payload type and encoding, it makes sense to provide the researcher with fine-grained control over this property. The Metasploit Framework has a very robust system for managing exploits along with their payloads and encodings, and can be a model for implementing this.
+ \end{description}
 
 
 \section{Conclusion}
