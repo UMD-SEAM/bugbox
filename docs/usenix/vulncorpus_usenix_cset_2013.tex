@@ -56,9 +56,17 @@ Computer Science Department\\University of Maryland
 
 \subsection*{Abstract}
 
-This paper covers the motivation and architecture behind BugBox, an open-source collection and management framework for PHP web application vulnerabilities. It is recognized that obtaining an adequate vulnerability data-set is a major hurdle in empirical vulnerability research. Many studies suffer from using vulnerability data-sets that are too small and often not made publicly available [ref]. The purpose of BugBox is to fill this void, and in doing so encourage the quality and repeatability of results. The goal is to collect a large number of vulnerabilities across many applications, and make data available to the larger community. Example uses of BugBox include testing vulnerability indicators and metrics, developing vulnerability definition representations, testing intrusion detection systems, or creating demonstrations for training purposes. 
+Web Applications provide a robust amount of code vulnerabilities that are exploited on a routine basis, but a large, diverse, automated, ease of use corpus for analyzing these vulnerabilities is not publicly available.   It is recognized that obtaining an adequate vulnerability dataset is a significant hurdle in empirical vulnerability research.  Many studies suffer from using vulnerability data-sets that are too small, and they are rarely made publicly available [ref].  The purpose of BugBox is to fill this void, and in doing so encourage the quality and repeatability of results.  We propose a scalable framework for web application corpus design and further explain the motivation and architecture behind BugBox, an open-source collection and management framework for PHP web application vulnerabilities.  Through our framework implimentation and corpus we can enhance testing vulnerability indicators and metrics, developing vulnerability definition representations, testing intrusion detection systems, or creating demonstrations for training purposes.  
 
 \section{Introduction}
+
+Web Applications are routinely exploited in order to glean sensitive information.  These exploits, when caught, are fixed and new versions of the web application are provided.  Frequently the vulnerability is also logged in the Common Vulnerability and Exposures (CVE) Database to warn administrators of malicious attacks that would successfuly execute on their applications.  As researchers, we can gain insight through analysis of this data.  While this data is properly logged and serves to notify the community of these attacks, it is not readily useful for the researcher trying to characterize these attacks.  To ensure that this data is useful to the researcher at hand, we hope to present many and diverse code vulnerability samples that are prepped for analysis.  \par
+
+{\em Talk about research projects that would benefit from this corpus.}
+
+Understanding the labor involved in developing a corpus that suits the needs of a researcher, we propose an elegant framework using current tools in order to automate data collection in a simple and scalable way.  In this paper, we describe the framework and the corpus that will lead to collection of a large amount of vulnerabilities that are diverse in representation through community support.  And we will provide a corpus and framework that can be easily expanded and analyzed, thus reducing the data collection time lending to an increase in research productivity.\par
+
+
 \textcolor{red}{
 (i.e. Introduction and Motivation)
 [what is a corpus?
@@ -66,13 +74,11 @@ This paper covers the motivation and architecture behind BugBox, an open-source 
  what should a corpus contain?
  what cool things can BugBox do?]}
 
-Building significant vulnerability corpus is not usually the main focus in vulnerability research.  Typically researchers want to develop their dataset quickly so that they can move on to more important work. Understanding why code is vulnerable can lead to automated techniques in preventing future vulnerabilities [more details on this]. An ideal vulnerability corpus would make it easy to explore each of these domains. We propose a framework based on common languages and tools, in order to manage and automate data collection in a way that is scalable to thousands of applications [specific, big claim].\par
-
 The value of a corpus is mostly measured by the size and diversity of vulnerabilities and vulnerable applications represented. But quantity is not the only consideration. It is also useful that the collection be easy to maintain, and that vulnerability meta-data is encoded in way that fascilitates search, and automation in the experiments. Through the use of abstraction and encapsulation, the management of application, environment, and exploitation has been streamlined in BugBox. The design is intended to be make it practical to manage a large database of exploits, along with their target environments. To have these qualities the corpus must be much more than an exploit repository. For a given application, it should include the software in which a vulnerability exists, the software's dependancies, the configuration of the software in it's vulnerable state, exploit code that will trigger the security breach, and data that describes any distinguishing attributes of the bug. [define attributes futher]\par
 
 Currently the framework is designed for PHP web applications. There are a number of factors for the decision to focus on collecting vulnerabilities only for PHP. Foremost, is that PHP remains on of the most popular languages for web applications [ref], and as has been reported by Top Cyber Security Risks to be a target for security threats [ref]. Web applications are subject to a rich variety of exploit types (such as XSS, CSRF, SQL injection, overflows, etc...) covering many actively maintained projects that are open source. In addition, popular vulnerability databases wuch as the National Vulnerability Database (NVD), Open Source Vulnerability Database (OSVDB), or the Exploit Database (EDB) have a large quantity of PHP application vulnerabilities. In addition, these databases often disclose enough details of the vulnerability that exploits can easily be written.\par
   
-Key qualities:\\
+Key qualities:
  \begin{tabular}{ l }
    $\bullet$ Quantity of vulnerabilities\\
    $\bullet$ Diversity of applications\\
@@ -90,7 +96,7 @@ Key qualities:\\
 A key question in empirical vulnerability research is how to determine which functionality, or piece of code creates a vulnerable condition in a program. In studying this problem, sometimes referred to as \emph{vulnerability localization}, it is necessary to have a large quantity of structured data on which one can formulate and test hypotheses. Potential approaches to vulnerability research include static and dynamic analysis of the software, therefore it is important that the corpus include both the vulnerable program's code, and some way to perform analysis as the system is compromised.\\
 
 
-[many things with with references go here]\\
+[many things with with references go here] \\
 Demonstrate that BugBox ....\\
 Predicting which metrics  \\
 
@@ -101,7 +107,7 @@ System taint analysis\\
 
 ``Vulnerability localization''
 
-Characteristics:\\
+Characteristics:
  \begin{tabular} { l }
    -Collecting Vulnerable Application source code\\
    -Collecting vulnerability details\\
@@ -114,14 +120,14 @@ Characteristics:\\
 \section{Framework}
 
 The framework has five main components: web application store, testing environment, testing scripts, and host system. Figure 1 illustrates general structure of the corpus environment, with arrows showing lines of control or communication. The system was designed to be modular so that every component can be independently interchanged.\par
-Currently BugBox is designed to work on any system compatable with the Debian GNU/Linux distribution. It can be distributed as a self-contained virtual machine, or as a package that can be installed on an existing system. The key requirements are that the machine have sufficient storage (roughly 4 GB per OS environment, and 2 GB for the application, engine, and exploit sources [Confirm these #s]), that it should be capable of running a MySql serverer to host the various applicaiton databases, in addition to the Selenium Server (used in the exploit implementations). The system dependancies also include debootstrap and the Advanced Packaging Tool (APT) for setting up the application host environments.
+Currently BugBox is designed to work on any system compatable with the Debian GNU/Linux distribution. It can be distributed as a self-contained virtual machine, or as a package that can be installed on an existing system. The key requirements are that the machine have sufficient storage (roughly 4 GB per OS environment, and 2 GB for the application, engine, and exploit sources [Confirm these \#s]), that it should be capable of running a MySql serverer to host the various applicaiton databases, in addition to the Selenium Server (used in the exploit implementations). The system dependancies also include debootstrap and the Advanced Packaging Tool (APT) for setting up the application host environments.
    
 At it's core, the orginization of the vulnerability engine is driven by the Python module and package system. The system breaks down into the following python modules:
 
  \begin{table}
  \begin{minipage}[b]{0.45\linewidth}
  \caption{Corpus Modules}
- \hline
+
  \begin{tabular}{ l }
    $\bullet$ corpus.Engine\\
    $\bullet$ corpus.Targets\\
