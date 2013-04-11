@@ -87,19 +87,16 @@ Key qualities:\\
 \subsection{Empirical Vulnerability Research}
 
 
-A key question in empirical vulnerability research is how to determine which functionality, or piece of code creates a vulnerable condition in a program. In studying this problem, sometimes referred to as \emph{vulnerability localization}, it is necessary to have a large quantity of structured data on which one can formulate and test hypotheses. Since potential approaches include vulnerability definitions based both static and dynamic analysis of the software, it is important that the corpus include both the vulnerable program's code, and some way to perform analysis as the system is compromised.\\
+A key question in empirical vulnerability research is how to determine which functionality, or piece of code creates a vulnerable condition in a program. In studying this problem, sometimes referred to as \emph{vulnerability localization}, it is necessary to have a large quantity of structured data on which one can formulate and test hypotheses. Potential approaches to vulnerability research include static and dynamic analysis of the software, therefore it is important that the corpus include both the vulnerable program's code, and some way to perform analysis as the system is compromised.\\
 
 
 [many things with with references go here]\\
-
 Demonstrate that BugBox ....\\
-Should be x, should be y, and should be z.\\
 Predicting which metrics  \\
 
 Code inspection\\
 Trace-based vulnerability definitions\\
 System taint analysis\\
-Selenium ... \\
 
 
 ``Vulnerability localization''
@@ -117,7 +114,7 @@ Characteristics:\\
 \section{Framework}
 
 The framework has five main components: web application store, testing environment, testing scripts, and host system. Figure 1 illustrates general structure of the corpus environment, with arrows showing lines of control or communication. The system was designed to be modular so that every component can be independently interchanged.\par
-Currently BugBox is designed to work on any system compatable with the Debian GNU/Linux distribution. The key requirements are that the machine have sufficient storage (roughly 4 GB per OS environment, and 2 GB for the application, engine, and exploit sources [Confirm these #s]), that it should be capable of running a MySql serverer to host the various applicaiton databases, in addition to the Selenium Server (used in the exploit implementations). The system dependancies also include debootstrap for managing the application host environments, and the Advanced Packaging Tool (APT) [...]
+Currently BugBox is designed to work on any system compatable with the Debian GNU/Linux distribution. It can be distributed as a self-contained virtual machine, or as a package that can be installed on an existing system. The key requirements are that the machine have sufficient storage (roughly 4 GB per OS environment, and 2 GB for the application, engine, and exploit sources [Confirm these #s]), that it should be capable of running a MySql serverer to host the various applicaiton databases, in addition to the Selenium Server (used in the exploit implementations). The system dependancies also include debootstrap for managing the application host environments, and the Advanced Packaging Tool (APT) [...]
    
 At it's core, the orginization of the vulnerability engine is driven by the Python module and package system. The system breaks down into the following python modules:
 
