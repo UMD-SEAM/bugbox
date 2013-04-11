@@ -66,30 +66,28 @@ This paper covers the motivation and architecture behind BugBox, an open-source 
  what should a corpus contain?
  what cool things can BugBox do?]}
 
-Building a corpus is not usually the main focus in conducting research.  Typically researchers want to develop their corpus quickly so that they can move on to more important work. 
+Building a corpus is not usually the main focus in conducting research.  Typically researchers want to develop their corpus quickly so that they can move on to more important work. As researchers we can gain knowledge about vulnerable code through analyzing previously run exploits.  Understanding why code is vulnerable can lead to automated techniques in preventing future vulnerabilities.  In order to conduct this analysis, we must build a corpus.  
 
-Furthermore, we propose to increase our vulnerability corpus through a community approach and share our framework so that researchers will have a reference implementation.
-
-As researchers we can gain knowledge about vulnerable code through analyzing previously run exploits.  Understanding why code is vulnerable can lead to automated techniques in preventing future vulnerabilities.  In order to conduct this analysis, we must build a corpus.  
 
 A useful corpus is one that has a diverse selection of applications in addition to a large sampling of vulnerabilities. However, quantity is not the only important requirement. Special consideration is made so that all relevant details of a vulnerability are available to the researcher. For a given application, a corpus should include the software in which a vulnerability exists, the configuration of the software in it's vulnerable state, exploit code that will trigger the security breach, and any other relevant attributes.\\
-
-Through the use of abstraction and encapsulation, the management of application, environment, and exploitation can be streamlined. 
-
-In any case, an ideal vulnerability corpus would make it easy to explore each of these domains.\\ 
-The design a practical system for managing a database of exploits, along with their target environments. \\
 
 Understanding the labor involved in developing a corpus that suits the needs of a researcher, we propose an elegant framework using current tools in order to automate data collection in a way that is scalable [How do we demonstrate scalability?]
 
 [Diversity, Quantity, Automation, Ease-of-use, Collaboration]
 
+Through the use of abstraction and encapsulation, the management of application, environment, and exploitation can be streamlined. 
+
+In any case, an ideal vulnerability corpus would make it easy to explore each of these domains.\\ 
+The design a practical system for managing a database of exploits, along with their target environments. Furthermore, we propose to increase our vulnerability corpus through a community approach and share our framework so that researchers will have a reference implementation.
+
+
 Currently the framework is designed for PHP web applications. There are a number of factors for the decision to focus on collecting vulnerabilities only for PHP. Foremost, is that PHP remains on of the most popular languages for web applications [ref], and as has been reported by Top Cyber Security Risks to be a target for security threats [ref]. Web applications are subject to a rich variety of exploit types (such as XSS, CSRF, SQL injection, overflows, etc...) covering many actively maintained projects that are open source. In addition, popular vulnerability databases wuch as the National Vulnerability Database (NVD), Open Source Vulnerability Database (OSVDB), or the Exploit Database (EDB) have a large quantity of PHP application vulnerabilities. Also, compared to other types of targets, the details disclosed in these databases are often enough to easily write an exploit. 
 While we cannot alter the type of application, we do see future support for other languages [GJN YES].
 
-We are currently tied to PHP because we use XDebug as our trace collector [GJN NO].  
+
   
 At it's core, the orginization of the vulnerability engine is driven by the Python module and package system.
-
+We are currently tied to PHP because we use XDebug as our trace collector [GJN NO].  
 
 Key qualities:\\
  \begin{tabular}{ l }
@@ -136,7 +134,7 @@ Characteristics:\\
 \section{Framework}
 
 The framework has five main components: web application store, testing environment, testing scripts, and host system. Figure 1 illustrates general structure of the corpus environment, with arrows showing lines of control or communication. The system was designed to be modular so that every component can be independently interchanged.\\
-Currently BugBox is designed to work on any system compatable with the Debian GNU/Linux distribution. The key requirements are that the machine have sufficient storage (roughly 4 GB per OS environment, and 2 GB for the application, engine, and exploit sources [Confirm these #s]), that it should be capable of running a MySql server, in addition to the Selenium Server.   
+Currently BugBox is designed to work on any system compatable with the Debian GNU/Linux distribution. The key requirements are that the machine have sufficient storage (roughly 4 GB per OS environment, and 2 GB for the application, engine, and exploit sources [Confirm these #s]), that it should be capable of running a MySql serverer to host the various applicaiton databases, in addition to the Selenium Server (used in the exploit implementations). The system dependancies also include debootstrap for managing the application host environments, and    
 Each part is implemented as a separate python module as follows:
 
 
@@ -187,6 +185,7 @@ Architecture:
 \subsection{Vulnerability Engine}
 
 \subsection{Environment}
+\textcolor{red}{[Why we need different OS environments, how the corpus manages them]}
 
 The corpus contains a main engine, written in python, to load a web application, gather traces, run exploits, and cleanup.  We provide an engine to abstract away the details of the setup process so that contributors can focus on creating new exploit scripts.  This separation accomplished two tasks, it makes developing for the corpus more approachable for programmers that want to contribute and provides a robust framework that can provide more of a challenge to seasoned programmers.
 
@@ -200,7 +199,7 @@ We use a virtual jail, the linux chroot environment.  Staging the application in
 
 
 \subsection{Target Module}
-
+\textcolor{red}{The anatomy of a ``Target'' module}
 \subsection{Exploit}
 
 Management actions, recording commands
@@ -213,22 +212,51 @@ cleanup()
 \end{verbatim}
 
 {\tt \small
+\begin{figure*}[!ht]
 \begin{verbatim}
-int wrap_fact(ClientData clientData,
-              Tcl_Interp *interp,
-              int argc, char *argv[]) {
-    int result;
-    int arg0;
-    if (argc != 2) {
-        interp->result = "wrong # args";
-        return TCL_ERROR;
-    }
-    arg0 = atoi(argv[1]);
-    result = fact(arg0);
-    sprintf(interp->result,"%d",result);
-    return TCL_OK;
-}
+import corpus
+
+class Exploit (corpus.Exploit):
+
+    def __init__(self):
+        corpus.Exploit.__init__(self, {
+                'Name' :        "CVE_2012_2403",
+                'Description' : "Creates a post containing a XSS payload.",
+                'References' :  [['CVE','2012-2403'],
+                                 ['OSVDB','81463']],
+                'Target' :      "Wordpress 3.3.1",
+                'Type' :        "XSS",
+                'VulWikiPage' : "http://seamster.cs.umd.edu/CVE-2012-2403"
+                })
+        return
+            
+    def exploit(self):
+
+        payload = "<a href=\"#\" title=\"XSS http://example.com/onmouseover"
+                  "=eval(unescape(/%61%6c%65%72%74%28%31%29%3b%61%6c%65%72"
+                  "%74%28%32%29%3b%61%6c%65%72%74%28%33%29%3b/.source))//\"
+                  ">XSS</a>"
+
+        driver = self.create_selenium_driver()
+        driver.get("http://localhost/wordpress/?p=1")
+        driver.find_element_by_id("author").clear()
+        driver.find_element_by_id("author").send_keys("selenium script")
+        driver.find_element_by_id("email").clear()
+        driver.find_element_by_id("email").send_keys("selenium@python.org")
+        driver.find_element_by_id("url").clear()
+        driver.find_element_by_id("url").send_keys("www.python.org")
+        driver.find_element_by_id("comment").clear()
+        driver.find_element_by_id("comment").send_keys(payload)
+        driver.find_element_by_id("submit").click()
+        driver.cleanup()
+
+        return
+
+if __name__ == "__main__": # Exploit invoked from command-line
+    engine = corpus.Engine(Exploit())
+    engine.parse_args(sys.argv)
 \end{verbatim}
+\end{figure*}
 }
 
 
@@ -281,30 +309,29 @@ Cons:
 We are restricted to web applications because of the use of selenium scripts in our corpus. [GJN ADD NOTES FROM JEFF's PAPER ON THIS]  
 
 
-{\tt \footnotesize
-\begin{verbatim}
+%{\tt \footnotesize
+%\begin{verbatim}
+%
+%payload = "XSS PAYLOAD"
+%
+%driver = self.create_selenium_driver()
+%
+%driver.get("http://localhost/wordpress/?p=1")
 
-payload = "XSS PAYLOAD"
-
-driver = self.create_selenium_driver()
-
-driver.get("http://localhost/wordpress/?p=1")
-
-%Selenium Actions preceded by
-% driver.find_element_by_id
-("author").clear()
-("author").send_keys("selenium script")
-("email").clear()
-("email").send_keys("selenium@python.org")
-("url").clear()
-("url").send_keys("www.python.org")
-("comment").clear()
-("comment").send_keys(payload)
-("submit").click()
-
-\end{verbatim}
-}
-
+%%Selenium Actions preceded by
+%% driver.find_element_by_id
+%("author").clear()
+%("author").send_keys("selenium script")
+%("email").clear()
+%("email").send_keys("selenium@python.org")
+%("url").clear()
+%("url").send_keys("www.python.org")
+%("comment").clear()
+%("comment").send_keys(payload)
+%("submit").click()
+%
+%\end{verbatim}
+%}
 
 
 \subsection{Trace Collection}
@@ -370,18 +397,16 @@ Everything is great, we just need community involvement to mature the framework 
 }
 \section{Availability}
 \textcolor{red}{
-[Available as a 10 GB virtual machine and as a standalone debian package]
+[Available as a 10 GB virtual machine and as a standalone debian package?]
 }
 \begin{center}
 {\tt ftp://ftp.site.dom/pub/myname/Wonderful}
 {\tt git://bugbox.github.com/blahblah}
 \end{center}
 
-Also, it's even greater when you can write that information is also 
-available on the Wonderful homepage at 
-
 \begin{center}
 {\tt http://www.vulnerabilitywiki.com}
+{\tt http://www.projecthomepage.com}
 \end{center}
 
 Now we get serious and fill in those references.  Remember you will
