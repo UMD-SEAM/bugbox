@@ -70,7 +70,7 @@ Building significant vulnerability corpus is not usually the main focus in vulne
 
 The value of a corpus is mostly measured by the size and diversity of vulnerabilities and vulnerable applications represented. But quantity is not the only consideration. It is also useful that the collection be easy to maintain, and that vulnerability meta-data is encoded in way that fascilitates search, and automation in the experiments. Through the use of abstraction and encapsulation, the management of application, environment, and exploitation has been streamlined in BugBox. The design is intended to be make it practical to manage a large database of exploits, along with their target environments. To have these qualities the corpus must be much more than an exploit repository. For a given application, it should include the software in which a vulnerability exists, the software's dependancies, the configuration of the software in it's vulnerable state, exploit code that will trigger the security breach, and data that describes any distinguishing attributes of the bug. [define attributes futher]\par
 
-Currently the framework is designed for PHP web applications. There are a number of factors for the decision to focus on collecting vulnerabilities only for PHP. Foremost, is that PHP remains on of the most popular languages for web applications [ref], and as has been reported by Top Cyber Security Risks to be a target for security threats [ref]. Web applications are subject to a rich variety of exploit types (such as XSS, CSRF, SQL injection, overflows, etc...) covering many actively maintained projects that are open source. In addition, popular vulnerability databases wuch as the National Vulnerability Database (NVD), Open Source Vulnerability Database (OSVDB), or the Exploit Database (EDB) have a large quantity of PHP application vulnerabilities. In addition, the details disclosed in these databases on PHP holes are often enough to easily write an exploit. In addition, XDebug is a feature-rich PHP debugger that can be used to easily collector traces enabling various run-time analyses.\par
+Currently the framework is designed for PHP web applications. There are a number of factors for the decision to focus on collecting vulnerabilities only for PHP. Foremost, is that PHP remains on of the most popular languages for web applications [ref], and as has been reported by Top Cyber Security Risks to be a target for security threats [ref]. Web applications are subject to a rich variety of exploit types (such as XSS, CSRF, SQL injection, overflows, etc...) covering many actively maintained projects that are open source. In addition, popular vulnerability databases wuch as the National Vulnerability Database (NVD), Open Source Vulnerability Database (OSVDB), or the Exploit Database (EDB) have a large quantity of PHP application vulnerabilities. In addition, these databases often disclose enough details of the vulnerability that exploits can easily be written.\par
   
 Key qualities:\\
  \begin{tabular}{ l }
@@ -310,7 +310,7 @@ We are restricted to web applications because of the use of selenium scripts in 
 \textcolor{red}{
 Stuff about interaction with XDebug.
 }
-
+XDebug is a feature-rich PHP debugger that can be used to easily collector traces enabling various run-time analyses.\par
 
 \subsection{File Structure}
 
