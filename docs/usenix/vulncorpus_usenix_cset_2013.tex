@@ -37,10 +37,16 @@
 
 %for single author (just remove % characters)
 \author{
+{\rm Gary Nilson}\\
+Computer Science Department\\University of Maryland
+\and
 {\rm Kent Wills}\\
 Computer Science Department\\University of Maryland
 \and
-{\rm Gary Nilson}\\
+{\rm Jeff Stuckman}\\
+Computer Science Department\\University of Maryland
+\and
+{\rm Jim Purtilo}\\
 Computer Science Department\\University of Maryland
 % copy the following lines to add more authors
 % \and
@@ -60,38 +66,24 @@ Web Applications provide a robust amount of code vulnerabilities that are exploi
 
 \section{Introduction}
 
-Web Applications are routinely exploited in order to glean sensitive information.  These exploits, when caught, are fixed and new versions of the web application are provided.  Frequently the vulnerability is also logged in the Common Vulnerability and Exposures (CVE) Database to warn administrators of malicious attacks that would successfuly execute on their applications.  As researchers, we can gain insight through analysis of this data.  While this data is properly logged and serves to notify the community of these attacks, it is not readily useful for the researcher trying to characterize these attacks.  To ensure that this data is useful to the researcher at hand, we hope to present many and diverse code vulnerability samples that are prepped for analysis.  \par
+\textcolor{red}{Overview}
+With the surge of internet blogging sites \footnote{Zero Comments: Blogging and Critical Internet Culture (09 August 2007) by Geert Lovink}, it has never before been so critical to release and maintain secure web applications.   Many blog administrators rely on these web applications, which tend to be open source, to be secure frameworks.  While blogging engines do represent a majority of web applications used on the internet, there are many other applications available to the community.  Due to the community of users in this space, many web applications are subject to a rich variety of exploit types, such as: cross-site scripting (XSS), cross-site request forgery (CSRF), SQL injection, buffer overflow, and more.  Of the web applications offered to the community, many popular applications, such as wordpress,... ,are designed in PHP.  Currently, PHP has been reported by Top Cyber Security Risks to be a target for security threats [ref].\par
 
-{\em Talk about research projects that would benefit from this corpus.}
+\textcolor{red}{Database}
+Popular vulnerability/exploit databases such as the National Vulnerability Database (NVD), Open Source Vulnerability Database (OSVDB), Common Vulnerability and Exposures Database(CVE), or the Exploit Database (EDB) log PHP application vulnerabilities/exploits as a service to the community.   \par
 
-Understanding the labor involved in developing a corpus that suits the needs of a researcher, we propose an elegant framework using current tools in order to automate data collection in a simple and scalable way.  In this paper, we describe the framework and the corpus that will lead to collection of a large amount of vulnerabilities that are diverse in representation through community support.  And we will provide a corpus and framework that can be easily expanded and analyzed, thus reducing the data collection time lending to an increase in research productivity.\par
+\textcolor{red}{Use}
+While many of these databases exist and disclose the details of the vulnerability/exploit, many do not provide vulnerable code that can be used for analysis.  While sufficient information is not included on these sites for code analysis, we use these databases as a template to write exploits from which we are able to gather vulnerable code samples with a systematic approach.  Code samples that can, in-turn, be further analyzed.
+\par
 
+\textcolor{red}{Corpus}
+Understanding the labor involved in developing a corpus that suits the needs of a researcher, we have built an elegant framework and corpus that contains over "x" exploits and "y" vulnerability samples that is made publicly available.  We hope to gain community support in order to further expand our corpus size and diversity of exploits.  In order to have a publicly available corpus that can be sustained in the academic community, we provide a framework that is easy to maintain, quick to use, automated, fully compartmentalized, and scalable.  Through the use of abstraction and encapsulation, the management of application, environment, and exploitation has been streamlined in BugBox.  The design is intended to be make it practical to manage a large database of exploits, along with their target environments. Our corpus is more than an exploit repository, it contains the software and its dependencies in which a vulnerability exists, the configuration of the software in it's vulnerable state, exploit code that will trigger the security breach, and data that describes any distinguishing attributes of the bug. [define attributes futher]\par
 
-\textcolor{red}{
-(i.e. Introduction and Motivation)
-[what is a corpus?
- what is empirical vulnerability research?
- what should a corpus contain?
- what cool things can BugBox do?]}
+\textcolor{red}{Benefiting Projects}
+Our corpus would have immediate benefit for testing static analysis tools\footnote{}, training security teams to spot vulnerable code\footnote{}, and vulnerability metric analysis\footnote{Stuckman Metrics Analysis}.
+Many current applications would benefit from a corpus like this, such as...{\em Talk about research projects that would benefit from this corpus.}
 
-The value of a corpus is mostly measured by the size and diversity of vulnerabilities and vulnerable applications represented. But quantity is not the only consideration. It is also useful that the collection be easy to maintain, and that vulnerability meta-data is encoded in way that fascilitates search, and automation in the experiments. Through the use of abstraction and encapsulation, the management of application, environment, and exploitation has been streamlined in BugBox. The design is intended to be make it practical to manage a large database of exploits, along with their target environments. To have these qualities the corpus must be much more than an exploit repository. For a given application, it should include the software in which a vulnerability exists, the software's dependancies, the configuration of the software in it's vulnerable state, exploit code that will trigger the security breach, and data that describes any distinguishing attributes of the bug. [define attributes futher]\par
-
-Currently the framework is designed for PHP web applications. There are a number of factors for the decision to focus on collecting vulnerabilities only for PHP. Foremost, is that PHP remains on of the most popular languages for web applications [ref], and as has been reported by Top Cyber Security Risks to be a target for security threats [ref]. Web applications are subject to a rich variety of exploit types (such as XSS, CSRF, SQL injection, overflows, etc...) covering many actively maintained projects that are open source. In addition, popular vulnerability databases wuch as the National Vulnerability Database (NVD), Open Source Vulnerability Database (OSVDB), or the Exploit Database (EDB) have a large quantity of PHP application vulnerabilities. In addition, these databases often disclose enough details of the vulnerability that exploits can easily be written.\par
-  
-Key qualities:
- \begin{tabular}{ l }
-   $\bullet$ Quantity of vulnerabilities\\
-   $\bullet$ Diversity of applications\\
-   $\bullet$ Automation of trace collection\\
-   $\bullet$ Collaboration from other researchers\\
-   $\bullet$ Ease of exploit implementation\\
-
- \end{tabular}
-\\
-
-
-\subsection{Empirical Vulnerability Research}
-
+\section{Empirical Vulnerability Research}
 
 A key question in empirical vulnerability research is how to determine which functionality, or piece of code creates a vulnerable condition in a program. In studying this problem, sometimes referred to as \emph{vulnerability localization}, it is necessary to have a large quantity of structured data on which one can formulate and test hypotheses. Potential approaches to vulnerability research include static and dynamic analysis of the software, therefore it is important that the corpus include both the vulnerable program's code, and some way to perform analysis as the system is compromised.\\
 
