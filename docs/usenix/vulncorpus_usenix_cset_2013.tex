@@ -23,6 +23,8 @@
 \documentclass[letterpaper,twocolumn,10pt]{article}
 \usepackage{usenix,epsfig,endnotes,graphicx}
 \usepackage{epstopdf, color}
+\usepackage{enumitem}
+\setlist[enumerate]{itemsep=0mm}
 % \DeclareGraphicsExtensions{.eps}
 
 \begin{document}
@@ -80,13 +82,15 @@ While many of these databases exist and disclose the details of the vulnerabilit
 Understanding the labor involved in developing a corpus that suits the needs of a researcher, we have built an elegant framework and corpus that contains over "x" exploits and "y" vulnerability samples that is made publicly available.  We hope to gain community support in order to further expand our corpus size and diversity of exploits.  In order to have a publicly available corpus that can be sustained in the academic community, we provide a framework that is easy to maintain, quick to use, automated, fully compartmentalized, and scalable.  Through the use of abstraction and encapsulation, the management of application, environment, and exploitation has been streamlined in BugBox.  The design is intended to be make it practical to manage a large database of exploits, along with their target environments. Our corpus is more than an exploit repository, it contains the software and its dependencies in which a vulnerability exists, the configuration of the software in it's vulnerable state, exploit code that will trigger the security breach, and data that describes any distinguishing attributes of the bug. [define attributes futher]\par
 
 \textcolor{red}{Benefiting Projects}
-Our corpus would have immediate benefit for testing static analysis tools\endnote{}, training security teams to spot vulnerable code\endnote{}, and vulnerability metric analysis\endnote{Stuckman Metrics Analysis}.
-Many current applications would benefit from a corpus like this, such as...{\em Talk about research projects that would benefit from this corpus.}
+Our corpus would have immediate benefit for testing static analysis tools,\endnote{M. Zitser, R. Lippmann, and T. Leek, "Testing Static Analysis Tools using Exploitable Buffer Overflows from Open Source Code," ???} penetration testing and training security teams with vulnerablity injection,\endnote{J. Fonseca, M. Vieira and H. Maderia, ``Traning Security Assurance Teams using Vulnerability Injection," 2008 14th IEEE Pacific Rim International Symposium on Dependable Computing} and computing attack surface metrics.\endnote{J. Stuckman and J. Purtilo, "Comparing and Applying Attack Surface Metrics," ???}
 
 \section{Empirical Vulnerability Research}
 
-A key question in empirical vulnerability research is how to determine which functionality, or piece of code creates a vulnerable condition in a program. In studying this problem, sometimes referred to as \emph{vulnerability localization}, it is necessary to have a large quantity of structured data on which one can formulate and test hypotheses. Potential approaches to vulnerability research include static and dynamic analysis of the software, therefore it is important that the corpus include both the vulnerable program's code, and some way to perform analysis as the system is compromised.\\
+A key question in empirical vulnerability research is how to determine which functionality, or piece of code creates a vulnerable condition in a program. In studying this problem, sometimes referred to as \emph{vulnerability localization}, it is necessary to have a large quantity of structured data in which one can formulate and test hypotheses. Potential approaches to vulnerability research include static and dynamic analysis of the software, therefore it is important that the corpus include both the vulnerable program's code, and some way to perform analysis as the system is compromised.\\
 
+We use a trace based collection approach in order to capture code vulnerabilities in software.  Benefits of a trace based approach include:  a global approach to collection.
+
+A global approach to collection can be more benefitial than using static analysis tools to find vulnerabilities.   
 
 \noindent [many things with references go here] \\
 Demonstrate that BugBox ....\\
@@ -106,44 +110,7 @@ System taint analysis\\
 
 BugBox is designed to work with the Debian GNU/Linux distribution and compatible distributions.  It can be distributed as a self-contained virtual machine, or as a package that can be installed on an existing system. The machine must have sufficient storage (roughly 4 GB per OS environment, and 2 GB for the application, engine, and exploit sources [Confirm these \#s]).  Dependencies for BugBox include MySQL,  Selenium Server, debootstrap, and the Advanced Packaging Tool (APT.)\par
 
-\section{Framework}
-
-The BugBox framework has five main components: web application store, testing environment, testing scripts, and host system. Figure 1 illustrates the general structure of the corpus environment, with arrows showing lines of control or communication.  BugBox is a modular framework design where individual components can be interchanged without effecting the overall functionality of the framework.\par
-At it's core, the organization of the vulnerability engine is driven by the Python module and package system. The system breaks down into the following python modules:
-
-
-\begin{center}
- \begin{itemize}
-   \item corpus.Engine\\
-   \item corpus.Targets\\
-   \item corpus.Exploit\\
-   \item corpus.SeleniumDriver\\
- \end{itemize}
-\end{center}
-
-
-   {\bf Engine} drives the environment setup, tear-down, and exploitation process. It contains most of the logic for doing work with exploits.
-   {\bf Targets} module has as submodules each application and application plugin that are associated with an exploit.
-   {\bf Exploit} is the superclass for each exploit in the corpus, defining interfaces and attributes that the engine uses to manage the environment and exploitation.
-   {\bf SeleniumDriver} a wrapper class for the Selenium's Firefox web driver.
-
-
-% you can also use the wonderful epsfig package...
-%{\special{psfile = system_diagram.ps hscale = 50 vscale = 50}}
-\begin{figure}[t]
-
-\begin{center}
-\begin{picture}(240, 195)(0,0) %(0,200)
-\put(0,0){\includegraphics[scale=1.17]{system_diagram.eps}}
-\end{picture}
-\end{center}
-\caption{System Diagram}
-\end{figure}
-
-
-\subsection{Vulnerability Engine}
-
-\subsection{Environment}
+\section{Environment}
 \textcolor{red}{[Why we need different OS environments, how the corpus manages them]}
 
 The corpus contains a main engine, written in python, to load a web application, gather traces, run exploits, and cleanup.  We provide an engine to abstract away the details of the setup process so that contributors can focus on creating new exploit scripts.  This separation accomplished two tasks, it makes developing for the corpus more approachable for programmers that want to contribute and provides a robust framework that can provide more of a challenge to seasoned programmers.
@@ -155,6 +122,49 @@ We use a virtual jail, the linux chroot environment.  Staging the application in
 {\bf Current tests are independent from future tests}.  We load a clean application into the chroot jail every time we wish to run a new test.  This ensures that there is no corruption of the original Web Application and provides reproducible results when testing.
 
 {\bf The web application cannot contaminate our testing environment}.  If a web application crashes due to the malicious script, we can ensure that it does not crash our corpus environment, worst case the chroot is corrupted, and we can ensure that the crash cannot have un-intended side effects in our testing environment.  
+
+\subsection{File Structure}
+
+The file structure mimics the modularity of our corpus.  Currently we store backups of the Web Applications in the {\tt/backups} directory and the actual applications in the {\tt/packages} directory.  We store a separate backup in order to verify that the selenium scripts did not modify the Web Application in any way.  If the Web Application is corrupt, then we simply copy the web application from the backup folder to the package folder.  
+
+Currently as simple incremental backup system is used to ensure that each chroot jail remains un-tainted. Periodically, an original instance of a chroot system will overwrite the 
+
+Future implementations will store only the md5 hash of the program on the corpus server and the backups on an external server.  This will allow for a quick comparison followed by a remote copy if necessary.  This separation will ensure that backups will never be corrupted through use of the corpus.  
+
+All the exploits that are available are located under the {\tt /scripts} folder.  While script is referenced as Selenium Script throughout the document, here scripts also include services such as: deploying the web application in the chroot jail, starting the trace collection, and running the script. All mounted chroot environments reside in {\tt /live\_systems}. 
+\\\\
+\textcolor{red}{
+{\bf insert file system diagram}
+}
+
+\section{Framework}
+
+The BugBox framework has five main components: web application store, testing environment, testing scripts, and host system. Figure 1 illustrates the general structure of the corpus environment, with arrows showing lines of control or communication.  BugBox is a modular framework design where individual components can be interchanged without effecting the overall functionality of the framework.\par
+At it's core, the organization of the vulnerability engine is driven by the Python module and package system. The system breaks down into the following four python modules:
+\begin{center}
+ \begin{enumerate}
+   \item corpus.{\bf Engine}\\
+   \item corpus.{\bf Targets}\\
+   \item corpus.{\bf Exploit}\\
+   \item corpus.{\bf SeleniumDriver}\\
+ \end{enumerate}
+\end{center}
+   The {\bf Engine} drives the environment setup, tear-down, and exploitation process. It contains most of the logic for doing work with exploits.
+   The {\bf Targets} module has as submodules each application and application plugin that are associated with an exploit.
+   {\bf Exploit} is the superclass for each exploit in the corpus, defining interfaces and attributes that the engine uses to manage the environment and exploitation.
+   The {\bf SeleniumDriver} is a wrapper class for the Selenium's Firefox web driver.
+
+\begin{figure}[t]
+\begin{center}
+\begin{picture}(240, 195)(0,0) %(0,200)
+\put(0,0){\includegraphics[scale=1.17]{system_diagram.eps}}
+\end{picture}
+\end{center}
+\caption{System Diagram}
+\end{figure}
+
+\subsection{Vulnerability Engine}
+
 
 
 \subsection{Target Module}
@@ -299,19 +309,7 @@ Stuff about interaction with XDebug.
 }
 XDebug is a feature-rich PHP debugger that can be used to easily collector traces enabling various run-time analyses.\par
 
-\subsection{File Structure}
 
-The file structure mimics the modularity of our corpus.  Currently we store backups of the Web Applications in the {\tt/backups} directory and the actual applications in the {\tt/packages} directory.  We store a separate backup in order to verify that the selenium scripts did not modify the Web Application in any way.  If the Web Application is corrupt, then we simply copy the web application from the backup folder to the package folder.  
-
-Currently as simple incremental backup system is used to ensure that each chroot jail remains un-tainted. Periodically, an original instance of a chroot system will overwrite the 
-
-Future implementations will store only the md5 hash of the program on the corpus server and the backups on an external server.  This will allow for a quick comparison followed by a remote copy if necessary.  This separation will ensure that backups will never be corrupted through use of the corpus.  
-
-All the exploits that are available are located under the {\tt /scripts} folder.  While script is referenced as Selenium Script throughout the document, here scripts also include services such as: deploying the web application in the chroot jail, starting the trace collection, and running the script. All mounted chroot environments reside in {\tt /live\_systems}. 
-\\\\
-\textcolor{red}{
-{\bf insert file system diagram}
-}
 
 
 \section{Scalability}
