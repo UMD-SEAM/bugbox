@@ -111,11 +111,8 @@ System taint analysis\\
 BugBox is designed to work with the Debian GNU/Linux distribution and compatible distributions.  It can be distributed as a self-contained virtual machine, or as a package that can be installed on an existing system. The machine must have sufficient storage (roughly 4 GB per OS environment, and 2 GB for the application, engine, and exploit sources [Confirm these \#s]).  Dependencies for BugBox include MySQL,  Selenium Server, debootstrap, and the Advanced Packaging Tool (APT.)\par
 
 \section{Environment}
-\textcolor{red}{[Why we need different OS environments, how the corpus manages them]}
 
-The corpus contains a main engine, written in python, to load a web application, gather traces, run exploits, and cleanup.  We provide an engine to abstract away the details of the setup process so that contributors can focus on creating new exploit scripts.  This separation accomplished two tasks, it makes developing for the corpus more approachable for programmers that want to contribute and provides a robust framework that can provide more of a challenge to seasoned programmers.
-
-We use a virtual jail, the linux chroot environment.  Staging the application in the chroot environment provides locality, reproducibility, and stability.  
+We use a virtual jail, the linux chroot environment.  Staging the application in the chroot environment provides locality, reproducibility, and stability.  (flexibility)
 
 {\bf The web application remains local}.  Many applications, such as wordpress, have a MYSQL backend.  If we were to host the application on a different server or VM we would have to ensure that the MYSQL database is properly setup each time.  With the chroot environment, the process is simplified, we keep a MYSQL database outside of the CHROOT Jail in order to facilitate MYSQL access.  
 
@@ -123,23 +120,18 @@ We use a virtual jail, the linux chroot environment.  Staging the application in
 
 {\bf The web application cannot contaminate our testing environment}.  If a web application crashes due to the malicious script, we can ensure that it does not crash our corpus environment, worst case the chroot is corrupted, and we can ensure that the crash cannot have un-intended side effects in our testing environment.  
 
-\subsection{File Structure}
+\textcolor{red}{[Why we need different OS environments, how the corpus manages them]}
 
-The file structure mimics the modularity of our corpus.  Currently we store backups of the Web Applications in the {\tt/backups} directory and the actual applications in the {\tt/packages} directory.  We store a separate backup in order to verify that the selenium scripts did not modify the Web Application in any way.  If the Web Application is corrupt, then we simply copy the web application from the backup folder to the package folder.  
 
 Currently as simple incremental backup system is used to ensure that each chroot jail remains un-tainted. Periodically, an original instance of a chroot system will overwrite the 
 
 Future implementations will store only the md5 hash of the program on the corpus server and the backups on an external server.  This will allow for a quick comparison followed by a remote copy if necessary.  This separation will ensure that backups will never be corrupted through use of the corpus.  
 
-All the exploits that are available are located under the {\tt /scripts} folder.  While script is referenced as Selenium Script throughout the document, here scripts also include services such as: deploying the web application in the chroot jail, starting the trace collection, and running the script. All mounted chroot environments reside in {\tt /live\_systems}. 
-\\\\
-\textcolor{red}{
-{\bf insert file system diagram}
-}
+We store a separate backup in order to verify that the selenium scripts did not modify the Web Application in any way.  If the Web Application is corrupt, then we simply copy the web application from the backup folder to the package folder.  
 
 \section{Framework}
 
-The BugBox framework has five main components: web application store, testing environment, testing scripts, and host system. Figure 1 illustrates the general structure of the corpus environment, with arrows showing lines of control or communication.  BugBox is a modular framework design where individual components can be interchanged without effecting the overall functionality of the framework.\par
+The BugBox framework has four main components: web application store, testing environment, testing scripts, and host system. Figure 1 illustrates the general structure of the corpus environment, with arrows showing lines of control or communication.  BugBox is a modular framework design where individual components can be interchanged without effecting the overall functionality of the framework.\par
 At it's core, the organization of the vulnerability engine is driven by the Python module and package system. The system breaks down into the following four python modules:
 \begin{center}
  \begin{enumerate}
@@ -149,9 +141,9 @@ At it's core, the organization of the vulnerability engine is driven by the Pyth
    \item corpus.{\bf SeleniumDriver}\\
  \end{enumerate}
 \end{center}
-   The {\bf Engine} drives the environment setup, tear-down, and exploitation process. It contains most of the logic for doing work with exploits.
-   The {\bf Targets} module has as submodules each application and application plugin that are associated with an exploit.
-   {\bf Exploit} is the superclass for each exploit in the corpus, defining interfaces and attributes that the engine uses to manage the environment and exploitation.
+   
+
+  
    The {\bf SeleniumDriver} is a wrapper class for the Selenium's Firefox web driver.
 
 \begin{figure}[t]
@@ -164,12 +156,19 @@ At it's core, the organization of the vulnerability engine is driven by the Pyth
 \end{figure}
 
 \subsection{Vulnerability Engine}
-
+The {\bf Engine} drives the environment setup, tear-down, and exploitation process. It contains most of the logic for doing work with exploits.
+deploying the web application in the chroot jail, starting the trace collection
+The corpus contains a main engine, written in python, to load a web application, gather traces, run exploits, and cleanup.  We provide an engine to abstract away the details of the setup process so that contributors can focus on creating new exploit scripts.  This separation accomplished two tasks, it makes developing for the corpus more approachable for programmers that want to contribute and provides a robust framework that can provide more of a challenge to seasoned programmers.
 
 
 \subsection{Target Module}
+
+   The {\bf Targets} module has as submodules each application and application plugin that are associated with an exploit.
 \textcolor{red}{The anatomy of a ``Target'' module}
+
 \subsection{Exploit}
+ {\bf Exploit} is the superclass for each exploit in the corpus, defining interfaces and attributes that the engine uses to manage the environment and exploitation.
+
 
 Management actions, recording commands
 attributes,
