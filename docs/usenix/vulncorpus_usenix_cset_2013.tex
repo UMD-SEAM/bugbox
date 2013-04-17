@@ -71,15 +71,15 @@ Web applications are subject to a rich variety of exploit types, such as cross-s
 
 While many of these databases exist and disclose the details of the vulnerability and/or exploit, many do not provide a collection of structured vulnerable code that can be used for analysis.  A suitable, structured collection of vulnerable code is typically not made publicly available and is scarce in quantity.  The structured collection, often reffered to as a corpus, is useful in statistical analysis and hypothesis testing if it meets certain criteria.  To elaborate on the suitability of a corpus, one most consider several of these criteria, which include: representativeness of the samples, quantity of the samples, diversity of the samples, and reproducability of the tests that produced the samples.  \\
 
-Uses of a corpus of this type include: serving as a training aid for security teams, penetration testing, testing static analysis tools, and metric based analysis.  Projects such as ``An empirical investigation into open source web applications' implementation vulnerabilities" by Huynh and Miller \cite{DBLP:journals/ese/HuynhM10} could have benefitted from a corpus of this type. Insert our projects here.\\
+Uses of a corpus of this type include: serving as a training aid for security teams, penetration testing, testing static analysis tools, and metric based analysis.  Projects such as ``An empirical investigation into open source web applications' implementation vulnerabilities" by Huynh and Miller\cite{DBLP:journals/ese/HuynhM10} could have benefitted from a corpus of this type. Insert our projects here.\\
 
 Understanding the scarcity and labor involved in developing a corpus that is suitable, has led to the in-house creation of BugBox, a publicly available, scalable, efficient, easy-to-use framework and corpus that collects vulnerable code signatures through an automated trace based collection method.  To increase the sample size and diversity of BugBox, we must attract community support.  In order to successfully use this support, we provide a framework that is easy to maintain, quick to use, automated, fully compartmentalized, and scalable.  Through the use of abstraction and encapsulation, the management of application, environment, and exploitation has been streamlined in BugBox.  The design is intended to make it practical to manage a large database of exploits, along with their target environments. Our corpus is more than an exploit repository, it contains the software and its dependencies in which a vulnerability exists, the configuration of the software in it's vulnerable state, exploit code that will trigger the security breach, and data that describes any distinguishing attributes of the bug. [define attributes futher]\\
 
-evaluating static analysis tools \cite{Zitser:2004:TSA:1041685.1029911}, penetration testing and training security teams with vulnerablity injection\cite{4725309}, and computing attack surface metrics.\cite{Stuckman:2012:CAA:2372225.2372229}\\
+evaluating static analysis tools\cite{Zitser:2004:TSA:1041685.1029911}, penetration testing and training security teams with vulnerablity injection\cite{4725309}, and computing attack surface metrics.\cite{Stuckman:2012:CAA:2372225.2372229}\\
 
 \section{Vulnerability Representation}
 
-A few effective methods for finding which piece of code creates a vulnerable condition in a program are line-based, run-based, and trace-based approaches.  Henceforth, we will refer to these  methods as \emph{vulnerability localization}.  Works by Fonseca and Vieira \cite{4630094} use a line-based approach for vulnerability collection.  This approach uses line numbers represented in program patches to identify the location of the vulnerabilities.  Whil, in general, this is a sound approach, patches in a program may only mask the vulnerable code instead of replace it.  Other by Song \cite{Song:2008:BNA:1496255.1496257} create vulnerability signatures from intermediate byte code.  This approach, while quick and efficient cannot be used for a PHP web application.  The method proposed for our corpus is a trace-based collection approach in order to capture code vulnerabilities in software.  The trace-based collection method is performed through monitoring the programs execution through the use of XDebug.
+A few effective methods for finding which piece of code creates a vulnerable condition in a program are line-based, run-based, and trace-based approaches.  Henceforth, we will refer to these  methods as \emph{vulnerability localization}.  Works by Fonseca and Vieira\cite{4630094} use a line-based approach for vulnerability collection.  This approach uses line numbers represented in program patches to identify the location of the vulnerabilities.  Whil, in general, this is a sound approach, patches in a program may only mask the vulnerable code instead of replace it.  Other by Song\cite{Song:2008:BNA:1496255.1496257} create vulnerability signatures from intermediate byte code.  This approach, while quick and efficient cannot be used for a PHP web application.  The method proposed for our corpus is a trace-based collection approach in order to capture code vulnerabilities in software.  The trace-based collection method is performed through monitoring the programs execution through the use of XDebug.
 
 \section{Requirements}
 
@@ -87,17 +87,17 @@ BugBox is designed to work with the Debian GNU/Linux distribution and compatible
 
 \section{Environment}
 
-In order to conduct tests in an isolated environment we use a virtual jail, the linux chroot environment.  Staging the application in the chroot environment provides locality, reproducibility, and stability and flexibility.
+In order to conduct tests in an isolated environment we use a virtual jail, the linux chroot environment.  Staging the application in the chroot environment provides locality, reproducibility, and stability and flexibility.\\
 
-{\bf The web application remains local}.  Many applications, such as wordpress, have a MYSQL backend.  If we were to host the application on a different server or VM we would have to ensure that the MYSQL database is properly setup each time.  With the chroot environment, the process is simplified, we keep a MYSQL database outside of the CHROOT Jail in order to facilitate MYSQL access.  
+{\bf The web application remains local}.  Many applications, such as wordpress, have a MYSQL backend.  If we were to host the application on a different server or VM we would have to ensure that the MYSQL database is properly setup each time.  With the chroot environment, the process is simplified, we keep a MYSQL database outside of the CHROOT Jail in order to facilitate MYSQL access.  \\
 
-{\bf Current tests are independent from future tests}.  We load a clean application into the chroot jail every time we wish to run a new test.  This ensures that there is no corruption of the original web application and provides reproducible results when testing.
+{\bf Current tests are independent from future tests}.  We load a clean application into the chroot jail every time we wish to run a new test.  This ensures that there is no corruption of the original web application and provides reproducible results when testing.\\
 
-{\bf The web application cannot contaminate our testing environment}.  If a web application crashes due to the malicious script, we can ensure that it does not crash our corpus environment.  In the worst case the chroot becomes corrupt for which we can treat in an isolated scenario tha does not have un-intended side effects in our testing environment.  
+{\bf The web application cannot contaminate our testing environment}.  If a web application crashes due to the malicious script, we can ensure that it does not crash our corpus environment.  In the worst case the chroot becomes corrupt for which we can treat in an isolated scenario tha does not have un-intended side effects in our testing environment.  \\
 
-{\bf The web application will never be contaminated}.  We store a separate backup in order to verify that the selenium scripts did not modify the Web Application in any way.  If the Web Application is corrupt, then we simply copy the web application from the backup folder to the package folder.  Future implementations will store only the md5 hash of the program on the corpus server and the backups on an external server.  This will allow for a quick comparison followed by a remote copy for mismatched hashes.  This separation will ensure that backups will never be corrupted through use of the corpus and expedite checking.  
+{\bf The web application will never be contaminated}.  We store a separate backup in order to verify that the selenium scripts did not modify the Web Application in any way.  If the Web Application is corrupt, then we simply copy the web application from the backup folder to the package folder.  Future implementations will store only the md5 hash of the program on the corpus server and the backups on an external server.  This will allow for a quick comparison followed by a remote copy for mismatched hashes.  This separation will ensure that backups will never be corrupted through use of the corpus and expedite checking.  \\
 
-{\bf Applications with different OS environments can be run}.  If an application was built for debian 6 as opposed to debian 4, we can setup a chroot environment that has support for that specific OS.  This gives us the flexibility to test the web application in whatever OS environment we choose.
+{\bf Applications with different OS environments can be run}.  If an application was built for debian 6 as opposed to debian 4, we can setup a chroot environment that has support for that specific OS.  This gives us the flexibility to test the web application in whatever OS environment we choose.\\
 
 \section{Framework}
 
@@ -177,8 +177,6 @@ To accomplish our trace based approach, we create a selenium script in Python, r
 \caption{Exploit Structure}
 \end{figure}
 
-The following shows how easy it is to write an automated exploit:
-
 \subsubsection{init()}
 
 To annotate the exploit properly for use, we declare the name, description, references, target, type and wiki page for the exploit.  The name is the technical name specified in one of the online databases of exploits and vulnerabilities mentioned earlier in the paper.  The description is a brief statement of what the exploit is supposed to do, because the name is typically not desciptive enough for a person to understand what type of exploit is being applied.  The Target is the web application target that is being used for the exploit.  The type is the type of exploit being conducted.  The VulWikiPage is the wiki page setup for an author to place auxilliary information about the exploit or script.  The following represents an example of a XSS exploit:\\
@@ -223,9 +221,8 @@ driver.get("http://localhost/wordpress/?p=1")
 
 \subsubsection{main()}
 
-The main section handles the interface with the corpus engine, sending it the arguments parsed from the command line and the exploit function 
+The main section handles the interface with the corpus engine, sending it the arguments parsed from the command line and the exploit function to run:
 
-functions:
 {\tt
 \begin{verbatim}
     engine = corpus.Engine(Exploit())
@@ -236,10 +233,8 @@ functions:
 
 
 \subsection{Trace Collection}
-\textcolor{red}{
-Stuff about interaction with XDebug.
-}
-XDebug is a feature-rich PHP debugger that can be used to easily collector traces enabling various run-time analyses.\par
+
+XDebug is a feature-rich PHP extenstion which provides debugging and profiling cababilities.  For our purposes, we use it to capture traces through setting its global environment auto-trace variable.  Currently we toggle this through the command line, but want future support to be able to toggle the trace collection through the setting of cookies while the script is being executed.
 
 \section{Scalability}
 In order to create a system that can handle a growing amount of vulnerabilities that are independent from one another, we represent an exploit on an application through  Selenium scripts, as noted in the Framework section.  Selenium scripts allow us to perform operations on web applications without fear of working in an un-intended, compromised environment. 
@@ -251,15 +246,21 @@ By providing a corpus that explicitly logs the steps taken in accumulating the l
 \\\\
 While the above process is only shown in one iteration, most students know that this is not the case.  One hour of work can turn into a whole week of work without the proper framework in place.  The above situation also shows that the selenium script can be discussed with the professor to show validity of the data and provide talking points for how the exploit was applied.
 
+\section{Lessons Learned}
+
+Some research projects conducted in our software engineering group at the University of Maryland are centered around collection of metrics data for vulnerabilities.  Since we were unable to find a corpus that suited our needs, we started to build an in-house corpus.  Originally we had another VM based architecture in mind.  
+
+\subsection{VM Architecture}
+The idea was to be able to mount web application targets onto VMs.  We had a similiar idea in th sense that the VM's could be setup and brought down, saving the current state that they were in.  Once the application was mounted, we performed an exploit manually and saved a snapshot of the VM instance.  All exploits applied to "tainted" applications, so we had to be careful that one exploit did not interfere with another.  We hired summer students to create exploits and save new snapshots, from which we had them report their progress on the wiki we had built.  
+
+\subsection{Fall Out}
+We found that because the process was not documented, it was harder to verify that the exploit was executed in the correct manner.  Many times pages that were logged as exploited, did not show the representation of the exploit.  Furthermore there was no specific collection that could be analyzed of the exploit.
+
+\subsection{Fixes}
+We determined that, for one, this environment was not scalable.  We could not continue to add new exploits to a tainted environment without eventually overlapping one exploit with another.  We would have an increasingly hard time to review whether or not an exploit was overlapping.
 
 \section{Acknowledgements}
 
-Metasploit, undergraduate summer labor, etc..\\
-Now we're going to cite somebody.  Watch for the cite tag.
-Here it comes~.  The tilde character (\~{})
-in the source means a non-breaking space.  This way, your reference will
-always be attached to the word that preceded it, instead of going to the
-next line.
 
 \section{Future Development}
  \begin{description}
@@ -277,10 +278,6 @@ For each exploit currently in the corpus, there is no standard for the payload u
  \end{description}
 
 
-\section{Conclusion}
-\textcolor{red}{
-Everything is great, we just need community involvement to mature the framework and to help write more exploits.
-}
 \section{Availability}
 \textcolor{red}{
 [Available as a 10 GB virtual machine and as a standalone debian package?]
