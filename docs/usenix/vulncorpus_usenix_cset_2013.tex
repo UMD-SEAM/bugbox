@@ -103,43 +103,46 @@ In order to conduct tests in an isolated environment we use a virtual jail, the 
 
 \begin{figure}[!tp]
 \begin{center}
-\includegraphics[scale=1.10]{system_diagram.eps}
+\includegraphics[scale=1.17]{system_diagram.eps}
 \end{center}
 \caption{System Diagram}
 \end{figure}
 
-At the core of the BugBox framework, the organization of the vulnerability engine is driven by the Python module and package system. The system breaks down into the following four python modules: corpus.{\bf Engine}, corpus.{\bf Targets}, corpus.{\bf Exploit}, and corpus.{\bf SeleniumDriver}.
+At the the core components of the BugBox framework are driven by the Python module and package system. The system breaks down into the following four python modules: corpus.{\bf Engine}, corpus.{\bf Targets}, corpus.{\bf Exploit}, and corpus.{\bf SeleniumDriver}.
 Figure 1 illustrates the general structure of the corpus environment, with arrows showing lines of control or communication.  
-   
-
 
   The {\bf SeleniumDriver} is a wrapper class for the Selenium's Firefox web driver.
 
+\subsection{Engine}
+The {\bf Engine} drives the environment setup, tear-down, and exploitation process.  The engine was created to abstract away details so that contributors can add new exploit scripts without worrying about the setup.  This separation accomplishs a step-like approach for getting involved with the corpus, where developing expoloits for the corpus is more approachable and quick for novice programmers that want to contribute and a robust framework that can be understood incrementally for larger contributions to the framework.  The following is an  example use case for running a script using this engine:
 
+\begin{enumerate}
+	\item {\tt script.py start}
+	\item {\tt script.py xdebug\_on}
+	\item {\tt script.py exploit}
+	\item {\tt script.py xdebug\_off}
+	\item {\tt script.py stop}
+\end{enumerate}
 
-\subsection{Vulnerability Engine}
-The {\bf Engine} drives the environment setup, tear-down, and exploitation process. It contains most of the logic for doing work with exploits.
-deploying the web application in the chroot jail, starting the trace collection
-The corpus contains a main engine, written in python, to load a web application, gather traces, run exploits, and cleanup.  We provide an engine to abstract away the details of the setup process so that contributors can focus on creating new exploit scripts.  This separation accomplished two tasks, it makes developing for the corpus more approachable for programmers that want to contribute and provides a robust framework that can provide more of a challenge to seasoned programmers.
+During step one the engine creates a chroot environment on the linux distribution for which the target application is copied over and the pertinent MYSQL bindings are established.  The engine can modify the state of the trace collection in X\_Debug as seen in steps two and four to ensure that we collect only the trace pertinent to the exploitation.  Finally, the fifth steps unmounts the chroot environment and returns the corpus environment back to an un-altered state.
 
+\subsection{Targets}
 
-\subsection{Target Module}
+   The corpus.{\bf Target} module controls all the application targets that the exploits may be applied to.  More specifically, this represents web applications such as WordPress, SimplePHPAgenda, etc.  The virgin copy of the target is always loaded before any exploit script is run on the target.  Init scripts are written per application to provide the corpus.{\bf Engine} with the proper details for the setup, for example:
 
-   The {\bf Targets} module has as submodules each application and application plugin that are associated with an exploit.
-\textcolor{red}{The anatomy of a ``Target'' module}
+{\tt \small
+\begin{verbatim}
+name = "Wordpress 3.3.1"
+application_dir_mapping = ...
+     [get_path("application"), "/var/www"]
+database_filename = get_path("database.sql")
+database_name = "wordpress_3_3_1_A"
+chroot_environment = "Debian7"
+\end{verbatim}
+} 
 
 \subsection{Exploit}
- {\bf Exploit} is the superclass for each exploit in the corpus, defining interfaces and attributes that the engine uses to manage the environment and exploitation.
-
-
-Management actions, recording commands
-attributes,
-\begin{verbatim} 
-__init__()
-exploit()
-check() [not yet]
-cleanup()
-\end{verbatim}
+The module corpus.{\bf Exploit} is the superclass for each exploit in the corpus, defining interfaces and attributes that the engine uses to manage the environment and exploitation.  This template ensures that the selenium driver is properly bound to the exploit and makes sure that an exploit script has been defined as well as defines any specific actions on teardown.
 
 {\tt \small
 \begin{figure*}[!ht]
