@@ -71,15 +71,15 @@ Web applications are subject to a rich variety of exploit types, such as cross-s
 
 While many of these databases exist and disclose the details of the vulnerability and/or exploit, many do not provide a collection of structured vulnerable code that can be used for analysis.  A suitable, structured collection of vulnerable code is typically not made publicly available and is scarce in quantity.  The structured collection, often reffered to as a corpus, is useful in statistical analysis and hypothesis testing if it meets certain criteria.  To elaborate on the suitability of a corpus, one most consider several of these criteria, which include: representativeness of the samples, quantity of the samples, diversity of the samples, and reproducability of the tests that produced the samples.  \\
 
-Uses of a corpus of this type include: serving as a training aid for security teams, penetration testing, testing static analysis tools, and metric based analysis.  Projects such as ``An empirical investigation into open source web applications' implementation vulnerabilities" by Huynh and Miller\endnote{} could have benefitted from a corpus of this type. Insert our projects here.\\
+Uses of a corpus of this type include: serving as a training aid for security teams, penetration testing, testing static analysis tools, and metric based analysis.  Projects such as ``An empirical investigation into open source web applications' implementation vulnerabilities" by Huynh and Miller \cite{DBLP:journals/ese/HuynhM10} could have benefitted from a corpus of this type. Insert our projects here.\\
 
 Understanding the scarcity and labor involved in developing a corpus that is suitable, has led to the in-house creation of BugBox, a publicly available, scalable, efficient, easy-to-use framework and corpus that collects vulnerable code signatures through an automated trace based collection method.  To increase the sample size and diversity of BugBox, we must attract community support.  In order to successfully use this support, we provide a framework that is easy to maintain, quick to use, automated, fully compartmentalized, and scalable.  Through the use of abstraction and encapsulation, the management of application, environment, and exploitation has been streamlined in BugBox.  The design is intended to make it practical to manage a large database of exploits, along with their target environments. Our corpus is more than an exploit repository, it contains the software and its dependencies in which a vulnerability exists, the configuration of the software in it's vulnerable state, exploit code that will trigger the security breach, and data that describes any distinguishing attributes of the bug. [define attributes futher]\\
 
-evaluating static analysis tools\endnote{M. Zitser, R. Lippmann, and T. Leek, ``Testing Static Analysis Tools using Exploitable Buffer Overflows from Open Source Code," ???}, penetration testing and training security teams with vulnerablity injection\endnote{J. Fonseca, M. Vieira and H. Maderia, ``Traning Security Assurance Teams using Vulnerability Injection," 2008 14th IEEE Pacific Rim International Symposium on Dependable Computing}, and computing attack surface metrics.\endnote{J. Stuckman and J. Purtilo, ``Comparing and Applying Attack Surface Metrics," ???}\\
+evaluating static analysis tools \cite{Zitser:2004:TSA:1041685.1029911}, penetration testing and training security teams with vulnerablity injection\cite{4725309}, and computing attack surface metrics.\cite{Stuckman:2012:CAA:2372225.2372229}\\
 
 \section{Vulnerability Representation}
 
-A few effective methods for finding which piece of code creates a vulnerable condition in a program are line-based, run-based, and trace-based approaches.  Henceforth, we will refer to these  methods as \emph{vulnerability localization}.  Works by Fonseca and Vieira\endnote{J. Fonseca and M. Vieira, ``Mapping Software Faults with Web Security Vulnerabilities," International Conference on Dependable Systems \& Networks: Anchorage, Alaska, June 24-27 2008} use a line-based approach for vulnerability collection.  This approach uses line numbers represented in program patches to identify the location of the vulnerabilities.  Whil, in general, this is a sound approach, patches in a program may only mask the vulnerable code instead of replace it.  Other by Song\endnote{Bitblaze} create vulnerability signatures from intermediate byte code.  This approach, while quick and efficient cannot be used for a PHP web application.  The method proposed for our corpus is a trace-based collection approach in order to capture code vulnerabilities in software.  The trace-based collection method is performed through monitoring the programs execution through the use of XDebug.
+A few effective methods for finding which piece of code creates a vulnerable condition in a program are line-based, run-based, and trace-based approaches.  Henceforth, we will refer to these  methods as \emph{vulnerability localization}.  Works by Fonseca and Vieira \cite{4630094} use a line-based approach for vulnerability collection.  This approach uses line numbers represented in program patches to identify the location of the vulnerabilities.  Whil, in general, this is a sound approach, patches in a program may only mask the vulnerable code instead of replace it.  Other by Song \cite{Song:2008:BNA:1496255.1496257} create vulnerability signatures from intermediate byte code.  This approach, while quick and efficient cannot be used for a PHP web application.  The method proposed for our corpus is a trace-based collection approach in order to capture code vulnerabilities in software.  The trace-based collection method is performed through monitoring the programs execution through the use of XDebug.
 
 \section{Requirements}
 
@@ -110,8 +110,6 @@ In order to conduct tests in an isolated environment we use a virtual jail, the 
 
 At the the core components of the BugBox framework are driven by the Python module and package system. The system breaks down into the following four python modules: corpus.{\bf Engine}, corpus.{\bf Targets}, corpus.{\bf Exploit}, and corpus.{\bf SeleniumDriver}.
 Figure 1 illustrates the general structure of the corpus environment, with arrows showing lines of control or communication.  
-
-  The {\bf SeleniumDriver} is a wrapper class for the Selenium's Firefox web driver.
 
 \subsection{Engine}
 The {\bf Engine} drives the environment setup, tear-down, and exploitation process.  The engine was created to abstract away details so that contributors can add new exploit scripts without worrying about the setup.  This separation accomplishs a step-like approach for getting involved with the corpus, where developing expoloits for the corpus is more approachable and quick for novice programmers that want to contribute and a robust framework that can be understood incrementally for larger contributions to the framework.  The following is an  example use case for running a script using this engine:
@@ -144,56 +142,7 @@ chroot_environment = "Debian7"
 \subsection{Exploit}
 The module corpus.{\bf Exploit} is the superclass for each exploit in the corpus, defining interfaces and attributes that the engine uses to manage the environment and exploitation.  This template ensures that the selenium driver is properly bound to the exploit and makes sure that an exploit script has been defined as well as defines any specific actions on teardown.
 
-{\tt \small
-\begin{figure*}[!ht]
-\begin{verbatim}
-import corpus
-
-class Exploit (corpus.Exploit):
-
-    def __init__(self):
-        corpus.Exploit.__init__(self, {
-                'Name' :        "CVE_2012_2403",
-                'Description' : "Creates a post containing a XSS payload.",
-                'References' :  [['CVE','2012-2403'],
-                                 ['OSVDB','81463']],
-                'Target' :      "Wordpress 3.3.1",
-                'Type' :        "XSS",
-                'VulWikiPage' : "http://seamster.cs.umd.edu/CVE-2012-2403"
-                })
-        return
-            
-    def exploit(self):
-
-        payload = "<a href=\"#\" title=\"XSS http://example.com/onmouseover"
-                  "=eval(unescape(/%61%6c%65%72%74%28%31%29%3b%61%6c%65%72"
-                  "%74%28%32%29%3b%61%6c%65%72%74%28%33%29%3b/.source))//\"
-                  ">XSS</a>"
-
-        driver = self.create_selenium_driver()
-        driver.get("http://localhost/wordpress/?p=1")
-        driver.find_element_by_id("author").clear()
-        driver.find_element_by_id("author").send_keys("selenium script")
-        driver.find_element_by_id("email").clear()
-        driver.find_element_by_id("email").send_keys("selenium@python.org")
-        driver.find_element_by_id("url").clear()
-        driver.find_element_by_id("url").send_keys("www.python.org")
-        driver.find_element_by_id("comment").clear()
-        driver.find_element_by_id("comment").send_keys(payload)
-        driver.find_element_by_id("submit").click()
-        driver.cleanup()
-
-        return
-
-if __name__ == "__main__": # Exploit invoked from command-line
-    engine = corpus.Engine(Exploit())
-    engine.parse_args(sys.argv)
-\end{verbatim}
-\end{figure*}
-}
-
-
-\subsubsection{As a Standalone Application}
+\subsubsection{The Exploit Script}
 
 Each exploit is defined in it's own python file as a module. In Python, modules can either be imported from other modules, or executed directly from the command-line. The exploits written for BugBox take advantage of this property to give the researcher the option of writing scripts to do work on a set of exploits, or to invoke one exploit at a time. When run from the command-line, the supplied arguments are passed directly to the vulnerability engine, which supports the options shown below: 
 
@@ -212,59 +161,78 @@ Options:
 \end{verbatim}
 }
 
-\subsubsection{As a Python Module}
 \textcolor{red}{
 Scripting of experiments. corpus.Query [Work in progress] interface for using querys of exploit metadata to manage sets of exploits/environments. 
 }
 
+\subsection{corpus.{\bf SeleniumDriver} and Scripting}
+We use the corpus.{\bf SeleniumDriver} as a wrapper class for the Selenium's Firefox web driver in order to leverage the powerful selenium browser automation.  Selenium is a greate choice for browser automation because of its ease-of-use, python bindings, and demonstration/visualization capability.
 
-\subsubsection{Selenium Scripting}
+To accomplish our trace based approach, we create a selenium script in Python, replicating actions a user would take in performing an exploit on a web application and collect the execution trace with XDebug.  Future support will provide trace collection through cookie manipulation in order to reduce the code footprint of the trace collected.  Due to the structure, represented in figure 2, of the corpus.{\bf Engine} we can create concise code statements for our selenium scripts. 
 
-We aim to gather code that is vulnerable.  We drastically can reduce the amount of computation needed by reducing the code size that needs to be analyzed through the use of past, found exploits.  
+\begin{figure}[!tp]
+\begin{center}
+\includegraphics[scale=.5]{Corpus_Exploit.PNG}
+\end{center}
+\caption{Exploit Structure}
+\end{figure}
 
-In order to better isolate vulnerable code, we create a selenium script in Python, replicating actions a user would take in performing an exploit on a web application.  While the script is running, we can have XDebug monitor the execution and output the final execution trace for the selenium script execution.  We can see future additions to this by turning XDebug on and off through cookie manipulation while the script is running, furthermore reducing the size of the vulnerable code.
+The following shows how easy it is to write an automated exploit:
 
-By setting up the application loader engine, we are able to create concise python selenium scripts for data collection.  The following code shows how easy it is to run an automated exploit:
+\subsubsection{init()}
 
-Pros:
--Ease of use, great python bindings
--Uses browser's javascript engine
--Good for Demonstration/visualization
+To annotate the exploit properly for use, we declare the name, description, references, target, type and wiki page for the exploit.  The name is the technical name specified in one of the online databases of exploits and vulnerabilities mentioned earlier in the paper.  The description is a brief statement of what the exploit is supposed to do, because the name is typically not desciptive enough for a person to understand what type of exploit is being applied.  The Target is the web application target that is being used for the exploit.  The type is the type of exploit being conducted.  The VulWikiPage is the wiki page setup for an author to place auxilliary information about the exploit or script.  The following represents an example of a XSS exploit:\\
 
-Cons:
--Not a necessary dependency, urrllib+cookielib would suffice
--requires SeleniumServer to run as a service on the host system
--Slower than crafting all requests directly
--Many times, we still need to use auxiliary libraries to send specially crafted requests anyway
+{\tt \small
 
-[figure of a session hijack in a web-browser?]
+\noindent{\bf Name}:	CVE\_2012\_2403\\
+{\bf Description}:		Creates a post containing a XSS payload.\\
+{\bf References}:	CVE 2012-2403,OSVDB 81463 \\
+{\bf Target}: 		Wordpress 3.3.1\\
+{\bf Type}: 		XSS\\
+{\bf VulWikiPage}: WIKIHOST/CVE-2012-2403
 
-We are restricted to web applications because of the use of selenium scripts in our corpus. [GJN ADD NOTES FROM JEFF's PAPER ON THIS]  
+}
 
+\subsubsection{exploit()}
 
-%{\tt \footnotesize
-%\begin{verbatim}
-%
-%payload = "XSS PAYLOAD"
-%
-%driver = self.create_selenium_driver()
-%
-%driver.get("http://localhost/wordpress/?p=1")
+The actual selenium script used for exploitation is contained under the exploit section.  Writing this exploit is as simple as instantiating the selenium driver and submitting a post on the wordpress site with the XSS Payload: 
 
+{\tt \footnotesize
+\begin{verbatim}
+
+payload = "XSS PAYLOAD"
+
+driver = self.create_selenium_driver()
+
+driver.get("http://localhost/wordpress/?p=1")
 %%Selenium Actions preceded by
-%% driver.find_element_by_id
-%("author").clear()
-%("author").send_keys("selenium script")
-%("email").clear()
-%("email").send_keys("selenium@python.org")
-%("url").clear()
-%("url").send_keys("www.python.org")
-%("comment").clear()
-%("comment").send_keys(payload)
-%("submit").click()
-%
-%\end{verbatim}
-%}
+% driver.find_element_by_id
+("author").clear()
+("author").send_keys("selenium script")
+("email").clear()
+("email").send_keys("selenium@python.org")
+("url").clear()
+("url").send_keys("www.python.org")
+("comment").clear()
+("comment").send_keys(payload)
+("submit").click()
+
+\end{verbatim}
+}
+
+\subsubsection{main()}
+
+The main section handles the interface with the corpus engine, sending it the arguments parsed from the command line and the exploit function 
+
+functions:
+{\tt
+\begin{verbatim}
+    engine = corpus.Engine(Exploit())
+    engine.parse_args(sys.argv)
+\end{verbatim}
+
+}
 
 
 \subsection{Trace Collection}
@@ -272,9 +240,6 @@ We are restricted to web applications because of the use of selenium scripts in 
 Stuff about interaction with XDebug.
 }
 XDebug is a feature-rich PHP debugger that can be used to easily collector traces enabling various run-time analyses.\par
-
-
-
 
 \section{Scalability}
 In order to create a system that can handle a growing amount of vulnerabilities that are independent from one another, we represent an exploit on an application through  Selenium scripts, as noted in the Framework section.  Selenium scripts allow us to perform operations on web applications without fear of working in an un-intended, compromised environment. 
@@ -329,10 +294,7 @@ Everything is great, we just need community involvement to mature the framework 
 \end{center}
 
 {\footnotesize \bibliographystyle{acm}
-\bibliography{../common/bibliography}}
-
-
-\theendnotes
+\bibliography{ref}}
 
 \end{document}
 
