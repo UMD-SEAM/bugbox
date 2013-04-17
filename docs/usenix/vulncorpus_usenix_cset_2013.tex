@@ -71,33 +71,15 @@ Web applications are subject to a rich variety of exploit types, such as cross-s
 
 While many of these databases exist and disclose the details of the vulnerability and/or exploit, many do not provide a collection of structured vulnerable code that can be used for analysis.  A suitable, structured collection of vulnerable code is typically not made publicly available and is scarce in quantity.  The structured collection, often reffered to as a corpus, is useful in statistical analysis and hypothesis testing if it meets certain criteria.  To elaborate on the suitability of a corpus, one most consider several of these criteria, which include: representativeness of the samples, quantity of the samples, diversity of the samples, and reproducability of the tests that produced the samples.  \\
 
-evaluating static analysis tools\endnote{M. Zitser, R. Lippmann, and T. Leek, "Testing Static Analysis Tools using Exploitable Buffer Overflows from Open Source Code," ???}, penetration testing and training security teams with vulnerablity injection\endnote{J. Fonseca, M. Vieira and H. Maderia, ``Traning Security Assurance Teams using Vulnerability Injection," 2008 14th IEEE Pacific Rim International Symposium on Dependable Computing}, and computing attack surface metrics.\endnote{J. Stuckman and J. Purtilo, "Comparing and Applying Attack Surface Metrics," ???}\\
+Uses of a corpus of this type include: serving as a training aid for security teams, penetration testing, testing static analysis tools, and metric based analysis.  Projects such as ``An empirical investigation into open source web applications' implementation vulnerabilities" by Huynh and Miller\endnote{} could have benefitted from a corpus of this type. Insert our projects here.\\
 
 Understanding the scarcity and labor involved in developing a corpus that is suitable, has led to the in-house creation of BugBox, a publicly available, scalable, efficient, easy-to-use framework and corpus that collects vulnerable code signatures through an automated trace based collection method.  To increase the sample size and diversity of BugBox, we must attract community support.  In order to successfully use this support, we provide a framework that is easy to maintain, quick to use, automated, fully compartmentalized, and scalable.  Through the use of abstraction and encapsulation, the management of application, environment, and exploitation has been streamlined in BugBox.  The design is intended to make it practical to manage a large database of exploits, along with their target environments. Our corpus is more than an exploit repository, it contains the software and its dependencies in which a vulnerability exists, the configuration of the software in it's vulnerable state, exploit code that will trigger the security breach, and data that describes any distinguishing attributes of the bug. [define attributes futher]\\
 
+evaluating static analysis tools\endnote{M. Zitser, R. Lippmann, and T. Leek, ``Testing Static Analysis Tools using Exploitable Buffer Overflows from Open Source Code," ???}, penetration testing and training security teams with vulnerablity injection\endnote{J. Fonseca, M. Vieira and H. Maderia, ``Traning Security Assurance Teams using Vulnerability Injection," 2008 14th IEEE Pacific Rim International Symposium on Dependable Computing}, and computing attack surface metrics.\endnote{J. Stuckman and J. Purtilo, ``Comparing and Applying Attack Surface Metrics," ???}\\
 
+\section{Vulnerability Representation}
 
-\section{Empirical Vulnerability Research}
-
-A key question in empirical vulnerability research is how to determine which functionality, or piece of code creates a vulnerable condition in a program. In studying this problem, sometimes referred to as \emph{vulnerability localization}, it is necessary to have a large quantity of structured data in which one can formulate and test hypotheses. Potential approaches to vulnerability research include static and dynamic analysis of the software, therefore it is important that the corpus include both the vulnerable program's code, and some way to perform analysis as the system is compromised.\\
-
-We use a trace based collection approach in order to capture code vulnerabilities in software.  Benefits of a trace based approach include:  a global approach to collection.
-
-A global approach to collection can be more benefitial than using static analysis tools to find vulnerabilities.   
-
-\noindent [many things with references go here] \\
-Demonstrate that BugBox ....\\
-Predicting which metrics  \\
-
-\noindent Code inspection\\
-Trace-based vulnerability definitions\\
-System taint analysis\\
-
-\noindent ``Vulnerability localization'' Characteristics:
- \begin{enumerate} 
-	\item Collecting Vulnerable Application source code
-	\item Collecting vulnerability details (line-based, run-based, trace-based)
- \end{enumerate}
+A few effective methods for finding which piece of code creates a vulnerable condition in a program are line-based, run-based, and trace-based approaches.  Henceforth, we will refer to these  methods as \emph{vulnerability localization}.  Works by Fonseca and Vieira\endnote{J. Fonseca and M. Vieira, ``Mapping Software Faults with Web Security Vulnerabilities," International Conference on Dependable Systems \& Networks: Anchorage, Alaska, June 24-27 2008} use a line-based approach for vulnerability collection.  This approach uses line numbers represented in program patches to identify the location of the vulnerabilities.  Whil, in general, this is a sound approach, patches in a program may only mask the vulnerable code instead of replace it.  Other by Song\endnote{Bitblaze} create vulnerability signatures from intermediate byte code.  This approach, while quick and efficient cannot be used for a PHP web application.  The method proposed for our corpus is a trace-based collection approach in order to capture code vulnerabilities in software.  The trace-based collection method is performed through monitoring the programs execution through the use of XDebug.
 
 \section{Requirements}
 
