@@ -87,41 +87,35 @@ BugBox is designed to work with the Debian GNU/Linux distribution and compatible
 
 \section{Environment}
 
-We use a virtual jail, the linux chroot environment.  Staging the application in the chroot environment provides locality, reproducibility, and stability.  (flexibility)
+In order to conduct tests in an isolated environment we use a virtual jail, the linux chroot environment.  Staging the application in the chroot environment provides locality, reproducibility, and stability and flexibility.
 
 {\bf The web application remains local}.  Many applications, such as wordpress, have a MYSQL backend.  If we were to host the application on a different server or VM we would have to ensure that the MYSQL database is properly setup each time.  With the chroot environment, the process is simplified, we keep a MYSQL database outside of the CHROOT Jail in order to facilitate MYSQL access.  
 
-{\bf Current tests are independent from future tests}.  We load a clean application into the chroot jail every time we wish to run a new test.  This ensures that there is no corruption of the original Web Application and provides reproducible results when testing.
+{\bf Current tests are independent from future tests}.  We load a clean application into the chroot jail every time we wish to run a new test.  This ensures that there is no corruption of the original web application and provides reproducible results when testing.
 
-{\bf The web application cannot contaminate our testing environment}.  If a web application crashes due to the malicious script, we can ensure that it does not crash our corpus environment, worst case the chroot is corrupted, and we can ensure that the crash cannot have un-intended side effects in our testing environment.  
+{\bf The web application cannot contaminate our testing environment}.  If a web application crashes due to the malicious script, we can ensure that it does not crash our corpus environment.  In the worst case the chroot becomes corrupt for which we can treat in an isolated scenario tha does not have un-intended side effects in our testing environment.  
 
-{\bf The web application will never be contaminated}.  We store a separate backup in order to verify that the selenium scripts did not modify the Web Application in any way.  If the Web Application is corrupt, then we simply copy the web application from the backup folder to the package folder.  Future implementations will store only the md5 hash of the program on the corpus server and the backups on an external server.  This will allow for a quick comparison followed by a remote copy if necessary.  This separation will ensure that backups will never be corrupted through use of the corpus.  
+{\bf The web application will never be contaminated}.  We store a separate backup in order to verify that the selenium scripts did not modify the Web Application in any way.  If the Web Application is corrupt, then we simply copy the web application from the backup folder to the package folder.  Future implementations will store only the md5 hash of the program on the corpus server and the backups on an external server.  This will allow for a quick comparison followed by a remote copy for mismatched hashes.  This separation will ensure that backups will never be corrupted through use of the corpus and expedite checking.  
 
-{\bf Applications with different OS environments can be run}.  If an application was built for debian 6 as opposed to debian 4, we can setup a chroot environment that has support for that specific OS.
+{\bf Applications with different OS environments can be run}.  If an application was built for debian 6 as opposed to debian 4, we can setup a chroot environment that has support for that specific OS.  This gives us the flexibility to test the web application in whatever OS environment we choose.
 
 \section{Framework}
 
-The BugBox framework has four main components: web application store, testing environment, testing scripts, and host system. Figure 1 illustrates the general structure of the corpus environment, with arrows showing lines of control or communication.  BugBox is a modular framework design where individual components can be interchanged without effecting the overall functionality of the framework.\par
-At it's core, the organization of the vulnerability engine is driven by the Python module and package system. The system breaks down into the following four python modules:
+\begin{figure}[!tp]
 \begin{center}
- \begin{enumerate}
-   \item corpus.{\bf Engine}\\
-   \item corpus.{\bf Targets}\\
-   \item corpus.{\bf Exploit}\\
-   \item corpus.{\bf SeleniumDriver}\\
- \end{enumerate}
-\end{center}
-   
-  The {\bf SeleniumDriver} is a wrapper class for the Selenium's Firefox web driver.
-
-\begin{figure}[t]
-\begin{center}
-\begin{picture}(240, 195)(0,0) %(0,200)
-\put(0,0){\includegraphics[scale=1.17]{system_diagram.eps}}
-\end{picture}
+\includegraphics[scale=1.10]{system_diagram.eps}
 \end{center}
 \caption{System Diagram}
 \end{figure}
+
+At the core of the BugBox framework, the organization of the vulnerability engine is driven by the Python module and package system. The system breaks down into the following four python modules: corpus.{\bf Engine}, corpus.{\bf Targets}, corpus.{\bf Exploit}, and corpus.{\bf SeleniumDriver}.
+Figure 1 illustrates the general structure of the corpus environment, with arrows showing lines of control or communication.  
+   
+
+
+  The {\bf SeleniumDriver} is a wrapper class for the Selenium's Firefox web driver.
+
+
 
 \subsection{Vulnerability Engine}
 The {\bf Engine} drives the environment setup, tear-down, and exploitation process. It contains most of the logic for doing work with exploits.
