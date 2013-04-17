@@ -64,25 +64,18 @@ Computer Science Department\\University of Maryland
 
 \subsection*{Abstract}
 
-Web Applications provide a robust amount of code vulnerabilities that are exploited on a routine basis, but a large, diverse, automated, ease of use corpus for analyzing these vulnerabilities is not publicly available.   It is recognized that obtaining an adequate vulnerability dataset is a significant hurdle in empirical vulnerability research.  Many studies suffer from using vulnerability data-sets that are too small, and they are rarely made publicly available [ref].  The purpose of BugBox is to fill this void, and in doing so encourage the quality and repeatability of results.  We propose a scalable framework for web application corpus design and further explain the motivation and architecture behind BugBox, an open-source collection and management framework for PHP web application vulnerabilities.  Through our framework implementation and corpus we can enhance testing vulnerability indicators and metrics, developing vulnerability definition representations, testing intrusion detection systems, or creating demonstrations for training purposes.  
+Web Applications provide a robust amount of code vulnerabilities that are exploited on a routine basis, but a large, diverse, automated, ease of use corpus for analyzing these vulnerabilities is not publicly available.   BugBox, an open-source corpus and framework for PHP web application vulnerabilities was created to fill this void and in doing so encourage community support to enhance the quality of the project.  We discuss the easy to use framework for web applications and further explain the motivation behind and application of BugBox.  Through our framework implementation and corpus we can enhance testing vulnerability indicators and metrics, developing vulnerability definition representations, testing intrusion detection systems, or creating demonstrations for training purposes.  
 
 \section{Introduction}
+Web applications are subject to a rich variety of exploit types, such as cross-site scripting (XSS), cross-site request forgery (XSRF), buffer overflow, and SQL injection.  Many of these web applications are designed in PHP, for which Top Cyber Security Risks has reported to be a target for security threats [ref].  This variety and preponderance of exploits is logged extensively in popular exploit databases such as the National Vulnerability Database (NVD), Open Source Vulnerability Database (OSVDB), Common Vulnerability and Exposures Database (CVE), or the Exploit Database (EDB).\\
 
-\textcolor{red}{Overview}
-With the surge of internet blogging sites \endnote{Zero Comments: Blogging and Critical Internet Culture (09 August 2007) by Geert Lovink}, it has never before been so critical to release and maintain secure web applications.   Many blog administrators rely on these web applications, which tend to be open source, to be secure frameworks.  While blogging engines do represent a majority of web applications used on the internet, there are many other applications available to the community.  Due to the community of users in this space, many web applications are subject to a rich variety of exploit types, such as: cross-site scripting (XSS), cross-site request forgery (CSRF), SQL injection, buffer overflow, and more.  Of the web applications offered to the community, many popular applications, such as wordpress,... ,are designed in PHP.  Currently, PHP has been reported by Top Cyber Security Risks to be a target for security threats [ref].\par
+While many of these databases exist and disclose the details of the vulnerability and/or exploit, many do not provide a collection of structured vulnerable code that can be used for analysis.  A suitable, structured collection of vulnerable code is typically not made publicly available and is scarce in quantity.  The structured collection, often reffered to as a corpus, is useful in statistical analysis and hypothesis testing if it meets certain criteria.  To elaborate on the suitability of a corpus, one most consider several of these criteria, which include: representativeness of the samples, quantity of the samples, diversity of the samples, and reproducability of the tests that produced the samples.  \\
 
-\textcolor{red}{Database}
-Popular vulnerability/exploit databases such as the National Vulnerability Database (NVD), Open Source Vulnerability Database (OSVDB), Common Vulnerability and Exposures Database(CVE), or the Exploit Database (EDB) log PHP application vulnerabilities/exploits as a service to the community.   \par
+evaluating static analysis tools\endnote{M. Zitser, R. Lippmann, and T. Leek, "Testing Static Analysis Tools using Exploitable Buffer Overflows from Open Source Code," ???}, penetration testing and training security teams with vulnerablity injection\endnote{J. Fonseca, M. Vieira and H. Maderia, ``Traning Security Assurance Teams using Vulnerability Injection," 2008 14th IEEE Pacific Rim International Symposium on Dependable Computing}, and computing attack surface metrics.\endnote{J. Stuckman and J. Purtilo, "Comparing and Applying Attack Surface Metrics," ???}\\
 
-\textcolor{red}{Use}
-While many of these databases exist and disclose the details of the vulnerability/exploit, many do not provide vulnerable code that can be used for analysis.  While sufficient information is not included on these sites for code analysis, we use these databases as a template to write exploits from which we are able to gather vulnerable code samples with a systematic approach.  Code samples that can, in-turn, be further analyzed.
-\par
+Understanding the scarcity and labor involved in developing a corpus that is suitable, has led to the in-house creation of BugBox, a publicly available, scalable, efficient, easy-to-use framework and corpus that collects vulnerable code signatures through an automated trace based collection method.  To increase the sample size and diversity of BugBox, we must attract community support.  In order to successfully use this support, we provide a framework that is easy to maintain, quick to use, automated, fully compartmentalized, and scalable.  Through the use of abstraction and encapsulation, the management of application, environment, and exploitation has been streamlined in BugBox.  The design is intended to make it practical to manage a large database of exploits, along with their target environments. Our corpus is more than an exploit repository, it contains the software and its dependencies in which a vulnerability exists, the configuration of the software in it's vulnerable state, exploit code that will trigger the security breach, and data that describes any distinguishing attributes of the bug. [define attributes futher]\\
 
-\textcolor{red}{Corpus}
-Understanding the labor involved in developing a corpus that suits the needs of a researcher, we have built an elegant framework and corpus that contains over "x" exploits and "y" vulnerability samples that is made publicly available.  We hope to gain community support in order to further expand our corpus size and diversity of exploits.  In order to have a publicly available corpus that can be sustained in the academic community, we provide a framework that is easy to maintain, quick to use, automated, fully compartmentalized, and scalable.  Through the use of abstraction and encapsulation, the management of application, environment, and exploitation has been streamlined in BugBox.  The design is intended to be make it practical to manage a large database of exploits, along with their target environments. Our corpus is more than an exploit repository, it contains the software and its dependencies in which a vulnerability exists, the configuration of the software in it's vulnerable state, exploit code that will trigger the security breach, and data that describes any distinguishing attributes of the bug. [define attributes futher]\par
 
-\textcolor{red}{Benefiting Projects}
-Our corpus would have immediate benefit for testing static analysis tools,\endnote{M. Zitser, R. Lippmann, and T. Leek, "Testing Static Analysis Tools using Exploitable Buffer Overflows from Open Source Code," ???} penetration testing and training security teams with vulnerablity injection,\endnote{J. Fonseca, M. Vieira and H. Maderia, ``Traning Security Assurance Teams using Vulnerability Injection," 2008 14th IEEE Pacific Rim International Symposium on Dependable Computing} and computing attack surface metrics.\endnote{J. Stuckman and J. Purtilo, "Comparing and Applying Attack Surface Metrics," ???}
 
 \section{Empirical Vulnerability Research}
 
@@ -120,14 +113,9 @@ We use a virtual jail, the linux chroot environment.  Staging the application in
 
 {\bf The web application cannot contaminate our testing environment}.  If a web application crashes due to the malicious script, we can ensure that it does not crash our corpus environment, worst case the chroot is corrupted, and we can ensure that the crash cannot have un-intended side effects in our testing environment.  
 
-\textcolor{red}{[Why we need different OS environments, how the corpus manages them]}
+{\bf The web application will never be contaminated}.  We store a separate backup in order to verify that the selenium scripts did not modify the Web Application in any way.  If the Web Application is corrupt, then we simply copy the web application from the backup folder to the package folder.  Future implementations will store only the md5 hash of the program on the corpus server and the backups on an external server.  This will allow for a quick comparison followed by a remote copy if necessary.  This separation will ensure that backups will never be corrupted through use of the corpus.  
 
-
-Currently as simple incremental backup system is used to ensure that each chroot jail remains un-tainted. Periodically, an original instance of a chroot system will overwrite the 
-
-Future implementations will store only the md5 hash of the program on the corpus server and the backups on an external server.  This will allow for a quick comparison followed by a remote copy if necessary.  This separation will ensure that backups will never be corrupted through use of the corpus.  
-
-We store a separate backup in order to verify that the selenium scripts did not modify the Web Application in any way.  If the Web Application is corrupt, then we simply copy the web application from the backup folder to the package folder.  
+{\bf Applications with different OS environments can be run}.  If an application was built for debian 6 as opposed to debian 4, we can setup a chroot environment that has support for that specific OS.
 
 \section{Framework}
 
@@ -142,9 +130,7 @@ At it's core, the organization of the vulnerability engine is driven by the Pyth
  \end{enumerate}
 \end{center}
    
-
-  
-   The {\bf SeleniumDriver} is a wrapper class for the Selenium's Firefox web driver.
+  The {\bf SeleniumDriver} is a wrapper class for the Selenium's Firefox web driver.
 
 \begin{figure}[t]
 \begin{center}
