@@ -167,7 +167,7 @@ Options:
 We use the corpus.{\bf SeleniumDriver} as a wrapper class for the Selenium's Firefox web driver in order to leverage the Selenium's powerful browser automation.  Selenium integrates nicely with the framework, providingdemonstration/visualization capabilities, javascript support, and simple interaction with HTML objects.
 
 \textcolor{red}{To accomplish our trace-based approach, we create a selenium script in Python, replicating actions a user would take in performing an exploit on a web application and collect the execution trace with XDebug.}
-We begin the trace-based approach by writing an exploit. The exploit script automates all actions an attackerwould take in compromising a web application. XDebug is instructed to collect the execution traces during this process, and finally the corpus engine collects and organizes them on a per-session basis.
+We begin the trace-based approach by writing an exploit in Python using Selenium. The exploit script automates all actions an attackerwould take in compromising a web application. XDebug is instructed to collect the execution traces during this process, and finally the corpus engine collects and organizes them on a per-session basis.
 
   Future support will control trace collection through cookie manipulation via XDebug. This will reduce the collection of insignificant interactions and provide a more refined break-down of the exploitation process since traces can be grouped by HTML request.  The structure of corpus.Engine (illustrated in figure 2) is designed so that exploits can be written in a concise code statement.
 
