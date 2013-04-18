@@ -179,7 +179,8 @@ We begin the trace-based approach by writing an exploit. The exploit script auto
 
 \subsubsection{init()}
 
-To annotate the exploit properly for use, we declare the name, description, references, target, type and wiki page for the exploit.  The name is the technical name specified in one of the online databases of exploits and vulnerabilities mentioned earlier in the paper.  The description is a brief statement of what the exploit is supposed to do, because the name is typically not desciptive enough for a person to understand what type of exploit is being applied.  The Target is the web application target that is being used for the exploit.  The type is the type of exploit being conducted.  The VulWikiPage is the wiki page setup for an author to place auxilliary information about the exploit or script.  The following represents an example of a XSS exploit:\\
+\textcolor{red}{I think it's important to mention Metasploit's inspiration here}
+The exploit module is annotated by it's attribute dictionary. This structure is inspired by the exploit class from the Metaploit module. In it we declare the name, description, references, target, type and wiki page for the exploit by the attributes dictionary.  The name is the technical name specified in one of the online databases of exploits and vulnerabilities mentioned earlier in the paper.  The description is a brief statement of what the exploit is supposed to do, because the name is typically not desciptive enough for a person to understand what type of exploit is being applied.  The Target is the web application target that is being used for the exploit.  The type is the type of exploit being conducted.  The VulWikiPage is the wiki page setup for an author to place auxilliary information about the exploit or script.  The following represents an example of a XSS exploit:\\
 
 {\tt \small
 
@@ -283,7 +284,7 @@ For each exploit currently in the corpus, there is no standard for the payload u
 [Available as a 10 GB virtual machine and as a standalone debian package?]
 }
 \begin{center}
-{\tt git://bugbox.github.com/blahblah}
+{\tt git://bugbox.cs.umd.edu/blahblah}
 \end{center}
 
 \begin{center}
