@@ -64,7 +64,8 @@ Computer Science Department\\University of Maryland
 
 \subsection*{Abstract}
 
-Web Applications provide a robust amount of code vulnerabilities that are exploited on a routine basis, but a large, diverse, automated, ease of use corpus for analyzing these vulnerabilities is not publicly available.   BugBox, an open-source corpus and framework for PHP web application vulnerabilities was created to fill this void and in doing so encourage community support to enhance the quality of the project.  We discuss the easy to use framework for web applications and further explain the motivation behind and application of BugBox.  Through our framework implementation and corpus we can enhance testing vulnerability indicators and metrics, developing vulnerability definition representations, testing intrusion detection systems, or creating demonstrations for training purposes.  
+\textcolor{red}{Prev: Web Applications provide a robust amount of code vulnerabilities that are exploited on a routine basis, but a large, diverse, automated, ease of use corpus for analyzing these vulnerabilities is not publicly.}
+Web Applications are some of the most frequently attacked types of software due to their high exposure, ease of exploitation, and pervasive poor programming practies. Accordingly, web applications are ideal specimins for \emph{empirical vulnerability research}. There is currently no publicly available resource of vulnerabilities that is both robust and practical to use. BugBox is an open-source corpus and framework for PHP web application vulnerabilities that was created to fill this void and in doing so encourage greater quality security research. In this paper we discuss the use of the framework and further explain the motivating factors behind the design. Through our framework implementation and corpus we can enhance testing vulnerability indicators and metrics, developing vulnerability definition representations, testing intrusion detection systems, or creating demonstrations for training purposes.  
 
 \section{Introduction}
 Web applications are subject to a rich variety of exploit types, such as cross-site scripting (XSS), cross-site request forgery (XSRF), buffer overflow, and SQL injection.  A recent study by White Hat Security~\cite{WhiteHat:2010:Online} analyzed seven web application languages: ASP, ASPX, CFM, DO, JSP, PHP, and PL showing that PHP, while having the smallest attack surface in their tests, produced one of the highest average number of serious vulnerabilities per website.  This variety and preponderance of exploits in PHP and other languages is logged extensively in popular exploit databases such as the National Vulnerability Database (NVD), Open Source Vulnerability Database (OSVDB), Common Vulnerability and Exposures Database (CVE), or the Exploit Database (EDB).\\
@@ -83,13 +84,13 @@ A few effective methods for finding which piece of code creates a vulnerable con
 
 \section{Requirements}
 
-BugBox is designed to work with the Debian GNU/Linux distribution and compatible distributions.  It can be distributed as a self-contained virtual machine, or as a package that can be installed on an existing system. The machine must have sufficient storage (roughly 4 GB per OS environment, and 2 GB for the application, engine, and exploit sources [Confirm these \#s]).  Dependencies for BugBox include MySQL,  Selenium Server, debootstrap, and the Advanced Packaging Tool (APT.)\par
+BugBox is designed to work with the Debian GNU/Linux distribution and compatible distributions.  It can be distributed as a self-contained virtual machine, or as a package that can be installed on an existing system. The machine must have sufficient storage (roughly 4 GB per OS environment, and 2 GB for the application, engine, and exploit sources [Confirm these \#s]).  Dependencies for BugBox include MySQL,  Selenium Server, debootstrap, and the Advanced Packaging Tool (APT.), and the capacity to run any of the system dependancies of the target web application.\\
 
 \section{Environment}
 
 In order to conduct tests in an isolated environment we use a virtual jail, the linux chroot environment.  Staging the application in the chroot environment provides locality, reproducibility, and stability and flexibility.\\
 
-{\bf The web application remains local}.  Many applications, such as wordpress, have a MYSQL backend.  If we were to host the application on a different server or VM we would have to ensure that the MYSQL database is properly setup each time.  With the chroot environment, the process is simplified, we keep a MYSQL database outside of the CHROOT Jail in order to facilitate MYSQL access.  \\
+{\bf The web application remains local}.  Many applications, such as wordpress, have a MYSQL backend.  If we were to host the application on a different server or VM we would have to ensure that the MYSQL database is properly setup each time.  With the chroot environment, the process is simplified. We keep a MYSQL database outside of the CHROOT Jail in order to facilitate web application configuration.  \\
 
 {\bf Current tests are independent from future tests}.  We load a clean application into the chroot jail every time we wish to run a new test.  This ensures that there is no corruption of the original web application and provides reproducible results when testing.\\
 
@@ -126,7 +127,7 @@ During step one the engine creates a chroot environment on the linux distributio
 
 \subsection{Targets}
 
-   The corpus.{\bf Target} module controls all the application targets that the exploits may be applied to.  More specifically, this represents web applications such as WordPress, SimplePHPAgenda, etc.  The virgin copy of the target is always loaded before any exploit script is run on the target.  Init scripts are written per application to provide the corpus.{\bf Engine} with the proper details for the setup, for example:
+   The corpus.{\bf Target} module controls all the application targets that the exploits may be applied to.  More specifically, this represents web applications such as WordPress, SimplePHPAgenda, etc. A copy of the target program with a typical configuration, is always loaded before any exploit script is run.  Init scripts are written per application to provide the corpus.{\bf Engine} with the proper details for the setup, for example:
 
 {\tt \small
 \begin{verbatim}
@@ -161,14 +162,13 @@ Options:
 \end{verbatim}
 }
 
-\textcolor{red}{
-Scripting of experiments. corpus.Query [Work in progress] interface for using querys of exploit metadata to manage sets of exploits/environments. 
-}
-
 \subsection{corpus.{\bf SeleniumDriver} and Scripting}
-We use the corpus.{\bf SeleniumDriver} as a wrapper class for the Selenium's Firefox web driver in order to leverage the powerful selenium browser automation.  Selenium is a greate choice for browser automation because of its ease-of-use, python bindings, and demonstration/visualization capability.
+We use the corpus.{\bf SeleniumDriver} as a wrapper class for the Selenium's Firefox web driver in order to leverage the Selenium's powerful browser automation.  Selenium integrates nicely with the framework, providingdemonstration/visualization capabilities, javascript support, and simple interaction with HTML objects.
 
-To accomplish our trace based approach, we create a selenium script in Python, replicating actions a user would take in performing an exploit on a web application and collect the execution trace with XDebug.  Future support will provide trace collection through cookie manipulation in order to reduce the code footprint of the trace collected.  Due to the structure, represented in figure 2, of the corpus.{\bf Engine} we can create concise code statements for our selenium scripts. 
+\textcolor{red}{To accomplish our trace-based approach, we create a selenium script in Python, replicating actions a user would take in performing an exploit on a web application and collect the execution trace with XDebug.}
+We begin the trace-based approach by writing an exploit. The exploit script automates all actions an attackerwould take in compromising a web application. XDebug is instructed to collect the execution traces during this process, and finally the corpus engine collects and organizes them on a per-session basis.
+
+  Future support will control trace collection through cookie manipulation via XDebug. This will reduce the collection of insignificant interactions and provide a more refined break-down of the exploitation process since traces can be grouped by HTML request.  The structure of corpus.Engine (illustrated in figure 2) is designed so that exploits can be written in a concise code statement.
 
 \begin{figure}[!tp]
 \begin{center}
