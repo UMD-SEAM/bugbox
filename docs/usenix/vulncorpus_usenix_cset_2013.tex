@@ -75,17 +75,14 @@ Web Applications are a rich source of vulnerabilities due to their high exposure
 Web applications are subject to a rich variety of exploit types, such as cross-site scripting (XSS), cross-site request forgery (XSRF), buffer overflow, and SQL injection.  A recent study by White Hat Security~\cite{WhiteHat:2010:Online} analyzed seven web application languages: ASP, ASPX, CFM, DO, JSP, PHP, and PL showing that PHP, while having the smallest attack surface in their tests, produced one of the highest average number of serious vulnerabilities per website.  This variety of exploits in PHP and other languages is logged extensively in popular exploit databases such as the National Vulnerability Database (NVD), Open Source Vulnerability Database (OSVDB), Common Vulnerability and Exposures Database (CVE), or the Exploit Database (EDB).\\
 
 While many of these databases exist and disclose the details of the vulnerability and/or exploit, they do not provide a collection of structured vulnerable code that can be used for analysis.  Specifically, it is not enough to know what exploit was used in a situation, but we must also know the location of the vulnerable code that allowed the exploit to execute.  A suitable, structured collection of vulnerable code is typically not made publicly available and is scarce in quantity.  Such a structured collection, often reffered to as a corpus, is useful in statistical analysis and hypothesis testing, but only when it is of certain quality.  To determine the quality or suitability of a corpus, one must consider several criteria: representativeness of the samples, quantity of the samples, diversity of the samples, and reproducability of the tests that produced the samples [need ref].\\
-\textcolor{red}{ Tests that produced the samples? clarify }
- 
-It is our experience that obtaining the necessary quantity of vulnerabilities is a difficult task that is usually limited by the manpower allocated to a given project. With the in-house creation of BugBox, our goal is to unify efforts accross researchers and projects to meet the expectations of a good vulnerability corpus. All code and data is licensed under the GPL v3 [OR OTHER], so that all contributions and modificaitons will remain Open Source. 
-
-
-A high-quality corpus will fascilitate work in variety of applications, such as: evaluating static analysis tools~\cite{Zitser:2004:TSA:1041685.1029911}, penetration testing, training security teams on vulnerability injection~\cite{4725309}, conducting analysis on open source web applications~\cite{DBLP:journals/ese/HuynhM10}, and comparing attack surface metrics accross applications~\cite{Stuckman:2012:CAA:2372225.2372229}.\\
+It is our experience that obtaining the necessary quantity of vulnerabilities is a difficult task that is usually limited by the manpower allocated to a given project. With the in-house creation of BugBox, our goal is to unify efforts accross researchers and projects to meet the expectations of a good vulnerability corpus. Community contributions will be key to building a corpus of sufficient size for many tasks. Therefore, all code and data is licensed under the GPL v3, so that contributions and modificaitons will remain Open Source. In addition, we maintain a vulnerability wiki detailing the entries in the corpus, and a web-interface to the git repository that hosts the project. Collaboration will be coordinated through the issue tracking system on the website, with git, and through the mailing list. \\
 
 
 \section{Vulnerability Representation}
 
-
+A high-quality corpus will fascilitate work in variety of applications, such as: evaluating static analysis tools~\cite{Zitser:2004:TSA:1041685.1029911}, penetration testing, training security teams on vulnerability injection~\cite{4725309}, conducting analysis on open source web applications~\cite{DBLP:journals/ese/HuynhM10}, and comparing attack surface metrics accross applications~\cite{Stuckman:2012:CAA:2372225.2372229}.\\
+\textcolor{red}{ TRANSITION }
+ 
 Line-based, run-based, and trace-based approaches are all effective ways for representing the \emph{vulnerability point}[ref] in a program.  The study of identifying vulnerabiliyt points and their representations is often refered to as \emph{vulnerability localization}[ref].  A line-based\cite{4630094} approach for vulnerability collection uses line numbers represented in program patches to identify the location of the vulnerabilities.  However, there are many ways to fix a vulnerability and a patch represents only one of these ways or may represent irrelevant changes.  A run-based\cite{Song:2008:BNA:1496255.1496257} approach creates vulnerability signatures from intermediate byte code.  The drawback to this approach is that it does not isolate the lines of source code that represents the vulnerability.  The method proposed for our corpus is a trace-based collection approach in order to capture code vulnerabilities in software.  We accomplish this task by collecting execution traces with XDebug showing the exploit and then manually highlighting the program paths relevant to the vulnerability.
 
 \section{Usage}
@@ -107,35 +104,8 @@ for Exploit in Query().get_by_type('XSS'):
 \end{verbatim}
 }
 
-This job would have taken hours to accomplish using our previous approach, which was based on virtual machine snapshots. With a layer of abstraction between the user and the OS, target application, and exploits, it is now possible to automate research tasks easily. The following sections will give details on the system design that makes this automation possible.
+The process of setting up an OS environment, configuring the target applicaiton, interacting with the PHP debugger, and all post-job cleanup all occurs behind the scenes of the framework. This job would have taken hours to accomplish using our previous approach, which was based on virtual machine snapshots. With a layer of abstraction between the user and the OS, target application, and exploits, it is now possible to automate research tasks easily, and it allows the corpus to be useful for a larger variety of problems. The following sections will give details on the abstractions that makes this automation possible.
 \\
-
-\textcolor{red}{ TRANSITION or elsewhere }
-Many times the focus of study is on a single vulnerability or vulnerable application. The run-time management of single corpus entries can be done easily from the command-line. The most basic commands are provided in the bbmanage.py utility with the following options: 
-
-%{\tt \small
-{\tt \footnotesize
-\begin{verbatim}
-
-Usage: ./bbmanage.py [command] <options>
-    Commands:   Options:
-    list        <exploits | 
-                 targets  | 
-                 types    | 
-                 running>
-    info        <exploit_name>
-    start       <exploit_name>
-    exploit     <exploit_name <disp_on | disp_off>>
-    stop        <exploit_name>
-    trace_on    <exploit_name>
-    trace_off   <exploit_name>
-    autorun     <exploit_name>
-
-
-\end{verbatim}
-}
-
-
 
 \section{Framework}
 
@@ -282,6 +252,35 @@ We use the {\bf SeleniumDriver} as a wrapper class for the Selenium's Firefox we
 
 \textcolor{red}{To accomplish our trace-based approach, we create a selenium script in Python, replicating actions a user would take in performing an exploit on a web application and collect the execution trace with XDebug.}
 We begin the trace-based approach by writing an exploit in Python using Selenium. The exploit script automates all actions an attacker would take in compromising a web application. XDebug is instructed to collect the execution traces during this process, and finally the corpus engine collects and organizes them on a per-session basis.
+
+
+\textcolor{red}{ THIS SECTION IS LOOKING FOR A HOME, remove? }
+Many times the focus of study is on a single vulnerability or vulnerable application. The run-time management of single corpus entries can be done easily from the command-line. The most basic commands are provided in the bbmanage.py utility with the following options: 
+
+%{\tt \small
+{\tt \footnotesize
+\begin{verbatim}
+
+Usage: ./bbmanage.py [command] <options>
+    Commands:   Options:
+    list        <exploits | 
+                 targets  | 
+                 types    | 
+                 running>
+    info        <exploit_name>
+    start       <exploit_name>
+    exploit     <exploit_name <disp_on | disp_off>>
+    stop        <exploit_name>
+    trace_on    <exploit_name>
+    trace_off   <exploit_name>
+    autorun     <exploit_name>
+
+
+\end{verbatim}
+}
+
+
+
 
 
 \section{Lessons Learned}
