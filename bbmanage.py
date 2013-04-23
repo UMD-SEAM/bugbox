@@ -137,6 +137,7 @@ if __name__ == "__main__":
             engine.startup()
             engine.xdebug_autotrace_on()
             engine.exploit.exploit()
+            engine.xdebug_autotrace_off()
             engine.shutdown()
             exit()
 

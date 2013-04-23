@@ -35,6 +35,16 @@ try:
                         
             return expl_list
 
+        def get_by_type(self, tname):
+            
+            expl_list = []
+            for expl in self.exploits:
+                if expl.attributes.has_key('Type'):
+                    if expl.attributes['Type'] == tname:
+                        expl_list += [expl]
+                    
+            return expl_list
+
         def get_by_name(self, name):
             
             for expl in self.exploits:
