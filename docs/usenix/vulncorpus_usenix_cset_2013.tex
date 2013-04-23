@@ -88,15 +88,6 @@ Support that will be effortlessly streamlined because of a scalable framework th
 
 Line-based, run-based, and trace-based approaches are all effective ways for representing the \emph{vulnerability point}[ref] in a program.  The study of identifying vulnerabiliyt points and their representations is often refered to as \emph{vulnerability localization}[ref].  A line-based\cite{4630094} approach for vulnerability collection uses line numbers represented in program patches to identify the location of the vulnerabilities.  However, there are many ways to fix a vulnerability and a patch represents only one of these ways or may represent irrelevant changes.  A run-based\cite{Song:2008:BNA:1496255.1496257} approach creates vulnerability signatures from intermediate byte code.  The drawback to this approach is that it does not isolate the lines of source code that represents the vulnerability.  The method proposed for our corpus is a trace-based collection approach in order to capture code vulnerabilities in software.  We accomplish this task by collecting execution traces with XDebug showing the exploit and then manually highlighting the program paths relevant to the vulnerability.
 
-
-\section{Anatomy of a Corpus Entry}
-
-A corpus entry has three main entities: a script, a trace, and a package.  The script contains the exploit actions that are programmatically taken on a specific application.  This script helps automation and reproducability of results.  The trace is the resultant execution trace of the web application when the script is executed on it.  The trace collected is why we have identified our method as a trace-based collection approach.  The packages represent web applications in their vulnerable state.  Each web application is represented multiple times under different versions, giving accessability to the vulnerable code. 
-
-\section{Corpus Entry Workflow}
-
-There are a few simple steps to creating a new corpus entry: determine the exploit, download a package, confirm the exploit, create the script, collect the trace.  As mentioned in the introduction, one could use any vulnerability or exploit database.   Once a particular exploit is found, we verify if the package is available already in the corpus, if not we simply upload it as a new package.  We perform a manual execution of the exploit to verify that we understand the scope of the exploit, from which we proceed to write a script for the exploit so that the process will be automated for future use.  Finally, we collect the trace of the program while our script is being executed and add it to our corpus.
-
 \section{Usage}
 
 The following Python script illustrates a use-case for the BugBox framework. In this example, all XSS vulnerabilities existing in the the corpus are sequentially invoked, and execution traces are collected:
@@ -155,7 +146,35 @@ Usage: ./bbmanage.py [command] <options>
 \caption{System Diagram}
 \end{figure}
 
-The major components of the BugBox framework are organized as the Python modules and packages. The system breaks down into the following four modules: {\bf SeleniumDriver}, {\bf Exploit},  {\bf Targets} and {\bf Engine}.  Figure 1 illustrates the general structure of the corpus environment, with arrows showing lines of control or communication.  
+The major components of the BugBox framework are organized as the Python modules and packages. The system breaks down into the following four modules: {\bf SeleniumDriver}, {\bf Exploit},  {\bf Targets} and {\bf Engine}.  Figure 1 illustrates the general structure of the corpus environment, with arrows showing lines of control or communication. \\  
+
+A corpus entry has three main entities: a script, a trace, and a package.  The script contains the exploit actions that are programmatically taken on a specific application.  This script helps automation and reproducability of results.  The trace is the resultant execution trace of the web application when the script is executed on it.  The trace collected is why we have identified our method as a trace-based collection approach.  The packages represent web applications in their vulnerable state.  Each web application is represented multiple times under different versions, giving accessability to the vulnerable code. 
+
+\section{Corpus Entry Workflow}
+
+There are a few simple steps to creating a new corpus entry: determine the exploit, download a package, confirm the exploit, create the script, collect the trace.  As mentioned in the introduction, one could use any vulnerability or exploit database.   Once a particular exploit is found, we verify if the package is available already in the corpus, if not we simply upload it as a new package.  We perform a manual execution of the exploit to verify that we understand the scope of the exploit, from which we proceed to write a script for the exploit so that the process will be automated for future use.  Finally, we collect the trace of the program while our script is being executed and add it to our corpus.
+
+
+
+\subsection{Engine}
+The {\bf Engine} drives the environment setup, tear-down, and exploitation process.  The engine was created to abstract away details so that contributors can add new exploit scripts without worrying about the setup. The structure of Engine (illustrated in figure 2) is designed so that exploits can be written in a concise code statement.  This separation accomplishs a step-like approach for getting involved with the corpus, where developing exploits for the corpus is more approachable and quick for novice programmers that want to contribute and a robust framework that can be understood incrementally for larger contributions to the framework.  The following is an  example use case for running a script using this engine:
+ 
+
+\begin{enumerate}
+	\item {\tt script.py start}
+	\item {\tt script.py xdebug\_on}
+	\item {\tt script.py exploit}
+	\item {\tt script.py xdebug\_off}
+	\item {\tt script.py stop}
+\end{enumerate}
+
+During step one the engine creates a chroot environment on the linux distribution for which the target application is copied over and the pertinent MYSQL bindings are established.  The engine can modify the state of the trace collection in X\_Debug as seen in steps two and four to ensure that we collect only the trace pertinent to the exploitation.  Finally, the fifth steps unmounts the chroot environment and returns the corpus environment back to an un-altered state.
+
+
+\section{Trace Collection}
+
+XDebug is a feature-rich PHP extenstion which provides debugging and profiling cababilities.  For our purposes, we use it to capture traces through setting its global environment auto-trace variable.  Currently we toggle this through the command line, but want future support to be able to toggle the trace collection through the setting of cookies while the script is being executed.
+
 
 \section{Environment}
 
@@ -180,6 +199,28 @@ We use the linux chroot environment in order to conduct tests in isolation.  Sta
 \end{center}
 \caption{Exploit Structure}
 \end{figure}
+
+
+\subsection{Targets}
+
+   The corpus.{\bf Target} module controls all the application targets that the exploits may be applied to.  More specifically, this represents web applications such as WordPress, SimplePHPAgenda, etc. A copy of the target program with a typical configuration, is always loaded before any exploit script is run.  Init scripts are written per application to provide the corpus.{\bf Engine} with the proper details for the setup, for example:
+
+{\tt \small
+\begin{verbatim}
+name = "Wordpress 3.3.1"
+application_dir_mapping = ...
+     [get_path("application"), "/var/www"]
+database_filename = get_path("database.sql")
+database_name = "wordpress_3_3_1_A"
+chroot_environment = "Debian7"
+\end{verbatim}
+} 
+
+
+\subsection{Exploit}
+The module corpus.{\bf Exploit} is the superclass for each exploit in the corpus, defining interfaces and attributes that the engine uses to manage the environment and exploitation.  This template ensures that the selenium driver is properly bound to the exploit and makes sure that an exploit script has been defined as well as defines any specific actions on teardown.
+
+
 
 \subsubsection{init()}
 
@@ -226,48 +267,6 @@ driver.get("http://localhost/wordpress/?p=1")
 It is important to note that in the creation of this database we will only release exploit scripts that have a patched released for the vulnerability or is properly noted in one of the databases mentioned in the introduction (it does not represent a zero-day exploit.)
 
 
-\subsection{Exploit}
-The module corpus.{\bf Exploit} is the superclass for each exploit in the corpus, defining interfaces and attributes that the engine uses to manage the environment and exploitation.  This template ensures that the selenium driver is properly bound to the exploit and makes sure that an exploit script has been defined as well as defines any specific actions on teardown.
-
-
-\subsection{Targets}
-
-   The corpus.{\bf Target} module controls all the application targets that the exploits may be applied to.  More specifically, this represents web applications such as WordPress, SimplePHPAgenda, etc. A copy of the target program with a typical configuration, is always loaded before any exploit script is run.  Init scripts are written per application to provide the corpus.{\bf Engine} with the proper details for the setup, for example:
-
-{\tt \small
-\begin{verbatim}
-name = "Wordpress 3.3.1"
-application_dir_mapping = ...
-     [get_path("application"), "/var/www"]
-database_filename = get_path("database.sql")
-database_name = "wordpress_3_3_1_A"
-chroot_environment = "Debian7"
-\end{verbatim}
-} 
-
-\subsection{Engine}
-The {\bf Engine} drives the environment setup, tear-down, and exploitation process.  The engine was created to abstract away details so that contributors can add new exploit scripts without worrying about the setup. The structure of Engine (illustrated in figure 2) is designed so that exploits can be written in a concise code statement.  This separation accomplishs a step-like approach for getting involved with the corpus, where developing exploits for the corpus is more approachable and quick for novice programmers that want to contribute and a robust framework that can be understood incrementally for larger contributions to the framework.  The following is an  example use case for running a script using this engine:
- 
-
-\begin{enumerate}
-	\item {\tt script.py start}
-	\item {\tt script.py xdebug\_on}
-	\item {\tt script.py exploit}
-	\item {\tt script.py xdebug\_off}
-	\item {\tt script.py stop}
-\end{enumerate}
-
-During step one the engine creates a chroot environment on the linux distribution for which the target application is copied over and the pertinent MYSQL bindings are established.  The engine can modify the state of the trace collection in X\_Debug as seen in steps two and four to ensure that we collect only the trace pertinent to the exploitation.  Finally, the fifth steps unmounts the chroot environment and returns the corpus environment back to an un-altered state.
-
-\section{Requirements}
-
-BugBox is designed to work with the Debian GNU/Linux distribution and compatible distributions.  It can be distributed as a self-contained virtual machine, or as a package that can be installed on an existing system. The machine must have sufficient storage (roughly 4 GB per OS environment, and 2 GB for the application, engine, and exploit sources [Confirm these \#s]).  Dependencies for BugBox include MySQL,  Selenium Server, debootstrap, and the Advanced Packaging Tool (APT.), and the capacity to run any of the system dependancies of the target web application.
-
-\section{Trace Collection}
-
-XDebug is a feature-rich PHP extenstion which provides debugging and profiling cababilities.  For our purposes, we use it to capture traces through setting its global environment auto-trace variable.  Currently we toggle this through the command line, but want future support to be able to toggle the trace collection through the setting of cookies while the script is being executed.
-
-
 \subsection{{\bf SeleniumDriver} and Scripting}
 We use the {\bf SeleniumDriver} as a wrapper class for the Selenium's Firefox web driver in order to leverage the Selenium's powerful browser automation.  Selenium integrates nicely with the framework, providing demonstration/visualization capabilities, javascript support, and simple interaction with HTML objects.
 
@@ -275,27 +274,27 @@ We use the {\bf SeleniumDriver} as a wrapper class for the Selenium's Firefox we
 We begin the trace-based approach by writing an exploit in Python using Selenium. The exploit script automates all actions an attacker would take in compromising a web application. XDebug is instructed to collect the execution traces during this process, and finally the corpus engine collects and organizes them on a per-session basis.
 
 
+\section{Lessons Learned}
+
+Some research projects conducted in our software engineering group at the University of Maryland are centered around collection of metrics data for vulnerabilities.  Since we were unable to find a corpus that suited our needs, we started to build an in-house corpus.  Originally we had another VM based architecture in mind. \\
+
+We found that because the process was not documented, it was harder to verify that the exploit was executed in the correct manner.  Many times pages that were logged as exploited, did not show the representation of the exploit.  Furthermore there was no specific collection that could be analyzed of the exploit.\\
+
+We determined that, for one, this environment was not scalable.  We could not continue to add new exploits to a tainted environment without eventually overlapping one exploit with another.  We would have an increasingly hard time to review whether or not an exploit was overlapping.\\
+
+The idea was to be able to mount web application targets onto VMs.  We had a similiar idea in th sense that the VM's could be setup and brought down, saving the current state that they were in.  Once the application was mounted, we performed an exploit manually and saved a snapshot of the VM instance.  All exploits applied to "tainted" applications, so we had to be careful that one exploit did not interfere with another.  We hired summer students to create exploits and save new snapshots, from which we had them report their progress on the wiki we had built.  
+
+
+\section{Acknowledgements}
+
+Plugs for everyone who has given us money.
+
 \section{Use Cases}
 By providing a corpus that explicitly logs the steps taken in accumulating the log files, we have more flexibility.  This flexibility can be seen with the following example:  
 \\\\
 {\tt Jon is told by his advisor that he needs to collect more trace data in order to get a proper sample size for his research.  John quickly creates a selenium script for the exploit he wants to collect and shows the advisor his results.  The advisor was generally happy with the trace data that he collected, but instead wanted him to do a slight modification to the exploit.  If Jon did not have the selenium script at hand, he would have to duplicate all of the work previously done.  Since he does have the script on hand, he can quickly make a change to the script and re-run in seconds versus hours.}
 \\\\
 While the above process is only shown in one iteration, most students know that this is not the case.  One hour of work can turn into a whole week of work without the proper framework in place.  The above situation also shows that the selenium script can be discussed with the professor to show validity of the data and provide talking points for how the exploit was applied.
-
-\section{Lessons Learned}
-
-Some research projects conducted in our software engineering group at the University of Maryland are centered around collection of metrics data for vulnerabilities.  Since we were unable to find a corpus that suited our needs, we started to build an in-house corpus.  Originally we had another VM based architecture in mind.  
-
-\subsection{VM Architecture}
-The idea was to be able to mount web application targets onto VMs.  We had a similiar idea in th sense that the VM's could be setup and brought down, saving the current state that they were in.  Once the application was mounted, we performed an exploit manually and saved a snapshot of the VM instance.  All exploits applied to "tainted" applications, so we had to be careful that one exploit did not interfere with another.  We hired summer students to create exploits and save new snapshots, from which we had them report their progress on the wiki we had built.  
-
-\subsection{Fall Out}
-We found that because the process was not documented, it was harder to verify that the exploit was executed in the correct manner.  Many times pages that were logged as exploited, did not show the representation of the exploit.  Furthermore there was no specific collection that could be analyzed of the exploit.
-
-\subsection{Fixes}
-We determined that, for one, this environment was not scalable.  We could not continue to add new exploits to a tainted environment without eventually overlapping one exploit with another.  We would have an increasingly hard time to review whether or not an exploit was overlapping.
-
-\section{Acknowledgements}
 
 
 \section{Future Development}
@@ -316,6 +315,8 @@ For each exploit currently in the corpus, there is no standard for the payload u
 
 
 \section{Availability and Use}
+
+BugBox is designed to work with the Debian GNU/Linux distribution and compatible distributions.  It can be distributed as a self-contained virtual machine, or as a package that can be installed on an existing system. The machine must have sufficient storage (roughly 4 GB per OS environment, and 2 GB for the application, engine, and exploit sources [Confirm these \#s]).  Dependencies for BugBox include MySQL,  Selenium Server, debootstrap, and the Advanced Packaging Tool (APT.), and the capacity to run any of the system dependancies of the target web application.
 
 The corpus is publicly available at:
 
