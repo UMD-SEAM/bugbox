@@ -97,7 +97,7 @@ A corpus entry has three main entities: a script, a trace, and a package.  The s
 
 There are a few simple steps to creating a new corpus entry: determine the exploit, download a package, confirm the exploit, create the script, collect the trace.  As mentioned in the introduction, one could use any vulnerability or exploit database.   Once a particular exploit is found, we verify if the package is available already in the corpus, if not we simply upload it as a new package.  We perform a manual execution of the exploit to verify that we understand the scope of the exploit, from which we proceed to write a script for the exploit so that the process will be automated for future use.  Finally, we collect the trace of the program while our script is being executed and add it to our corpus.
 
-\section{Capabilities}
+\section{Usage}
 
 The following Python script illustrates a use-case for the BugBox framework. In this example, all XSS vulnerabilities existing in the the corpus are sequentially invoked, and execution traces are collected:
 
@@ -116,7 +116,46 @@ for Exploit in Query().get_by_type('XSS'):
 \end{verbatim}
 }
 
-This is a job that in our previous approach, which was based on virtual machine snapshots, would have taken hours to accomplish. With a layer of abstraction between the user and the OS, target application, and exploits, it is now possible to automate research tasks easily. The following sections will give details on the system design that makes this automation possible.
+This job would have taken hours to accomplish using our previous approach, which was based on virtual machine snapshots. With a layer of abstraction between the user and the OS, target application, and exploits, it is now possible to automate research tasks easily. The following sections will give details on the system design that makes this automation possible.
+\\
+
+\textcolor{red}{ TRANSITION or elsewhere }
+Many times the focus of study is on a single vulnerability or vulnerable application. The run-time management of single corpus entries can be done easily from the command-line. The most basic commands are provided in the bbmanage.py utility with the following options: 
+
+%{\tt \small
+{\tt \footnotesize
+\begin{verbatim}
+
+Usage: ./bbmanage.py [command] <options>
+    Commands:   Options:
+    list        <exploits | 
+                 targets  | 
+                 types    | 
+                 running>
+    info        <exploit_name>
+    start       <exploit_name>
+    exploit     <exploit_name <disp_on | disp_off>>
+    stop        <exploit_name>
+    trace_on    <exploit_name>
+    trace_off   <exploit_name>
+    autorun     <exploit_name>
+
+
+\end{verbatim}
+}
+
+
+
+\section{Framework}
+
+\begin{figure}[!tp]
+\begin{center}
+\includegraphics[scale=1.17]{system_diagram.eps}
+\end{center}
+\caption{System Diagram}
+\end{figure}
+
+The major components of the BugBox framework are organized as the Python modules and packages. The system breaks down into the following four modules: {\bf SeleniumDriver}, {\bf Exploit},  {\bf Targets} and {\bf Engine}.  Figure 1 illustrates the general structure of the corpus environment, with arrows showing lines of control or communication.  
 
 \section{Environment}
 
@@ -132,24 +171,8 @@ We use the linux chroot environment in order to conduct tests in isolation.  Sta
 
 {\bf Applications with different OS environments can be run}.  If an application was built for debian 6 as opposed to debian 4, we can setup a chroot environment that has support for that specific OS.  This gives us the flexibility to test the web application in whatever OS environment we choose.
 
-\section{Framework}
+{\bf Scalability}.  In order to create a system that can handle a growing amount of vulnerabilities that are independent from one another, we represent an exploit on an application through  Selenium scripts, as noted in the Framework section.  Selenium scripts allow us to perform operations on web applications without fear of working in an un-intended, compromised environment.  Scalability is critical because we ultimately want to do mass, automated experiments in tandem. \\
 
-\begin{figure}[!tp]
-\begin{center}
-\includegraphics[scale=1.17]{system_diagram.eps}
-\end{center}
-\caption{System Diagram}
-\end{figure}
-
-The major components of the BugBox framework are organized by the Python module and package system. The system breaks down into the following four python modules: corpus.{\bf SeleniumDriver}, corpus.{\bf Exploit},  corpus.{\bf Targets} and corpus.{\bf Engine}.  Figure 1 illustrates the general structure of the corpus environment, with arrows showing lines of control or communication.  
-
-\subsection{corpus.{\bf SeleniumDriver} and Scripting}
-We use the corpus.{\bf SeleniumDriver} as a wrapper class for the Selenium's Firefox web driver in order to leverage the Selenium's powerful browser automation.  Selenium integrates nicely with the framework, providing demonstration/visualization capabilities, javascript support, and simple interaction with HTML objects.
-
-\textcolor{red}{To accomplish our trace-based approach, we create a selenium script in Python, replicating actions a user would take in performing an exploit on a web application and collect the execution trace with XDebug.}
-We begin the trace-based approach by writing an exploit in Python using Selenium. The exploit script automates all actions an attackerwould take in compromising a web application. XDebug is instructed to collect the execution traces during this process, and finally the corpus engine collects and organizes them on a per-session basis.
-
-  Future support will control trace collection through cookie manipulation via XDebug. This will reduce the collection of insignificant interactions and provide a more refined break-down of the exploitation process since traces can be grouped by HTML request.  The structure of corpus.Engine (illustrated in figure 2) is designed so that exploits can be written in a concise code statement.
 
 \begin{figure}[!tp]
 \begin{center}
@@ -206,41 +229,6 @@ It is important to note that in the creation of this database we will only relea
 \subsection{Exploit}
 The module corpus.{\bf Exploit} is the superclass for each exploit in the corpus, defining interfaces and attributes that the engine uses to manage the environment and exploitation.  This template ensures that the selenium driver is properly bound to the exploit and makes sure that an exploit script has been defined as well as defines any specific actions on teardown.
 
-\subsubsection{The Exploit Script}
-
-Each exploit is defined in it's own python file as a module. In Python, modules can either be imported from other modules, or executed directly from the command-line. The exploits written for BugBox take advantage of this property to give the researcher the option of writing scripts to do work on a set of exploits, or to invoke one exploit at a time. When run from the command-line, the supplied arguments are passed directly to the vulnerability engine, which supports the options shown below: 
-
-%Usage: python OSVDB_89960.py [options]
-%Options:
-%    start:          Start exploit instance
-%    stop:           Stop exploit instance
-%    exploit:        Run the exploit
-%    check:          Check if the corresponding 
-%                    environment is running
-%    xdebug_on:      Turn on xdebug autotrace
-%    xdebug_off:     Turn off and collect 
-%                    xdebug autotrace
-
-{\tt \small
-\begin{verbatim}
-
-Usage: ./bbmanage.py [command] <options>
-    Commands:   Options:
-    list        <exploits | 
-                 targets  | 
-                 types    | 
-                 running>
-    info        <exploit_name>
-    start       <exploit_name>
-    exploit     <exploit_name <disp_on | disp_off>>
-    stop        <exploit_name>
-    trace_on    <exploit_name>
-    trace_off   <exploit_name>
-    autorun     <exploit_name>
-
-
-\end{verbatim}
-}
 
 \subsection{Targets}
 
@@ -258,7 +246,8 @@ chroot_environment = "Debian7"
 } 
 
 \subsection{Engine}
-The {\bf Engine} drives the environment setup, tear-down, and exploitation process.  The engine was created to abstract away details so that contributors can add new exploit scripts without worrying about the setup.  This separation accomplishs a step-like approach for getting involved with the corpus, where developing expoloits for the corpus is more approachable and quick for novice programmers that want to contribute and a robust framework that can be understood incrementally for larger contributions to the framework.  The following is an  example use case for running a script using this engine:
+The {\bf Engine} drives the environment setup, tear-down, and exploitation process.  The engine was created to abstract away details so that contributors can add new exploit scripts without worrying about the setup. The structure of Engine (illustrated in figure 2) is designed so that exploits can be written in a concise code statement.  This separation accomplishs a step-like approach for getting involved with the corpus, where developing exploits for the corpus is more approachable and quick for novice programmers that want to contribute and a robust framework that can be understood incrementally for larger contributions to the framework.  The following is an  example use case for running a script using this engine:
+ 
 
 \begin{enumerate}
 	\item {\tt script.py start}
@@ -278,8 +267,13 @@ BugBox is designed to work with the Debian GNU/Linux distribution and compatible
 
 XDebug is a feature-rich PHP extenstion which provides debugging and profiling cababilities.  For our purposes, we use it to capture traces through setting its global environment auto-trace variable.  Currently we toggle this through the command line, but want future support to be able to toggle the trace collection through the setting of cookies while the script is being executed.
 
-\section{Scalability}
-In order to create a system that can handle a growing amount of vulnerabilities that are independent from one another, we represent an exploit on an application through  Selenium scripts, as noted in the Framework section.  Selenium scripts allow us to perform operations on web applications without fear of working in an un-intended, compromised environment.  Scalability is critical because we ultimately want to do mass, automated experiments in tandem.  
+
+\subsection{{\bf SeleniumDriver} and Scripting}
+We use the {\bf SeleniumDriver} as a wrapper class for the Selenium's Firefox web driver in order to leverage the Selenium's powerful browser automation.  Selenium integrates nicely with the framework, providing demonstration/visualization capabilities, javascript support, and simple interaction with HTML objects.
+
+\textcolor{red}{To accomplish our trace-based approach, we create a selenium script in Python, replicating actions a user would take in performing an exploit on a web application and collect the execution trace with XDebug.}
+We begin the trace-based approach by writing an exploit in Python using Selenium. The exploit script automates all actions an attacker would take in compromising a web application. XDebug is instructed to collect the execution traces during this process, and finally the corpus engine collects and organizes them on a per-session basis.
+
 
 \section{Use Cases}
 By providing a corpus that explicitly logs the steps taken in accumulating the log files, we have more flexibility.  This flexibility can be seen with the following example:  
@@ -314,6 +308,7 @@ We determined that, for one, this environment was not scalable.  We could not co
    \item[Isolating attack event]
      \textcolor{red}{(with xdebug manually/cookies/etc...)}   
    \item[Selenium driver and aux modules]
+  Future support will control trace collection through cookie manipulation via XDebug. This will reduce the collection of insignificant interactions and provide a more refined break-down of the exploitation process since traces can be grouped by HTML request.  \par
    Explore the possibility of a unified communication interface. This may be necessary in order to cleanly interact with xdebug with appropriate cookies set on a per-request basis (especially when modules other than Selenium are used for communication).
    \item[Payload standardization]
 For each exploit currently in the corpus, there is no standard for the payload used in the attack. Since many studies may be sensitive to the payload type and encoding, it makes sense to provide the researcher with fine-grained control over this property. The Metasploit Framework has a very robust system for managing exploits along with their payloads and encodings, and can be a model for implementing this.
