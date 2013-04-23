@@ -1,0 +1,3 @@
+03-18-13 21:04:02	69.140.15.240	INFO	shared	Create User	user_id=admin
+03-18-13 21:04:16	69.140.15.240	INFO	admin	Log In	
+03-18-13 22:26:13	69.140.15.240	INFO	admin	Switch Repository	rep. id=1

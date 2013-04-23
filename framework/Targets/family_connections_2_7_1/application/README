@@ -1,0 +1,59 @@
+
+                             Family Connections 2.7.1
+
+
+  Installation
+  ------------
+
+  1. Upload the entire contents of FCMS_2.7.1.zip to your web host.
+
+  2. Run the online installation script by visiting your website.
+
+     If you installed Family Connections in a directory called fcms/ and your 
+     domain is yourdomain.com, then you would type in the url 
+     http://www.yourdomain.com/fcms/ into your browser.
+
+  3. It is recommended that you delete the install.php file after installation.
+
+
+
+  Upgrading from 2.7 to 2.7.1
+  ---------------------------
+
+  ** DO NOT DELETE THE FOLLOWING FILE **
+    inc/config_inc.php
+
+  ** DO NOT TOUCH ANY FILES IN THE FOLLOWING DIRECTORIES **
+    uploads/avatar/
+    uploads/documents/
+    uploads/photos/memberX/
+    uploads/upimages/
+
+  1. It is recommended that you backup your entire site, including your
+     MySQL database before upgrading.
+
+  2. Login as the administrator, visit the upgrade section, and run the 
+     automatic upgrade.
+
+  3. Delete the install.php file from your web host (if it still exists).
+
+
+
+  Change Log
+  ----------
+
+  2.7.1
+
+    #395 - Error with 2.7 Fresh Install
+    #396 - RSS Feed not working
+
+  For the full change log please refer to the included ChangeLog file.
+
+
+
+  License
+  -------
+
+  This software uses the The GNU General Public License (GPL), please refer to 
+  the full license description in the LICENSE file.
+
