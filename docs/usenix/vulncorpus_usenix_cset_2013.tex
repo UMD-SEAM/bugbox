@@ -104,7 +104,7 @@ for Exploit in Query().get_by_type('XSS'):
 \end{verbatim}
 }
 
-The process of setting up an OS environment, configuring the target applicaiton, interacting with the PHP debugger, and all post-job cleanup all occurs behind the scenes of the framework. This job would have taken hours to accomplish using our previous approach, which was based on virtual machine snapshots. With a layer of abstraction between the user and the OS, target application, and exploits, it is now possible to automate research tasks easily, and it allows the corpus to be useful for a larger variety of problems. The following sections will give details on the abstractions that makes this automation possible.
+The process of setting up an OS environment, configuring the target applicaiton, interacting with the PHP debugger, and all post-job cleanup all occur behind the scenes of the framework. This job would have taken hours to accomplish using our previous approach, which was based on virtual machine snapshots. With a layer of abstraction above the OS, target application, and exploits, it is now possible to automate research tasks easily. The following sections will give details on the design of the system that makes this automation possible.
 \\
 
 \section{Framework}
