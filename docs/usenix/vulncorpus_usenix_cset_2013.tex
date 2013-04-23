@@ -64,23 +64,23 @@ Computer Science Department\\University of Maryland
 
 \section{TODO}
 Our previous approach
+Orphin sentences:
+... a publicly available, scalable, and easy-to-use corpus that collects vulnerable code signatures through an automated trace-based collection method
+
 
 \subsection*{Abstract}
 Web Applications are a rich source of vulnerabilities due to their high exposure, ease of exploitation, and pervasive poor programming practices. Accordingly, web applications are ideal specimens for \emph{empirical vulnerability research}. There is currently no publicly available resource of vulnerabilities that is both robust and practical to use. BugBox is an open-source corpus and framework for PHP web application vulnerabilities that was created to fill this void with the goal of encouraging greater quality security research. In this paper we discuss the use of the framework and further explain the motivating factors behind the design. The corpus can be used to enhance testing vulnerability indicators and metrics, developing vulnerability definition representations, testing intrusion detection systems, or for creating demonstrations for training purposes.  
 
 \section{Introduction}
-Web applications are subject to a rich variety of exploit types, such as cross-site scripting (XSS), cross-site request forgery (XSRF), buffer overflow, and SQL injection.  A recent study by White Hat Security~\cite{WhiteHat:2010:Online} analyzed seven web application languages: ASP, ASPX, CFM, DO, JSP, PHP, and PL showing that PHP, while having the smallest attack surface in their tests, produced one of the highest average number of serious vulnerabilities per website.  This variety and preponderance of exploits in PHP and other languages is logged extensively in popular exploit databases such as the National Vulnerability Database (NVD), Open Source Vulnerability Database (OSVDB), Common Vulnerability and Exposures Database (CVE), or the Exploit Database (EDB).\\
+Web applications are subject to a rich variety of exploit types, such as cross-site scripting (XSS), cross-site request forgery (XSRF), buffer overflow, and SQL injection.  A recent study by White Hat Security~\cite{WhiteHat:2010:Online} analyzed seven web application languages: ASP, ASPX, CFM, DO, JSP, PHP, and PL showing that PHP, while having the smallest attack surface in their tests, produced one of the highest average number of serious vulnerabilities per website.  This variety of exploits in PHP and other languages is logged extensively in popular exploit databases such as the National Vulnerability Database (NVD), Open Source Vulnerability Database (OSVDB), Common Vulnerability and Exposures Database (CVE), or the Exploit Database (EDB).\\
 
-While many of these databases exist and disclose the details of the vulnerability and/or exploit, they do not provide a collection of structured vulnerable code that can be used for analysis.  Specifically, it is not enough to know what exploit was used in a situation, but we must also know the location of the vulnerable code that allowed the exploit to execute.  A suitable, structured collection of vulnerable code is typically not made publicly available and is scarce in quantity.  The structured collection, often reffered to as a corpus, is useful in statistical analysis and hypothesis testing, but only if it is of certain quality.  To elaborate one must consider several criteria in order to determine the quality or suitability of a corpus: representativeness of the samples, quantity of the samples, diversity of the samples, and reproducability of the tests that produced the samples [need ref].\\
+While many of these databases exist and disclose the details of the vulnerability and/or exploit, they do not provide a collection of structured vulnerable code that can be used for analysis.  Specifically, it is not enough to know what exploit was used in a situation, but we must also know the location of the vulnerable code that allowed the exploit to execute.  A suitable, structured collection of vulnerable code is typically not made publicly available and is scarce in quantity.  Such a structured collection, often reffered to as a corpus, is useful in statistical analysis and hypothesis testing, but only when it is of certain quality.  To determine the quality or suitability of a corpus, one must consider several criteria: representativeness of the samples, quantity of the samples, diversity of the samples, and reproducability of the tests that produced the samples [need ref].\\
+\textcolor{red}{ Tests that produced the samples? clarify }
+ 
+It is our experience that obtaining the necessary quantity of vulnerabilities is a difficult task that is usually limited by the manpower allocated to a given project. With the in-house creation of BugBox, our goal is to unify efforts accross researchers and projects to meet the expectations of a good vulnerability corpus. All code and data is licensed under the GPL v3 [OR OTHER], so that all contributions and modificaitons will remain Open Source. 
 
-A suitable corpus of this type can aid work in a wide variety of applications, such as:  evaluating static analysis tools~\cite{Zitser:2004:TSA:1041685.1029911}, penetration testing, training security teams with vulnerability injection~\cite{4725309}, conducting analysis on open source web applications~\cite{DBLP:journals/ese/HuynhM10}, and as a way to compare attack surface metrics accross applications~\cite{Stuckman:2012:CAA:2372225.2372229}.\\
 
-Understanding the scarcity and labor involved in developing a suitable corpus has led to the in-house creation of BugBox, a publicly available, scalable, efficient, easy-to-use framework and corpus that collects vulnerable code signatures through an automated trace-based collection method.  Our goal is to expand and diversify the content of BugBox through community support.  
-
-\textcolor{red}{ NEEDS REVISION, less MBA mumbo jumbo }
-Support that will be effortlessly streamlined because of a scalable framework that is easy to maintain, quick to use, automated, and fully compartmentalized.  Furthermore, the framework capability is streamlined through the thorough use of abstraction and encapsulation making the management of the application, environment, and exploitation in BugBox. 
-
- The design is intended to make it practical to manage a large database of exploits, along with their target environments while acting as more than an exploit repository through containing the software and its dependencies in which a vulnerability exists, the configuration of the software in it's vulnerable state, exploit code that will trigger the security breach, and data that describes any distinguishing attributes of the bug.
+A high-quality corpus will fascilitate work in variety of applications, such as: evaluating static analysis tools~\cite{Zitser:2004:TSA:1041685.1029911}, penetration testing, training security teams on vulnerability injection~\cite{4725309}, conducting analysis on open source web applications~\cite{DBLP:journals/ese/HuynhM10}, and comparing attack surface metrics accross applications~\cite{Stuckman:2012:CAA:2372225.2372229}.\\
 
 
 \section{Vulnerability Representation}
@@ -149,6 +149,16 @@ Usage: ./bbmanage.py [command] <options>
 The major components of the BugBox framework are organized as the Python modules and packages. The system breaks down into the following four modules: {\bf SeleniumDriver}, {\bf Exploit},  {\bf Targets} and {\bf Engine}.  Figure 1 illustrates the general structure of the corpus environment, with arrows showing lines of control or communication. \\  
 
 A corpus entry has three main entities: a script, a trace, and a package.  The script contains the exploit actions that are programmatically taken on a specific application.  This script helps automation and reproducability of results.  The trace is the resultant execution trace of the web application when the script is executed on it.  The trace collected is why we have identified our method as a trace-based collection approach.  The packages represent web applications in their vulnerable state.  Each web application is represented multiple times under different versions, giving accessability to the vulnerable code. 
+
+
+
+  Furthermore, the framework capability is streamlined through the thorough use of abstraction and encapsulation making the management of the application, environment, and exploitation in BugBox. 
+ The design is intended to make it practical to manage a large database of exploits, along with their target environments while acting as more than an exploit repository through containing the software and its dependencies in which a vulnerability exists, the configuration of the software in it's vulnerable state, exploit code that will trigger the security breach, and data that describes any distinguishing attributes of the bug.
+
+Support that will be effortlessly streamlined because of a scalable framework that is easy to maintain, quick to use, automated, and fully compartmentalized.  
+
+
+
 
 \section{Corpus Entry Workflow}
 
