@@ -311,8 +311,6 @@ Some research projects conducted in our software engineering group at the Univer
 The idea was to be able to mount web application targets onto VMs.  We had a similiar idea in th sense that the VM's could be setup and brought down, saving the current state that they were in.  Once the application was mounted, we performed an exploit manually and saved a snapshot of the VM instance.  All exploits applied to "tainted" applications, so we had to be careful that one exploit did not interfere with another.  We hired summer students to create exploits and save new snapshots, from which we had them report their progress on the wiki we had built.\par
 We found that because the process was not sufficiently documented, it was harder to verify that the exploit was executed in the correct manner.  Many times pages that were logged as exploited, did not show the representation of the exploit. Furthermore it was not possible to perform actions using the entire collection of exploits.\par
 We determined that, for one, this environment was not scalable.  We could not continue to add new exploits to a tainted environment without eventually overlapping one exploit with another.  We would have an increasingly hard time to review whether or not an exploit was overlapping.\par
-While the above process is only shown in one iteration, most students know that this is not the case.  One hour of work can turn into a whole week of work without the proper framework in place.  The above situation also shows that the selenium script can be discussed with the professor to show validity of the data and provide talking points for how the exploit was applied.
-
 
 \section{Acknowledgements}
 
