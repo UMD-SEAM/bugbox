@@ -295,12 +295,9 @@ get("submit").click()
 \section{Corpus Development}
 
 To add a new member to the corpus one has to create two to four main entities. Writing an exploit, and generating an execution trace are required, and depending on the target application, one may have to define a new target module, and/or in rare cases, create a new target evironment. However, often there are multiple exploits for a given target application, so it is not always necessary to create a new one. And because PHP web applications do not tend to have a large range of system dependencies, the majority of targets require at most a handful of different OS environments. \par
-The exploit must contain a procedure responsible for exploiting a specific application, and potentially other for doing any pre-exploitation checks of the target, or post exploitation cleanup of the target's environment (for example, removing any files that were uploaded to a webserver). The format of a BugBox exploit should look familiar to anyone who has worked with the Metasploit framework.\par
-
-
+The format of a BugBox exploit should look familiar to anyone who has worked with the Metasploit framework. The exploit must contain a procedure for attacking a specific application, and potentially one or two others for doing pre-exploitation checks of the target, and post exploitation cleanup of the target's environment (for example, removing any files that were uploaded to a webserver). \par
 The execution trace is generated using XDebug to capture the application's state throughout exploitati
 on. XDebug is a feature-rich PHP extenstion which provides debugging and profiling cababilities.  For our purposes, we use it to capture traces through setting its global environment auto-trace variable. XDebug is instructed to collect the execution traces during this process, and finally the corpus engine collects and organizes them on a per-session basis. Currently we toggle this on a session basis, but plan for support to be manage the trace collection through the setting of cookies while the script is being executed. \par
- 
 The Target module represents web applications in their vulnerable state. To add a new vulnerability to the corpus, we first select an application and determine whether the package is defined in the corpus, and proceed to create a target module if necessary. Althought we focus primarily on open source applications, it is sometimes hard to obtain vulnerable the versions of an application. This step may involve hunting down patches in a mailing list or searching through the branches of a source repository. We perform a manual execution of the exploit to verify that we understand the scope of the exploit, from which we proceed to write a script for the exploit so that the process will integrated into the corpus. Finally, we collect the trace of the program while our script is being executed and add it to our corpus. Similarly, a target environment (the OS) includes the entire set of depenancies of the web application, such as PHP version, or web-server.\par
 
 \section{Security Demonstrations}
@@ -344,7 +341,7 @@ Or can be checked out from the git repositroy using:
 Details on the existing corpus entries can be found on our wiki at:
 
 \begin{center}
-{\tt http://www.vulnerabilitywiki.com}
+{\tt http://www.vulnwiki.com}
 \end{center}
 
 {\footnotesize \bibliographystyle{acm}
