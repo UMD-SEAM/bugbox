@@ -65,6 +65,10 @@ Computer Science Department\\University of Maryland
 % Comment it out when you first submit the paper for review.
 \thispagestyle{empty}
 
+\subsection{Orphan Sentences}
+  Furthermore, the framework capability is streamlined through the thorough use of abstraction and encapsulation making the management of the application, environment, and exploitation in BugBox. \\
+
+
 \subsection*{Abstract}
 Web Applications are a rich source of vulnerabilities due to their high exposure, ease of exploitation, and pervasive poor programming practices. Accordingly, web applications are ideal specimens for \emph{empirical vulnerability research}. There is currently no publicly available resource of vulnerabilities that is both robust and practical to use. BugBox is an open-source corpus and framework for PHP web application vulnerabilities that was created to fill this void with the goal of encouraging greater quality security research. In this paper we discuss the use of the framework and further explain the motivating factors behind the design. The corpus can be used to enhance testing vulnerability indicators and metrics, developing vulnerability definition representations, testing intrusion detection systems, or for creating demonstrations for training purposes.  
 
@@ -72,22 +76,23 @@ Web Applications are a rich source of vulnerabilities due to their high exposure
 Web applications are subject to a rich variety of exploit types, such as cross-site scripting (XSS), cross-site request forgery (XSRF), buffer overflow, and SQL injection.  A recent study by White Hat Security~\cite{WhiteHat:2010:Online} analyzed seven web application languages: ASP, ASPX, CFM, DO, JSP, PHP, and PL showing that PHP, while having the smallest attack surface in their tests, produced one of the highest average number of serious vulnerabilities per website.  This variety of exploits in PHP and other languages is logged extensively in popular exploit databases such as the National Vulnerability Database (NVD), Open Source Vulnerability Database (OSVDB), Common Vulnerability and Exposures Database (CVE), or the Exploit Database (EDB).\\
 
 While many of these databases exist and disclose the details of the vulnerability and/or exploit, they do not provide a collection of structured vulnerable code that can be used for analysis.  Specifically, it is not enough to know what exploit was used in a situation, but we must also know the location of the vulnerable code that allowed the exploit to execute.  A suitable, structured collection of vulnerable code is typically not made publicly available and is scarce in quantity.  Such a structured collection, often reffered to as a corpus, is useful in statistical analysis and hypothesis testing, but only when it is of certain quality.  To determine the quality or suitability of a corpus, one must consider several criteria: representativeness of the samples, quantity of the samples, diversity of the samples, and reproducability of the tests that produced the samples [need ref].\\
-It is our experience that obtaining the necessary quantity of vulnerabilities is a difficult task that is usually limited by the manpower allocated to a given project. With the in-house creation of BugBox, our goal is to unify efforts accross researchers and projects to meet the expectations of a good vulnerability corpus. Community contributions will be key to building a corpus of sufficient size for many tasks. Therefore, all code and data is licensed under the GPL v3, so that contributions and modificaitons will remain Open Source. In addition, we maintain a vulnerability wiki detailing the entries in the corpus, and a web-interface to the git repository that hosts the project. Collaboration will be coordinated through the issue tracking system on the website, with git, and through the mailing list. \\
 
+It is our experience that obtaining the necessary quantity of vulnerabilities is a difficult task that is usually limited by the manpower allocated to a given project. With the in-house creation of BugBox, our goal is to unify efforts accross researchers and projects to meet the expectations of a good vulnerability corpus. Community contributions will be key to building a corpus of sufficient size for many tasks. Therefore, all code and data is licensed under the GPL v3, so that contributions and modificaitons will remain Open Source. In addition, we maintain a vulnerability wiki detailing the entries in the corpus, and a web-interface for the git repository that where all code is managed. Collaboration will be coordinated through the issue tracking system on the website, with git, and through the mailing list. \\
 
 \section{Vulnerability Representation}
 
-A high-quality corpus will fascilitate work in variety of applications, such as: evaluating static analysis tools~\cite{Zitser:2004:TSA:1041685.1029911}, penetration testing, training security teams on vulnerability injection~\cite{4725309}, conducting analysis on open source web applications~\cite{DBLP:journals/ese/HuynhM10}, and comparing attack surface metrics accross applications~\cite{Stuckman:2012:CAA:2372225.2372229}.\\
+A high-quality corpus will fascilitate work in variety of applications, such as: evaluating static analysis tools~\cite{Zitser:2004:TSA:1041685.1029911}, penetration testing, training security teams on vulnerability injection~\cite{4725309}, conducting analysis on open source web applications~\cite{DBLP:journals/ese/HuynhM10}, and comparing attack surface metrics accross applications~\cite{Stuckman:2012:CAA:2372225.2372229}. \\
+
 \textcolor{red}{ TRANSITION }
  
-Line-based, run-based, and trace-based approaches are all effective ways for representing the \emph{vulnerability point}[ref] in a program.  The study of identifying vulnerabiliyt points and their representations is often refered to as \emph{vulnerability localization}[ref].  A line-based\cite{4630094} approach for vulnerability collection uses line numbers represented in program patches to identify the location of the vulnerabilities.  However, there are many ways to fix a vulnerability and a patch represents only one of these ways or may represent irrelevant changes.  A run-based\cite{Song:2008:BNA:1496255.1496257} approach creates vulnerability signatures from intermediate byte code.  The drawback to this approach is that it does not isolate the lines of source code that represents the vulnerability.  The method proposed for our corpus is a trace-based collection approach in order to capture code vulnerabilities in software.  We accomplish this task by collecting execution traces with XDebug showing the exploit and then manually highlighting the program paths relevant to the vulnerability.
+Line-based, run-based, and trace-based approaches are all effective ways for representing the \emph{vulnerability point}[ref] in a program.  The study of identifying vulnerability points and their representations is often refered to as \emph{vulnerability localization}[ref].  A line-based\cite{4630094} approach for vulnerability collection uses line numbers represented in program patches to identify the location of the vulnerabilities.  However, there are many ways to fix a vulnerability and a patch represents only one of these ways or may represent irrelevant changes.  A run-based\cite{Song:2008:BNA:1496255.1496257} approach creates vulnerability signatures from intermediate byte code.  The drawback to this approach is that it does not isolate the lines of source code that represents the vulnerability.  The method proposed for our corpus is a trace-based collection approach in order to capture code vulnerabilities in software.  We accomplish this task by collecting execution traces with XDebug showing the exploit and then manually highlighting the program paths relevant to the vulnerability.
 
 \section{Core Usage}
 
-The following Python scripts illustrate two use-cases for the BugBox framework. Both of these examples show ways to make use of vulnerability meta-data to construct different experiments. In the first example, all XSS vulnerabilities existing in the the corpus are sequentially invoked, and execution traces are collected for analysis:
+The following Python scripts illustrate two use-cases for the BugBox framework. Both of these examples show ways to make use of vulnerability meta-data to run different experiments. In the first example, all XSS vulnerabilities existing in the the corpus are sequentially invoked, and execution traces are collected for analysis:
 
 %\begin{minipage}{\textwidth}
-  {\tt \footnotesize
+{\tt \footnotesize
 \begin{verbatim}
 import config
 from framework import Query, Engine
@@ -105,7 +110,7 @@ for Exploit in Query().get_by_type('XSS'):
 
 %\caption{Example 1:}
 
-Here, instead of collecting traces for all vulnerabilities of the same type, we are interested in running all exploits for accross all versions of a given application:
+Here, instead of collecting traces for all vulnerabilities of the same type, we are interested in running all exploits accross all versions of a given application:
 
 %\begin{minipage}{\textwidth}
 {\tt \footnotesize
@@ -126,7 +131,7 @@ for Exploit in Query().get_by_re('Target',
 %\end{minipage}
 %\caption{Example 2:}
 
-Many times the focus of study is on a single vulnerability or vulnerable application. For these cases, the run-time management of a single corpus entry can be done from the command-line. The most basic commands are provided in the bbmanage.py utility with the following syntax:
+Many times the focus of study is on a single vulnerability or vulnerable application. For these cases, the run-time management of a single corpus entry can be done from the command-line. The most basic commands are provided in the bbmanage.py utility with the following options:
 
 %{\tt \small
 {\tt \footnotesize
@@ -151,13 +156,11 @@ The process of setting up an OS environment, configuring the target applicaiton,
 
 \section{Framework}
 
-The major components of the BugBox framework are organized as the Python modules and packages. The system breaks down into the following four modules: {\bf SeleniumDriver}, {\bf Exploit},  {\bf Targets} and {\bf Engine}.  Figure 1 illustrates the general structure of the corpus environment, with arrows showing lines of control or communication. \\  
+%{\bf SeleniumDriver}, {\bf Exploit}, 
+The major components of the BugBox framework are organized as the Python modules and packages. The system breaks down logically into the following three modules: {\bf Exploit}, {\bf Targets} and {\bf Engine}. The role these modules have in the management of the application, environment, and exploitation 
 
-A corpus entry has three main entities: a script, a trace, and a package.  The script contains the exploit actions that are programmatically taken on a specific application.  This script helps automation and reproducability of results.  The trace is the resultant execution trace of the web application when the script is executed on it.  The trace collected is why we have identified our method as a trace-based collection approach.  The packages represent web applications in their vulnerable state.  Each web application is represented multiple times under different versions, giving accessability to the vulnerable code. 
+ Figure 1 illustrates the general structure of the corpus, with arrows showing lines of control or communication. \\  
 
-
-
-  Furthermore, the framework capability is streamlined through the thorough use of abstraction and encapsulation making the management of the application, environment, and exploitation in BugBox. 
  The design is intended to make it practical to manage a large database of exploits, along with their target environments while acting as more than an exploit repository through containing the software and its dependencies in which a vulnerability exists, the configuration of the software in it's vulnerable state, exploit code that will trigger the security breach, and data that describes any distinguishing attributes of the bug.
 
 Support that will be effortlessly streamlined because of a scalable framework that is easy to maintain, quick to use, automated, and fully compartmentalized.  
@@ -173,6 +176,8 @@ Support that will be effortlessly streamlined because of a scalable framework th
 
 
 \section{Corpus Entry Workflow}
+
+A corpus entry has three main entities: a script, a trace, and a package.  The script contains the exploit actions that are programmatically taken on a specific application.  This script helps automation and reproducability of results.  The trace is the resultant execution trace of the web application when the script is executed on it.  The trace collected is why we have identified our method as a trace-based collection approach.  The packages represent web applications in their vulnerable state.  Each web application is represented multiple times under different versions, giving accessability to the vulnerable code.
 
 There are a few simple steps to creating a new corpus entry: determine the exploit, download a package, confirm the exploit, create the script, collect the trace.  As mentioned in the introduction, one could use any vulnerability or exploit database.   Once a particular exploit is found, we verify if the package is available already in the corpus, if not we simply upload it as a new package.  We perform a manual execution of the exploit to verify that we understand the scope of the exploit, from which we proceed to write a script for the exploit so that the process will be automated for future use.  Finally, we collect the trace of the program while our script is being executed and add it to our corpus.
 
