@@ -182,8 +182,8 @@ The process of setting up an OS environment, configuring the target application,
 \section{Framework}
 
 %{\bf SeleniumDriver}, {\bf Exploit},
-Figure 1 illustrates the structure of the corpus, with boxes and arrows showing lines of control or communication. The framework breaks down logically into the following five components: {\bf Host Environment} (currently the Virtual Machine), {\bf Engine}, {\bf Target Environment}, {\bf Target}, and {\bf Exploit}. Except for the host environment, each component is represented directly in BugBox as either a Python module or a package.\par
-The design is intended to make it practical to manage a large database of exploits, along with their target environments. Special consideration is made so that all relevant details of a vulnerability are available to the researcher. For a given application, the corpus includes the software in which a vulnerability exists, the configuration of the software in it's vulnerable state, exploit code that will trigger the security breach, and any relevant meta-data.\par
+Figure 1 illustrates the structure of the corpus, with boxes and arrows showing lines of control or communication. The framework breaks down logically into the following five components: {\bf Host Environment} (currently the Virtual Machine), {\bf Engine}, {\bf Target Environment}, {\bf Target}, and {\bf Exploit}. The diagram shows that the corpus is composed of any number of exploits, chroot jails, target applications, and associated target plugins, that exploits and chroot jails are under control of the vulnerability engine, the exploits interact directly with the target application (during exploitation) both through the Selenium Server and directly using libraries such as urllib, all databases associates with the target applications are hosted directly on the host environment, and the database server is under control of the vulnerability engine.\par
+Except for the host environment, each of the five major components are represented directly in BugBox as either a Python module or a package. The design is intended to make it practical to manage a large database of exploits, along with their target environments. For each exploit, all relevant details of a vulnerability are maintained for the researcher. A given corpus entry we include the software in which a vulnerability exists, the configuration of the software in it's vulnerable state, exploit code that will trigger the security breach, and any relevant meta-data.\par
 
 \begin{figure}[!tp]
 \begin{center}
@@ -292,16 +292,15 @@ get("submit").click()
 }
 \end{minipage}
 
-
-\subsection{Trace Collection}
-
-XDebug is a feature-rich PHP extenstion which provides debugging and profiling cababilities.  For our purposes, we use it to capture traces through setting its global environment auto-trace variable. XDebug is instructed to collect the execution traces during this process, and finally the corpus engine collects and organizes them on a per-session basis. Currently we toggle this on a session basis, but plan for support to be manage the trace collection through the setting of cookies while the script is being executed. \par
-
 \section{Corpus Development}
 
-To add a new member to the corpus one has to create two to four main entities. Writing an exploit, and generating an execution trace are required, and depending on the target application, one may have to define a new target module, and/or (in rare cases) create a new target evironment. However, often there are multiple exploits for a given target application, so it is not always necessary to create a new one. And because PHP web applications vary little in their system dependencies, the majority of targets should only require a handful of different OS environments. \par
+To add a new member to the corpus one has to create two to four main entities. Writing an exploit, and generating an execution trace are required, and depending on the target application, one may have to define a new target module, and/or in rare cases, create a new target evironment. However, often there are multiple exploits for a given target application, so it is not always necessary to create a new one. And because PHP web applications do not tend to have a large range of system dependencies, the majority of targets require at most a handful of different OS environments. \par
 The exploit must contain a procedure responsible for exploiting a specific application, and potentially other for doing any pre-exploitation checks of the target, or post exploitation cleanup of the target's environment (for example, removing any files that were uploaded to a webserver). The format of a BugBox exploit should look familiar to anyone who has worked with the Metasploit framework.\par
-The execution trace is generated using XDebug to capture the application's state throughout exploitation.\textcolor{red} {need more here}\par 
+
+
+The execution trace is generated using XDebug to capture the application's state throughout exploitati
+on. XDebug is a feature-rich PHP extenstion which provides debugging and profiling cababilities.  For our purposes, we use it to capture traces through setting its global environment auto-trace variable. XDebug is instructed to collect the execution traces during this process, and finally the corpus engine collects and organizes them on a per-session basis. Currently we toggle this on a session basis, but plan for support to be manage the trace collection through the setting of cookies while the script is being executed. \par
+ 
 The Target module represents web applications in their vulnerable state. To add a new vulnerability to the corpus, we first select an application and determine whether the package is defined in the corpus, and proceed to create a target module if necessary. Althought we focus primarily on open source applications, it is sometimes hard to obtain vulnerable the versions of an application. This step may involve hunting down patches in a mailing list or searching through the branches of a source repository. We perform a manual execution of the exploit to verify that we understand the scope of the exploit, from which we proceed to write a script for the exploit so that the process will integrated into the corpus. Finally, we collect the trace of the program while our script is being executed and add it to our corpus. Similarly, a target environment (the OS) includes the entire set of depenancies of the web application, such as PHP version, or web-server.\par
 
 \section{Security Demonstrations}
