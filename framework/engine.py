@@ -143,6 +143,10 @@ class Engine:
 
         return
 
+    def exploit():
+	self.exploit.exploit()
+	return
+
     def is_running(self):
         return os.path.isdir(self.target_system_dir)
 
