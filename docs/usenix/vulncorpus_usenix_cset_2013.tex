@@ -27,6 +27,9 @@
 \setlist[enumerate]{itemsep=0mm}
 % \DeclareGraphicsExtensions{.eps}
 
+
+
+
 \begin{document}
 
 %don't want date printed
@@ -62,12 +65,6 @@ Computer Science Department\\University of Maryland
 % Comment it out when you first submit the paper for review.
 \thispagestyle{empty}
 
-\section{TODO}
-Our previous approach
-Orphin sentences:
-... a publicly available, scalable, and easy-to-use corpus that collects vulnerable code signatures through an automated trace-based collection method
-
-
 \subsection*{Abstract}
 Web Applications are a rich source of vulnerabilities due to their high exposure, ease of exploitation, and pervasive poor programming practices. Accordingly, web applications are ideal specimens for \emph{empirical vulnerability research}. There is currently no publicly available resource of vulnerabilities that is both robust and practical to use. BugBox is an open-source corpus and framework for PHP web application vulnerabilities that was created to fill this void with the goal of encouraging greater quality security research. In this paper we discuss the use of the framework and further explain the motivating factors behind the design. The corpus can be used to enhance testing vulnerability indicators and metrics, developing vulnerability definition representations, testing intrusion detection systems, or for creating demonstrations for training purposes.  
 
@@ -85,11 +82,12 @@ A high-quality corpus will fascilitate work in variety of applications, such as:
  
 Line-based, run-based, and trace-based approaches are all effective ways for representing the \emph{vulnerability point}[ref] in a program.  The study of identifying vulnerabiliyt points and their representations is often refered to as \emph{vulnerability localization}[ref].  A line-based\cite{4630094} approach for vulnerability collection uses line numbers represented in program patches to identify the location of the vulnerabilities.  However, there are many ways to fix a vulnerability and a patch represents only one of these ways or may represent irrelevant changes.  A run-based\cite{Song:2008:BNA:1496255.1496257} approach creates vulnerability signatures from intermediate byte code.  The drawback to this approach is that it does not isolate the lines of source code that represents the vulnerability.  The method proposed for our corpus is a trace-based collection approach in order to capture code vulnerabilities in software.  We accomplish this task by collecting execution traces with XDebug showing the exploit and then manually highlighting the program paths relevant to the vulnerability.
 
-\section{Usage}
+\section{Core Usage}
 
-The following Python script illustrates a use-case for the BugBox framework. In this example, all XSS vulnerabilities existing in the the corpus are sequentially invoked, and execution traces are collected:
+The following Python scripts illustrate two use-cases for the BugBox framework. Both of these examples show ways to make use of vulnerability meta-data to construct different experiments. In the first example, all XSS vulnerabilities existing in the the corpus are sequentially invoked, and execution traces are collected for analysis:
 
-{\tt \footnotesize
+%\begin{minipage}{\textwidth}
+  {\tt \footnotesize
 \begin{verbatim}
 import config
 from framework import Query, Engine
@@ -98,23 +96,60 @@ for Exploit in Query().get_by_type('XSS'):
     engine = Engine(Exploit(), config)
     engine.startup()
     engine.xdebug_autotrace_on()
-    engine.exploit.exploit()
+    engine.exploit()
     engine.xdebug_autotrace_off()
     engine.shutdown()
 \end{verbatim}
 }
+%\end{minipage}
 
-The process of setting up an OS environment, configuring the target applicaiton, interacting with the PHP debugger, and all post-job cleanup all occur behind the scenes of the framework. This job would have taken hours to accomplish using our previous approach, which was based on virtual machine snapshots. With a layer of abstraction above the OS, target application, and exploits, it is now possible to automate research tasks easily. The following sections will give details on the design of the system that makes this automation possible.
-\\
+%\caption{Example 1:}
+
+Here, instead of collecting traces for all vulnerabilities of the same type, we are interested in running all exploits for accross all versions of a given application:
+
+%\begin{minipage}{\textwidth}
+{\tt \footnotesize
+\begin{verbatim}
+import config
+from framework import Query, Engine
+
+for Exploit in Query().get_by_re('Target', 
+                                 'Wordpress.*"):
+    engine = Engine(Exploit(), config)
+    engine.startup()
+    engine.xdebug_autotrace_on()
+    engine.exploit()
+    engine.xdebug_autotrace_on()
+    engine.shutdown()
+\end{verbatim}
+}
+%\end{minipage}
+%\caption{Example 2:}
+
+Many times the focus of study is on a single vulnerability or vulnerable application. For these cases, the run-time management of a single corpus entry can be done from the command-line. The most basic commands are provided in the bbmanage.py utility with the following syntax:
+
+%{\tt \small
+{\tt \footnotesize
+\begin{verbatim}
+Usage: ./bbmanage.py [command] <options>
+    Commands:   Options:
+    list        <exploits | 
+                 targets  | 
+                 types    | 
+                 running>
+    info        <exploit_name>
+    start       <exploit_name>
+    exploit     <exploit_name <display>>
+    stop        <exploit_name>
+    trace_on    <exploit_name>
+    trace_off   <exploit_name>
+    autorun     <exploit_name>
+\end{verbatim}
+}
+
+The process of setting up an OS environment, configuring the target applicaiton, interacting with the PHP debugger, and all post-job cleanup all occur behind the scenes in the framework. Any of these tasks would have taken hours to accomplish using our previous approach, which was based on manually managing various virtual machine snapshots. Using Python as a layer of abstraction above the OS, target application, and exploits, it is now possible to automate research tasks easily. The following sections give an overview of the system design that makes this abstraction possible.\\
 
 \section{Framework}
-
-\begin{figure}[!tp]
-\begin{center}
-\includegraphics[scale=1.17]{system_diagram.eps}
-\end{center}
-\caption{System Diagram}
-\end{figure}
 
 The major components of the BugBox framework are organized as the Python modules and packages. The system breaks down into the following four modules: {\bf SeleniumDriver}, {\bf Exploit},  {\bf Targets} and {\bf Engine}.  Figure 1 illustrates the general structure of the corpus environment, with arrows showing lines of control or communication. \\  
 
@@ -128,6 +163,13 @@ A corpus entry has three main entities: a script, a trace, and a package.  The s
 Support that will be effortlessly streamlined because of a scalable framework that is easy to maintain, quick to use, automated, and fully compartmentalized.  
 
 
+
+\begin{figure}[!tp]
+\begin{center}
+\includegraphics[scale=1.17]{system_diagram.eps}
+\end{center}
+\caption{System Diagram}
+\end{figure}
 
 
 \section{Corpus Entry Workflow}
@@ -252,35 +294,6 @@ We use the {\bf SeleniumDriver} as a wrapper class for the Selenium's Firefox we
 
 \textcolor{red}{To accomplish our trace-based approach, we create a selenium script in Python, replicating actions a user would take in performing an exploit on a web application and collect the execution trace with XDebug.}
 We begin the trace-based approach by writing an exploit in Python using Selenium. The exploit script automates all actions an attacker would take in compromising a web application. XDebug is instructed to collect the execution traces during this process, and finally the corpus engine collects and organizes them on a per-session basis.
-
-
-\textcolor{red}{ THIS SECTION IS LOOKING FOR A HOME, remove? }
-Many times the focus of study is on a single vulnerability or vulnerable application. The run-time management of single corpus entries can be done easily from the command-line. The most basic commands are provided in the bbmanage.py utility with the following options: 
-
-%{\tt \small
-{\tt \footnotesize
-\begin{verbatim}
-
-Usage: ./bbmanage.py [command] <options>
-    Commands:   Options:
-    list        <exploits | 
-                 targets  | 
-                 types    | 
-                 running>
-    info        <exploit_name>
-    start       <exploit_name>
-    exploit     <exploit_name <disp_on | disp_off>>
-    stop        <exploit_name>
-    trace_on    <exploit_name>
-    trace_off   <exploit_name>
-    autorun     <exploit_name>
-
-
-\end{verbatim}
-}
-
-
-
 
 
 \section{Lessons Learned}
