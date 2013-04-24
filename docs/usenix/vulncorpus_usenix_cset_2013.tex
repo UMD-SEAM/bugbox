@@ -274,16 +274,20 @@ We use the linux chroot environment in order to conduct tests in isolation.  Sta
 
    The corpus.{\bf Target} module controls all the application targets that the exploits may be applied to.  More specifically, this represents web applications such as WordPress, SimplePHPAgenda, etc. A copy of the target program with a typical configuration, is always loaded before any exploit script is run.  Init scripts are written per application to provide the corpus.{\bf Engine} with the proper details for the setup, for example:
 
-{\tt \small
-\begin{verbatim}
+\begin{minipage}{\textwidth}
+{\tt \footnotesize
+%\begin{verbatim}
+\begin{lstlisting}
 name = "Wordpress 3.3.1"
 application_dir_mapping = ...
      [get_path("application"), "/var/www"]
 database_filename = get_path("database.sql")
 database_name = "wordpress_3_3_1_A"
 chroot_environment = "Debian7"
-\end{verbatim}
+\end{lstlisting}
+%\end{verbatim}
 } 
+\end{minipage}
 
 
 \subsection{Exploit}
