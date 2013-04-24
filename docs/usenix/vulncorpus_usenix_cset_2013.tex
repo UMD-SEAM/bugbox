@@ -103,17 +103,18 @@ Web Applications are a rich source of vulnerabilities due to their high exposure
 \section{Introduction}
 Web applications are subject to a rich variety of exploit types, such as cross-site scripting (XSS), cross-site request forgery (CSRF), buffer overflow, and SQL injection.  A recent study by White Hat Security~\cite{WhiteHat:2010:Online} analyzed seven web application languages: ASP, ASPX, CFM, DO, JSP, PHP, and PL showing that PHP, while having the smallest attack surface in their tests, produced one of the highest average number of serious vulnerabilities per website.  This variety of exploits in PHP and other languages is logged extensively in popular exploit databases such as the National Vulnerability Database (NVD), Open Source Vulnerability Database (OSVDB), Common Vulnerability and Exposures Database (CVE), or the Exploit Database (EDB).\par
 
-While many of these databases exist and disclose the details of the vulnerability and/or exploit, they do not provide a collection of structured vulnerable code that can be used for analysis.  Specifically, it is not enough to know what exploit was used in a situation, but we must also know the location of the vulnerable code that allowed the exploit to execute.  A suitable, structured collection of vulnerable code is typically not made publicly available and is scarce in quantity.  Such a structured collection, often reffered to as a corpus, is useful in statistical analysis and hypothesis testing, but only when it is of certain quality.  To determine the quality or suitability of a corpus, one must consider several criteria: representativeness of the samples, quantity of the samples, diversity of the samples, and reproducability of the tests that produced the samples [need ref].\par
+While many of these databases exist and disclose the details of the vulnerability and/or exploit, they do not provide a collection of structured vulnerable code that can be used for analysis.  Specifically, it is not enough to know what exploit was used in a situation, but we must also know the location of the vulnerable code that allowed the exploit to execute.  A suitable, structured collection of vulnerable code is typically not made publicly available and is scarce in quantity.  Such a structured collection, often referred to as a corpus, is useful in statistical analysis and hypothesis testing, but only when it is of certain quality.  To determine the quality or suitability of a corpus, one must consider several criteria: representativeness of the samples, quantity of the samples, diversity of the samples, and reproducability of the tests that produced the samples [need ref].\par
 
-It is our experience that obtaining the necessary quantity of vulnerabilities is a difficult task that is usually limited by insufficient manpower. After all, collecting vulnerabilities is rarely the primary target for research. With the in-house creation of BugBox, our goal is to unify efforts accross projects to meet the expectations of a good vulnerability corpus. Community contributions will be key to building a corpus of sufficient size. Therefore, all code and data is licensed by the University of Maryland under the GPL v3, so that contributions and modificaitons will remain Open Source. In addition, we maintain a vulnerability wiki detailing the entries in the corpus, and a web-interface for the git repository that where the code is managed. Collaboration will be coordinated through the issue tracking system on the website, with git, and through the mailing list. \par
+It is our experience that obtaining the necessary quantity of vulnerabilities is a difficult task that is usually limited by insufficient manpower. After all, collecting vulnerabilities is rarely the primary target for research. With the in-house creation of BugBox, our goal is to unify efforts across projects to meet the expectations of a good vulnerability corpus. Community contributions will be key to building a corpus of sufficient size. Therefore, all code and data is licensed by the University of Maryland under the GPL v3, so that contributions and modifications will remain Open Source. In addition, we maintain a vulnerability wiki detailing the entries in the corpus, and a web-interface for the git repository that where the code is managed. Collaboration will be coordinated through the issue tracking system on the website, with git, and through the mailing list. \par
 
 \section{Vulnerability Representation}
 
-A high-quality corpus will fascilitate work in variety of applications, including evaluating static analysis tools~\cite{Zitser:2004:TSA:1041685.1029911}, penetration testing, training security teams on vulnerability injection~\cite{4725309}, conducting analysis on open source web applications~\cite{DBLP:journals/ese/HuynhM10}, and comparing attack surface metrics accross applications~\cite{Stuckman:2012:CAA:2372225.2372229}. \par
+A high-quality corpus will facilitate work in variety of applications, including evaluating static analysis tools~\cite{Zitser:2004:TSA:1041685.1029911}, penetration testing, training security teams on vulnerability injection~\cite{4725309}, conducting analysis on open source web applications~\cite{DBLP:journals/ese/HuynhM10}, and comparing attack surface metrics across applications~\cite{Stuckman:2012:CAA:2372225.2372229}. \par
 
-A key question accross many applications of empirical vulnerability research is how to represent which functionality, or piece of code accounts for the vulnerable condition in a program. In studying this problem, referred to as \emph{vulnerability localization}[ref], it is important to have a large quantity of structured data to test hypotheses. The nature of this structured data may vary by line of study, but in the BugBox framewrok the primary method proposed for capturing code vulnerabilities is through the collection of execution traces. \par
+A key question across many applications of empirical vulnerability research is how to represent which functionality, or piece of code accounts for the vulnerable condition in a program. In studying this problem, referred to as \emph{vulnerability localization}[ref], it is important to have a large quantity of structured data to test hypotheses. The nature of this structured data may vary by line of study, but in the BugBox framework the primary method proposed for capturing code vulnerabilities is through the collection of execution traces. We accomplish this task by collecting execution traces during exploitation using XDebug, and then manually highlight the program paths relevant to the vulnerability. \par
  
-Line-based, run-based, and trace-based approaches are all effective ways for representing the \emph{vulnerability point}[ref] in a program.   A line-based\cite{4630094} approach for vulnerability collection uses line numbers represented in program patches to identify the location of the vulnerabilities.  However, there are many ways to fix a vulnerability and a patch represents only one of these ways or may represent irrelevant changes.  A run-based\cite{Song:2008:BNA:1496255.1496257} approach creates vulnerability signatures from intermediate byte code.  The drawback to this approach is that it does not isolate the lines of source code that represents the vulnerability. 
+Line-based, run-based, and trace-based approaches are all effective ways for representing the \emph{vulnerability point}[ref] in a program.   A line-based\cite{4630094} approach for vulnerability collection uses line numbers represented in program patches to identify the location of the vulnerabilities.  However, there are many ways to fix a vulnerability and a patch represents only one of these ways or may represent irrelevant changes.  A run-based\cite{Song:2008:BNA:1496255.1496257} approach creates vulnerability signatures from intermediate byte code.  The drawback to this approach is that it does not isolate the lines of source code that represents the vulnerability.
+  
 
 \section{Use Cases}
 
@@ -140,7 +141,7 @@ The following Python scripts illustrate two use-cases for the BugBox framework. 
 
 %\caption{Example 1:}
 
-Here, instead of collecting traces for all vulnerabilities of the same type, we are interested in running all exploits accross all versions of a given application:
+Here, instead of collecting traces for all vulnerabilities of the same type, we are interested in running all exploits across all versions of a given application:
 
 \begin{minipage}{\textwidth}
 {\tt \footnotesize
@@ -181,13 +182,13 @@ Usage: ./bbmanage.py [command] <options>
 \end{verbatim}
 }
 
-The process of setting up an OS environment, configuring the target applicaiton, interacting with the PHP debugger, and all post-job cleanup occur behind the scenes in the framework. Any of these tasks would have taken hours to accomplish using our previous approach, which was based on manually managing various virtual machine snapshots. Using Python as a layer of abstraction above the OS, target application, and exploits, it is now possible to easily automate research tasks. The following sections give an overview of the system design that makes this abstraction possible.
+The process of setting up an OS environment, configuring the target application, interacting with the PHP debugger, and all post-job cleanup occur behind the scenes in the framework. Any of these tasks would have taken hours to accomplish using our previous approach, which was based on manually managing various virtual machine snapshots. Using Python as a layer of abstraction above the OS, target application, and exploits, it is now possible to easily automate research tasks. The following sections give an overview of the system design that makes this abstraction possible.
 
 \section{Framework}
 
 %{\bf SeleniumDriver}, {\bf Exploit},
 Figure 1 illustrates the structure of the corpus, with arrows showing lines of control or communication. The framework breaks down logically into the following five components: {\bf Host Environment} (currently Virtual Machine), {\bf Engine}, {\bf Target Environment}, {\bf Target}, and {\bf Exploit}. Except for the host environment, each component is represented directly in BugBox as either a Python module or a package.\par
-The design is intended to make it practical to manage a large database of exploits, along with their target environments. Special consideration is made so that all relavant details of a vulnerability are available to the researcher. For a given application, the corpus includes the software in which a vulnerability exists, the configuration of the software in it's vulnerable state, exploit code that will trigger the security breach, and any relavant meta-data. 
+The design is intended to make it practical to manage a large database of exploits, along with their target environments. Special consideration is made so that all relevant details of a vulnerability are available to the researcher. For a given application, the corpus includes the software in which a vulnerability exists, the configuration of the software in it's vulnerable state, exploit code that will trigger the security breach, and any relevant meta-data. 
 
 
 \begin{figure}[!tp]
@@ -200,22 +201,18 @@ The design is intended to make it practical to manage a large database of exploi
 
 \section{Engine}
 The {\bf Engine} drives the environment setup, tear-down, and exploitation process. The engine was created to abstract away details so that researchers can easily run exploit scripts without having to worry about getting the target application running every time. \par
-As illustrated in Figure 1, the vulnerability engine controls the actions of a given exploit, and ensures that the proper target environment, application, and application plugins are properly setup in the chroot envrionment. The role of the engine is shown in the two use-cases. For example, following relevant lines in Use-Case 1:
+As illustrated in Figure 1, the vulnerability engine controls the actions of a given exploit, and ensures that the proper target environment, application, and application plugins are properly setup in the chroot environment. The role of the engine is shown in the two use-cases. For example, following relevant lines in Use-Case 1:
 \begin{description}
   \item[Line 5] A new engine instance is constructed with an exploit instance and system configuration as arguments.
-  \item[Line 6] The engine creates a chroot environment on the host system to which the target application is copied and the pertinent MYSQL databases are established.
+  \item[Line 6] The engine creates a chroot environment on the host system to which the target application is copied and the pertinent MYSQL databases are established. The setup of the environment is determined by the 'Target' attribute in the exploit instance. 
   \item[Lines 7 \& 9] The engine can modify the state of the trace collection in X\_Debug to ensure that we collect only the trace pertinent to the exploitation.
   \item[Line 10] Cleanup unmounts the chroot environment and returns the corpus environment back to an un-altered state.
 \end{description}
 
-
-\subsection{Trace Collection}
-
-
-We accomplish this task by collecting execution traces with XDebug showing the exploit and then manually highlighting the program paths relevant to the vulnerability.
+\section{Trace Collection}
 
 
-XDebug is a feature-rich PHP extenstion which provides debugging and profiling cababilities.  For our purposes, we use it to capture traces through setting its global environment auto-trace variable.  Currently we toggle this through the command line, but want future support to be able to toggle the trace collection through the setting of cookies while the script is being executed.
+XDebug is a feature-rich PHP extenstion which provides debugging and profiling cababilities.  For our purposes, we use it to capture traces through setting its global environment auto-trace variable.  Currently we toggle this on a session basis, but plan for support to be manage the trace collection through the setting of cookies while the script is being executed.\par
 
 
 \textcolor{red}{To accomplish our trace-based approach, we create a selenium script in Python, replicating actions a user would take in performing an exploit on a web application and collect the execution trace with XDebug.}
@@ -225,11 +222,11 @@ We begin the trace-based approach by writing an exploit in Python using Selenium
 
 We use the linux chroot environment in order to conduct tests in isolation.  Staging the application within the chroot environment provides locality, reproducibility, and stability.\\
 
-{\bf The web application remains local}.  Many applications, such as wordpress, have a MYSQL backend.  If we were to host the application on a different server or VM we would have to ensure that the MYSQL database is properly setup each time.  With the chroot environment, the process is simplified. We keep a MYSQL database outside of the CHROOT Jail in order to facilitate web application configuration.  \\
+{\bf The web application remains local}.  Many applications, such as WordPress, have a MYSQL backend.  If we were to host the application on a different server or VM we would have to ensure that the MYSQL database is properly setup each time.  With the chroot environment, the process is simplified. We keep a MYSQL database outside of the CHROOT Jail in order to facilitate web application configuration.  \\
 
 {\bf Current tests are independent from future tests}.  We load a clean application into the chroot jail every time we wish to run a new test.  This ensures that there is no corruption of the original web application and provides reproducible results when testing.\\
 
-{\bf The web application cannot contaminate our testing environment}.  If a web application crashes due to the malicious script, we can ensure that it does not crash our corpus environment.  In the worst case the chroot becomes corrupt for which we can treat in an isolated scenario tha does not have un-intended side effects in our testing environment.  \\
+{\bf The web application cannot contaminate our testing environment}.  If a web application crashes due to the malicious script, we can ensure that it does not crash our corpus environment.  In the worst case the chroot becomes corrupt for which we can treat in an isolated scenario that does not have un-intended side effects in our testing environment.  \\
 
 {\bf The web application will never be contaminated}.  We store a separate backup in order to verify that the selenium scripts did not modify the Web Application in any way.  If the Web Application is corrupt, then we simply copy the web application from the backup folder to the package folder.  Future implementations will store only the md5 hash of the program on the corpus server and the backups on an external server.  This will allow for a quick comparison followed by a remote copy for mismatched hashes.  This separation will ensure that backups will never be corrupted through use of the corpus and expedite checking.  \\
 
@@ -246,7 +243,7 @@ We use the linux chroot environment in order to conduct tests in isolation.  Sta
 %\end{figure}
 
 
-\subsection{Targets}
+\section{Targets}
 
    The corpus.{\bf Target} module controls all the application targets that the exploits may be applied to.  More specifically, this represents web applications such as WordPress, SimplePHPAgenda, etc. A copy of the target program with a typical configuration, is always loaded before any exploit script is run.  Init scripts are written per application to provide the corpus.{\bf Engine} with the proper details for the setup, for example:
 
@@ -266,29 +263,31 @@ chroot_environment = "Debian7"
 \end{minipage}
 
 
-\subsection{Exploit}
-The module corpus.{\bf Exploit} is the superclass for each exploit in the corpus, defining interfaces and attributes that the engine uses to manage the environment and exploitation.  This template ensures that the selenium driver is properly bound to the exploit and makes sure that an exploit script has been defined as well as defines any specific actions on teardown.
+\section{Exploit}
+The {\bf Exploit} class is the superclass for each exploit in the corpus, defining interfaces and attributes that the engine uses to manage the environment and exploitation. The structure of Exploit is designed so that exploits can be written as a concise code statement. Each exploit is simply a subclass of Exploit residing in it's own Python file. 
+ In addition, a Query module is included that will return a set of Exploit instances based on matching against the meta-data specified in the exploit.\par
 
-The structure of Exploit is designed so that exploits can be written as a concise code statement. This separation accomplishes a step-like approach for getting involved with the corpus, where developing exploits for the corpus is more approachable and quick for novice programmers that wants to contribute and a robust framework that can be understood incrementally for larger contributions to the framework.\par
+This separation accomplishes a step-like approach for getting involved with the corpus, where developing exploits for the corpus is more approachable and quick for novice programmers that wants to contribute and a robust framework that can be understood incrementally for larger contributions to the framework.\par
+ 
+This template ensures that the selenium driver is properly initialized bound to the exploit and makes sure that an exploit script has been defined as well as defines any specific actions on teardown.\par
 
-\subsubsection{init()}
+
+\subsection{init()}
 
 The exploit module is annotated by it's attribute dictionary. This structure is inspired by the exploit class from the Metaploit module. In it we declare the name, description, references, target, type and wiki page for the exploit by the attributes dictionary.  The name is the technical name specified in one of the online databases of exploits and vulnerabilities mentioned earlier in the paper.  The description is a brief statement of what the exploit is supposed to do, because the name is typically not desciptive enough for a person to understand what type of exploit is being applied.  The Target is the web application target that is being used for the exploit.  The type is the type of exploit being conducted.  The VulWikiPage is the wiki page setup for an author to place auxilliary information about the exploit or script.  The following represents an example of a XSS exploit:\\
 
 {\tt \small
-
 \noindent{\bf Name}:	CVE\_2012\_2403\\
 {\bf Description}:		Creates a post containing a XSS payload.\\
 {\bf References}:	CVE 2012-2403,OSVDB 81463 \\
 {\bf Target}: 		Wordpress 3.3.1\\
 {\bf Type}: 		XSS\\
 {\bf VulWikiPage}: WIKIHOST/CVE-2012-2403
-
 }
 
-\subsubsection{exploit()}
+\subsection{exploit()}
 
-The actual selenium script used for exploitation is contained under the exploit section.  Writing this exploit is as simple as instantiating the selenium driver and submitting a post on the wordpress site with the XSS Payload: 
+The actual selenium script used for exploitation is contained under the exploit section.  Writing this exploit is as simple as instantiating the selenium driver and submitting a post on the WordPress site with the XSS Payload: 
 
 {\tt \footnotesize
 \begin{verbatim}
