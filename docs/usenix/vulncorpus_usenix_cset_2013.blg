@@ -1,0 +1,12 @@
+This is BibTeX, Version 0.99dThe top-level auxiliary file: vulncorpus_usenix_cset_2013.aux
+The style file: acm.bst
+Database file #1: ref.bib
+Warning--entry type for "WhiteHat:2010:Online" isn't style-file defined
+--line 106 of file ref.bib
+Warning--string name "spring" is undefined
+--line 109 of file ref.bib
+Warning--entry type for "MetaSploit:2012:Online" isn't style-file defined
+--line 114 of file ref.bib
+Warning--string name "spring" is undefined
+--line 117 of file ref.bib
+(There were 4 warnings)
