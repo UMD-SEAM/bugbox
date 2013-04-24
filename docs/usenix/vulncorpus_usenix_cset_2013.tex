@@ -27,7 +27,19 @@
 \setlist[enumerate]{itemsep=0mm}
 % \DeclareGraphicsExtensions{.eps}
 
+\usepackage{listings}
 
+\lstset{
+    language=python,
+    numbers=left,
+    tabsize=2,
+    showstringspaces=false,
+    showspaces=false,
+    numberstyle=\footnotesize, %tiny, footnotesize
+    xleftmargin=1em,
+    frame=leftline, %lines
+    resetmargins=true,
+}
 
 
 \begin{document}
@@ -65,22 +77,22 @@ Computer Science Department\\University of Maryland
 % Comment it out when you first submit the paper for review.
 \thispagestyle{empty}
 
-\subsection{MY NOTES}
-  Furthermore, the framework capability is streamlined through the thorough use of abstraction and encapsulation making the management of the application, environment, and exploitation in BugBox. \\
- The study of identifying vulnerability points and their representations is often refered to as \emph{vulnerability localization}[ref].\\
+%\subsection{MY NOTES}
+%  Furthermore, the framework capability is streamlined through the thorough use of abstraction and encapsulation making the management of the application, environment, and exploitation in BugBox. \\
+% The study of identifying vulnerability points and their representations is often refered to as \emph{vulnerability localization}[ref].\\
 
-[REF A database of computer attacks for the evaluations of IDSes]
-Generating Realistic traffic... DARPA IDS (long ref).. 300 attacks.. 32 types.. 7 different scenarios.
-Realistic variance of methods used by the attacker..
+%[REF A database of computer attacks for the evaluations of IDSes]
+%Generating Realistic traffic... DARPA IDS (long ref).. 300 attacks.. 32 types.. 7 different scenarios.
+%Realistic variance of methods used by the attacker..
 
-sections: 
-Consequences of use: good for many references.
-Evaluation
-Why is this hard.
-Why have others not done it yet.
+%sections: 
+%Consequences of use: good for many references.
+%Evaluation
+%Why is this hard.
+%Why have others not done it yet.
 
-Abstract:
-What makes it ours?
+%Abstract:
+%What makes it ours?
 
 
 \subsection*{Abstract}
@@ -97,7 +109,7 @@ It is our experience that obtaining the necessary quantity of vulnerabilities is
 
 A high-quality corpus will fascilitate work in variety of applications, including evaluating static analysis tools~\cite{Zitser:2004:TSA:1041685.1029911}, penetration testing, training security teams on vulnerability injection~\cite{4725309}, conducting analysis on open source web applications~\cite{DBLP:journals/ese/HuynhM10}, and comparing attack surface metrics accross applications~\cite{Stuckman:2012:CAA:2372225.2372229}. \\
 
-A key question accross many applications of empirical vulnerability research is how to represent which functionality, or piece of code allows for the vulnerable condition in a program. In studying this problem, referred to as \emph{vulnerability localization}[ref], it is important to have a large quantity of structured data to test hypotheses. The nature of this structured data may vary by line of study, but in the BugBox framewok the primary method proposed for capturing code vulnerabilities is the execution trace-based collection approach. \\
+A key question accross many applications of empirical vulnerability research is how to represent which functionality, or piece of code accounts for the vulnerable condition in a program. In studying this problem, referred to as \emph{vulnerability localization}[ref], it is important to have a large quantity of structured data to test hypotheses. The nature of this structured data may vary by line of study, but in the BugBox framewrok the primary method proposed for capturing code vulnerabilities is through the collection of execution traces. \\
  
 Line-based, run-based, and trace-based approaches are all effective ways for representing the \emph{vulnerability point}[ref] in a program.   A line-based\cite{4630094} approach for vulnerability collection uses line numbers represented in program patches to identify the location of the vulnerabilities.  However, there are many ways to fix a vulnerability and a patch represents only one of these ways or may represent irrelevant changes.  A run-based\cite{Song:2008:BNA:1496255.1496257} approach creates vulnerability signatures from intermediate byte code.  The drawback to this approach is that it does not isolate the lines of source code that represents the vulnerability. 
 
@@ -105,44 +117,47 @@ Line-based, run-based, and trace-based approaches are all effective ways for rep
 
 The following Python scripts illustrate two use-cases for the BugBox framework. Both of these examples show ways to make use of vulnerability meta-data to run different experiments. In the first example, all XSS vulnerabilities existing in the the corpus are sequentially invoked, and execution traces are collected for analysis:
 
-%\begin{minipage}{\textwidth}
-{\tt \footnotesize
-\begin{verbatim}
-import config
-from framework import Query, Engine
 
-for Exploit in Query().get_by_type('XSS'):
+\begin{minipage}{\textwidth}
+{\tt \footnotesize
+
+\begin{lstlisting}
+ import config
+ from framework import Query, Engine
+ 
+ for Exploit in Query().get_by_type('XSS'):
     engine = Engine(Exploit(), config)
     engine.startup()
     engine.xdebug_autotrace_on()
     engine.exploit()
     engine.xdebug_autotrace_off()
     engine.shutdown()
-\end{verbatim}
+\end{lstlisting}
 }
-%\end{minipage}
+\end{minipage}
 
 %\caption{Example 1:}
 
 Here, instead of collecting traces for all vulnerabilities of the same type, we are interested in running all exploits accross all versions of a given application:
 
-%\begin{minipage}{\textwidth}
+\begin{minipage}{\textwidth}
 {\tt \footnotesize
-\begin{verbatim}
+\begin{lstlisting}
 import config
 from framework import Query, Engine
 
-for Exploit in Query().get_by_re('Target', 
-                                 'Wordpress.*"):
+for Exploit 
+    in Query().get_by_re('Target', 
+                         'Wordpress.*"):
     engine = Engine(Exploit(), config)
     engine.startup()
     engine.xdebug_autotrace_on()
     engine.exploit()
     engine.xdebug_autotrace_on()
     engine.shutdown()
-\end{verbatim}
+\end{lstlisting}
 }
-%\end{minipage}
+\end{minipage}
 %\caption{Example 2:}
 
 For more simple jobs where the focus of study is a single vulnerability or vulnerable application, the run-time management of a single corpus entry can be done from the command-line. The most basic commands are provided in the bbmanage.py utility with the following options:
@@ -152,10 +167,8 @@ For more simple jobs where the focus of study is a single vulnerability or vulne
 \begin{verbatim}
 Usage: ./bbmanage.py [command] <options>
     Commands:   Options:
-    list        <exploits | 
-                 targets  | 
-                 types    | 
-                 running>
+    list        <exploits | targets | 
+                 types    | running>
     info        <exploit_name>
     start       <exploit_name>
     exploit     <exploit_name <display>>
@@ -249,12 +262,12 @@ We use the linux chroot environment in order to conduct tests in isolation.  Sta
 {\bf Scalability}.  In order to create a system that can handle a growing amount of vulnerabilities that are independent from one another, we represent an exploit on an application through  Selenium scripts, as noted in the Framework section.  Selenium scripts allow us to perform operations on web applications without fear of working in an un-intended, compromised environment.  Scalability is critical because we ultimately want to do mass, automated experiments in tandem. \\
 
 
-\begin{figure}[!tp]
-\begin{center}
-\includegraphics[scale=.5]{Corpus_Exploit.PNG}
-\end{center}
-\caption{Exploit Structure}
-\end{figure}
+%\begin{figure}[!tp]
+%\begin{center}
+%\includegraphics[scale=.5]{Corpus_Exploit.PNG}
+%\end{center}
+%\caption{Exploit Structure}
+%\end{figure}
 
 
 \subsection{Targets}
@@ -359,14 +372,8 @@ Plugs for everyone who has given us money.
 
 \section{Future Development}
  \begin{description}
-   \item[Distribution]
-     \textcolor{red}{Virtual machine v.s. debian package. Pre-built chroot jails v.s. build scripts.
-     i.e. size <--> setup proceess balance. Striking a balance between}
-   \item[Services]
-     \textcolor{red}{Why run Selenium/Mysql in VM vs a chroot jail?}
    \item[Isolating attack event]
      \textcolor{red}{(with xdebug manually/cookies/etc...)}   
-   \item[Selenium driver and aux modules]
   Future support will control trace collection through cookie manipulation via XDebug. This will reduce the collection of insignificant interactions and provide a more refined break-down of the exploitation process since traces can be grouped by HTML request.  \par
    Explore the possibility of a unified communication interface. This may be necessary in order to cleanly interact with xdebug with appropriate cookies set on a per-request basis (especially when modules other than Selenium are used for communication).
    \item[Payload standardization]
