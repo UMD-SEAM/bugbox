@@ -108,6 +108,8 @@ BugBox is a framework  that streamlines the collection and sharing of vulnerabil
  
 \section {The Structure and Contents of a Corpus}
 
+BugBox
+
 \subsection{Application Packaging and {\tt chroot} Environment}
 
 A key responsibility of the framework is to manage packaged vulnerable applications in an automated way. This includes doing tasks needed to setup the operating system, web server, PHP interpreter, and the application itself. Since every application has it's own system requirements, the configuration is joined with the application itself within {\bf Target} modules existing in the corpus. It is the job of the {\bf Engine} to then match exploits with targets and actualy perform setup, configuration, and teardown work. The Engine will actually mount the web application's folders within an associated chroot jail, 
