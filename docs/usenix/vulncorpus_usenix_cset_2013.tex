@@ -96,7 +96,7 @@ Computer Science Department\\University of Maryland
 
 \subsection*{Abstract}
 \textit{
-PHP Web Applications are a rich source of vulnerabilities due to their high exposure and diversity. Accordingly, they are ideal specimens for empirical vulnerability research. There are not, however, publicly available resources of vulnerabilities that are both robust and practical to use. BugBox is an open-source corpus and framework for PHP web application vulnerabilities created to fill this void, and in doing so encourage greater quality security research. In this paper we describe Bug Box as a mechanism that encourages the distribution of vulnerability data and further supports research in developing vulnerability definition representations, testing intrusion detection systems, testing static analysis tools, and separately as a tool for training purposes.  
+PHP Web Applications are a rich source of vulnerabilities due to their high exposure, diversity, and popularity. Accordingly, they are ideal specimens for empirical vulnerability research. There are not, however, publicly available resources of vulnerabilities that are both robust and practical to use. BugBox is an open-source corpus and framework for PHP web application vulnerabilities created to fill this void, and in doing so encourage greater quality security research. In this paper we describe Bug Box as a mechanism that encourages the distribution of vulnerability data and further supports research in developing vulnerability definition representations, testing intrusion detection systems, testing static analysis tools, and separately as a tool for training purposes.  
 }
 
 \section{Introduction}
@@ -109,6 +109,8 @@ BugBox is a framework  that streamlines the collection and sharing of vulnerabil
 \section {The Structure and Contents of a Corpus}
 
 \subsection{Application Packaging and {\tt chroot} Environment}
+
+A key responsibility of the framework is to manage packaged vulnerable applications in an automated way. This includes doing tasks needed to setup the operating system, web server, PHP interpreter, and the application itself. Since every application has it's own system requirements, the configuration is joined with the application itself within {\bf Target} modules existing in the corpus. It is the job of the {\bf Engine} to then match exploits with targets and actualy perform setup, configuration, and teardown work. The Engine will actually mount the web application's folders within an associated chroot jail, 
 
 We use Linux {\tt chroot} jails as the host environments to support target applications with varying system requirements.  The Engine stages the application within the {\tt chroot} environment provides locality, reproducibility, and stability. The following properties are reasons supporting the use of {\tt chroot} jails as the target environments:\par
 {\bf The web application remains local}.  Many applications, such as WordPress, have a MYSQL back end.  If we were to host the application on a different server or VM we would have to ensure that the MYSQL database is properly setup each time.  With the {\tt chroot} environment, the process is simplified. We keep a MYSQL database outside of the {\tt chroot} Jail in order to facilitate web application configuration. \par
