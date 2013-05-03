@@ -41,7 +41,6 @@
     resetmargins=true,
 }
 
-
 \begin{document}
 
 %don't want date printed
@@ -54,17 +53,17 @@
 
 %for single author (just remove % characters)
 \author{
-{\rm Gary Nilson}\\
-Computer Science Department\\University of Maryland
+{\rm First Author}\\
+Institution
 \and
-{\rm Kent Wills}\\
-Computer Science Department\\University of Maryland
+{\rm Second Author}\\
+Institution
 \and
-{\rm Jeff Stuckman}\\
-Computer Science Department\\University of Maryland
+{\rm Third Author}\\
+Institution
 \and
-{\rm Jim Purtilo}\\
-Computer Science Department\\University of Maryland
+{\rm Fourth Author}\\
+Institution
 % copy the following lines to add more authors
 % \and
 % {\rm Name}\\
@@ -75,23 +74,10 @@ Computer Science Department\\University of Maryland
 
 % Use the following at camera-ready time to suppress page numbers.
 % Comment it out when you first submit the paper for review.
-\thispagestyle{empty}
+%\thispagestyle{empty}
 
-%Orphaned sentences
-%  Furthermore, the framework capability is streamlined through the thorough use of abstraction and encapsulation making the management of the application, environment, and exploitation in BugBox. \\
-% The study of identifying vulnerability points and their representations is often refered to as \emph{vulnerability localization}[ref].\\
 
-%[REF A database of computer attacks for the evaluations of IDSes]
-%Generating Realistic traffic... DARPA IDS (long ref).. 300 attacks.. 32 types.. 7 different scenarios
-%Realistic variance of methods used by the attacker..
-
-%Some suggestions from Jim: 
-%Consequences of use: good for many references.
-%Evaluation
-%Why is this hard.
-%Why have others not done it yet.
-%Abstract:
-%What makes it ours?
+ 
  
 
 \subsection*{Abstract}
@@ -102,7 +88,7 @@ Web Applications are a rich source of vulnerabilities due to their high exposure
 \section{Introduction}
 PHP Web applications are subject to a rich variety of exploit types, such as cross-site scripting (XSS), cross-site request forgery (CSRF), buffer overflow, and SQL injection.  A recent study by White Hat Security~\cite{WhiteHat:2010:Online} analyzed seven web application languages: ASP, ASPX, CFM (Cold Fusion Markup), DO (Struts), JSP, PHP, and PL (Perl) showing that PHP, while having the smallest attack surface in their tests, produced one of the highest average number of serious vulnerabilities per website.  This variety of exploits in PHP and other languages is logged extensively in popular exploit databases such as the National Vulnerability Database (NVD), Open Source Vulnerability Database (OSVDB), Common Vulnerability and Exposures Database (CVE), or the Exploit Database (EDB).\par
 
-While many of these databases are easy to access and disclose the details of the vulnerability and/or exploit, they do not provide a collection of structured vulnerable code, a corpus, that can support statistical analysis and hypothesis testing.  The pursuit for such a corpus was driven through prior research, in developing attack surface metrics~\cite{Stuckman:2012:CAA:2372225.2372229} and evaluating intrusion prevention systems~\cite{Stuckman:2011:TEW:2195220.2195671}, and is furthered through our continued research in dynamic decentralized intrusion detection.  Furthermore, a corpus can facilitate a variety of activities of interest to the security community including evaluating static analysis tools~\cite{Zitser:2004:TSA:1041685.1029911}, penetration testing and training security teams on vulnerability injection~\cite{4725309}, and analyzing open source web applications~\cite{DBLP:journals/ese/HuynhM10}.  \par
+While many of these databases are easy to access and disclose the details of the vulnerability and/or exploit, they do not provide a collection of structured vulnerable code, a corpus, that can support statistical analysis and hypothesis testing.  The pursuit for such a corpus was driven through our prior research in security metrics and the testing and evaluation of security products, and is furthered through our continued research in dynamic decentralized intrusion detection.  Furthermore, a corpus can facilitate a variety of activities of interest to the security community including evaluating static analysis tools~\cite{Zitser:2004:TSA:1041685.1029911}, penetration testing and training security teams on vulnerability injection~\cite{4725309}, and analyzing open source web applications~\cite{DBLP:journals/ese/HuynhM10}.  \par
 
 BugBox is a framework that streamlines the collection and sharing of vulnerability data, facilitates cyber security experiments, and furthers education on security vulnerabilities.  This mechanism allows users to identify a vulnerability in a web application, quickly develop an exploit script, and collect execution traces of vulnerability data, all of which can be easily packaged and distributed to the community. Exploits can also be demonstrated by visualizing a live web browser that shows the exploit being performed from the attacker's perspective. Advanced users and researchers can perform large-scale vulnerability experiments in an environment that can easily be guarded from contamination.
 
