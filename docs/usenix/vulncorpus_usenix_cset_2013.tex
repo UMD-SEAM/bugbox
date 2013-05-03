@@ -330,16 +330,20 @@ get("submit").click()
 {\bf Introspection} Since the {\tt chroot} environments exist on the host machine as simple directories, it is trivial to write scripts for managing the environment. This property allows for easy management of web applications, simple maintenance using incremental backups, and provides for other paths of research such as system taint analysis.
 
 
-\section {Lessons learned}
-{\bf Applications with different OS environments can be run}.  If an application was built for Debian 6 as opposed to Debian 4, we can setup a {\tt chroot} environment that has support for that specific OS.  This gives us the flexibility to test the web application in whatever OS environment we choose.\par
-
-
 
 This wrapper class allows the exploit writer to choose whether to display the Firefox browser during exploitation. This feature has proven very useful for debugging exploits, and has lead to quicker turn-around in the exploit development. With the Selenium Driver, one can also orchestrate demonstrations to teach others the principles behind web vulnerabilities.  A setup could entail showing a live feed of tcpdump and the Apache logs on one screen, while in real-time one Firefox process shows the actions taken by an attacker posting a malicious script on a forum, after which the session for an unsuspecting admin in an adjacent Firefox process shows the activation of a CSRF exploit. 
 
-Some research projects conducted in our software engineering group at the University of Maryland are centered around collection of metrics data for vulnerabilities.  Since we were unable to find a corpus that suited our needs, we started to build an in-house corpus.  Originally our corpus architecture was a VM based. \par
-The idea was to be able to mount web application targets onto VMs.  We had a similar idea in th sense that the VM's could be setup and brought down, saving the current state that they were in.  Once the application was mounted, we performed an exploit manually and saved a snapshot of the VM instance.  All exploits applied to "tainted`` applications, so we had to be careful that one exploit did not interfere with another.  We hired summer students to create exploits and save new snapshots, from which we had them report their progress on the wiki we had built.\par
-We found that because the process was not sufficiently documented, it was harder to verify that the exploit was executed in the correct manner.  Many times pages that were logged as exploited, did not show the representation of the exploit. Furthermore it was not possible to perform automated query-able tests for the collection of exploits.\par
+\section {Lessons learned}
+
+In developing BugBox, we learned {\em four} key lessons: Flexibility of environment, visual aids speed up exploit script development, developing a large diverse corpus is quicker with community involvement, quick script verification can increase corpus quality and repeatability of experiments.\par
+
+Having flexibility over choosing the environment in which web applications are installed is a critical factor in corpus development.  The goal of creating a corpus is to create a wide variety of examples, and in doing this we sometimes have to use web applications that are outdated.  Incorporating these web applications into the corpus leads to dependencies on older language versions that have dependencies for different Linux distributions.\par
+
+Exploit script development is a repetitive and necessary process.  We found that in developing the exploit scripts alongside the Selenium visual framework we could more rapidly create exploit scripts.  This increase in productivity is directly correlative to the visual execution monitoring of the scripts allowing developers to efficiently pinpoint errors and enhancing script generation.  \par
+
+In collecting samples for our original corpus we focused on the quantity of samples, but did not emphasize diversity of samples.  In attempting to conduct statistical tests on the corpus we needed a better representative sample.  Taking a community approach for corpus development and streamlining corpus entry allows us and the community obtain a large quantity of data that is diverse and representative.\par
+
+Finally, verification of the vulnerable traces was originally difficult because trace data can be verbose and we did not have scripts to make repeatable results.  By executing the Selenium script, one can visually verify that the exploit is being run and captured correctly in a matter of seconds. 
 
 \section{Future work}
   Future development on the framework will include features for controlling trace collection through cookie manipulation via XDebug. This will reduce the collection of insignificant interactions and provide a more refined break-down of the exploitation process since traces can be grouped by HTML request. In order to achieve this, we may have to explore the possibility of forcing the exploit writer to use a single communication interface, instead of the Selenium/cookielib/urllib combination in the current approach. This may be necessary in order to cleanly interact with XDebug with appropriate cookies set on a per-request basis (especially when modules other than Selenium are used for communication).\par
