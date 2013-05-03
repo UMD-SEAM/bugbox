@@ -105,41 +105,66 @@ PHP Web applications are subject to a rich variety of exploit types, such as cro
 While many of these databases are easy to access and disclose the details of the vulnerability and/or exploit, they do not provide a collection of structured vulnerable code, a corpus, that can support statistical analysis and hypothesis testing.  The pursuit for such a corpus was driven through prior research, in developing attack surface metrics~\cite{Stuckman:2012:CAA:2372225.2372229} and evaluating intrusion prevention systems~\cite{Stuckman:2011:TEW:2195220.2195671}, and is furthered through our continued research in dynamic decentralized intrusion detection.  Furthermore, a corpus can facilitate a variety of activities of interest to the security community including evaluating static analysis tools~\cite{Zitser:2004:TSA:1041685.1029911}, penetration testing and training security teams on vulnerability injection~\cite{4725309}, and analyzing open source web applications~\cite{DBLP:journals/ese/HuynhM10}.  \par
 
 BugBox is a framework  that streamlines the collection and sharing of vulnerability data and facilitates cyber security experiments.  This mechanism allows users to identify a vulnerability in a web application, quickly develop an exploit script, and collect execution traces of vulnerability data, all of which can be easily packaged and distributed to the community.
+
+\section{An overview of BugBox}
+
+At the core of BugBox is a packaging system that encapsulates vulnerabilities, vulnerable applicatations, and their exploits into self-contained, redistributable modules. These modules are automatically installed in an isolated \texttt{chroot} environment, which allows for the user to perform the exploit without incurring additional setup effort or the risk of contaminating a live system. These modules also provide metadata describing vulnerabities and scripts which automatically execute exploits against the packaged applications. Because the vulnerabilities and exploits are automated through Python modules, large-scale security experiements can be set up by coding against the provided API. Collection of exploit execution traces is also automated, to support research in intrusion and vulnerability detection.
  
-\section {The Structure and Contents of a Corpus}
+\subsection{Application packaging and the {\tt chroot} environment}
 
-\subsection{Application Packaging and {\tt chroot} Environment}
+A key responsibility of BugBox is to manage packaged vulnerable applications in an automated way. BugBox first prepares environments for the applications by setting up the operating system, web server, and other dependencies. Preconfigured applications can then be automatically installed in this environment, where their prerequisites are guaranteed to be present and they are in a state that is exploitable. These environments are constructed by setting up {\tt chroot} jails on a Debian Linux host machine, providing a virtual environment with less overhead than a full virtual machine. A \texttt{chroot} jail supplies an isolated operating system installation (sharing the kernel of the host), allowing for applications, libraries, and configuration to be customized and discared as needed. These characterics are important for BugBox, as some applications have conflicting dependencies, and exploits should not be able to corrupt the host environment.
 
-A key responsibility of the framework is to manage packaged vulnerable applications in an automated way. This includes doing tasks needed to setup the operating system, web server, PHP interpreter, and the application itself. Since every application has it's own system requirements, a configuration is written in Python and joined with the application itself within {\bf Target} modules existing in the corpus. It is the job of the {\bf Engine} to then match exploits with target modles and actualy perform setup, configuration, and teardown work. The Engine will actually mount the web application's folders within an associated chroot jail, load a stored MySQL database, install the appropriate XDebug PHP debugger configuration file, start the web server, and eventually perform cleanup operations associated with these steps. \par
+We create a \texttt{chroot} environment by running utilities supplied by Debian which generate a fresh environment and installs packages from the official distribution repositories. Because this environment can be based on any Debian release, different versions of the application dependencies can coexist on a single host machine. 
 
-We use Linux {\tt chroot} jails as the host environments to support target applications with varying system requirements.  The Engine stages the application within the {\tt chroot} environment provides locality, reproducibility, and stability. The following properties are reasons supporting the use of {\tt chroot} jails as the target environments:\par
-{\bf The web application remains local}.  Many applications, such as WordPress, have a MYSQL back end.  If we were to host the application on a different server or VM we would have to ensure that the MYSQL database is properly setup each time.  With the {\tt chroot} environment, the process is simplified. We keep a MYSQL database outside of the {\tt chroot} Jail in order to facilitate web application configuration. \par
-{\bf Current tests are independent from future tests}.  We load a clean application into the {\tt chroot} jail every time we wish to run a new test.  This ensures that there is no corruption of the original web application and provides reproducible results when testing.\par
+Applications that are installed in our environment are packaged in Python modules called \textit{target} modules. Target modules include the vulnerable application's PHP files, the application's database, and metadata on the target's dependencies. The BugBox framework loads the target module into the \texttt{chroot} environment by identifying an environment that satisfies the module's dependencies, mounting the module into the environment's filesystem, and running the database scripts against the local MySQL installation. Modules are removed by removing the module's files from the environment. Because we load a clean application into the {\tt chroot} jail every time we wish to run a new test.  This ensures that there is no corruption of the original web application and provides reproducible results when testing.
+
+\subsection{Exploit and vulnerability packaging}
+
+A second kind of BugBox module, the exploit module, contains information on a vulnerability and a scripted exploit. Exploit scripting is simplified, because applications in BugBox are installed in a predictible environment which is repeatedly reset to its original state. The format of a BugBox exploit resembles an exploit in the Metasploit framework, including the CVE number, the vulnerability type, and a link to the page on BugBox's wiki where the module is maintained. Below is an example of this information:
+
+\begin{minipage}{\textwidth}
+{\tt \small
+\begin{tabular} { l l }
+\noindent{\bf Name}&CVE\_2012\_2403\\
+{\bf Description}&Creates a post containing a\\& XSS payload.\\
+{\bf References}&CVE 2012-2403, OSVDB 81463 \\
+{\bf Target}&Wordpress 3.3.1\\
+{\bf Type}&XSS\\
+{\bf VulWikiPage}&WIKIHOST/CVE-2012-2403
+\end{tabular}
+}
+\end{minipage}
+
+These attributes serve to document the module's exploit and associated vulnerability. They are also used by the BugBox framework to perform processes across all available exploits, such as displaying information about exploits meeting certain criteria. These processes can be extended by scripts calling the BugBox API, which can grab collections of exploit instances based on regular expression matching against the attributes.
+
+Scripted exploits are implemented as methods in exploit modules. These scripts leverage Selenium, a scriptable application that drives and automates web browsers such as Firefox. Selenium integrates nicely with the framework using stable and well-documented Python bindings, providing demonstration/visualization capabilities, JavaScript support, and easy interaction with HTML objects. The exploit code interacts with Selenium to perform pre-exploitation checks of the target and execute the exploit by automating a browser.
+
+\subsection{Collection of traces and vulnerability localization}
+
+A key question across many applications of empirical vulnerability research is how to represent which functionality, or piece of code accounts for the vulnerable condition in a program. In studying this problem, referred to as \emph{vulnerability localization}, it is important to have a large quantity of structured data to test hypotheses. The desired properties of this structured data may vary by line of study, but in the BugBox framework the primary method proposed for capturing code vulnerabilities is through the collection of execution traces. We accomplish this task by collecting execution traces during exploitation using XDebug, and then manually highlight the program paths relevant to the vulnerability.
+
+Line-based, run-based, and trace-based approaches are all effective types of vulnerability localization definitions. A line-based~\cite{4630094} approach for vulnerability collection uses line numbers represented in program patches to identify the location of the vulnerabilities.  However, there are many ways to fix a vulnerability and a patch represents only one of these ways or may represent irrelevant changes.  A run-based~\cite{Song:2008:BNA:1496255.1496257} approach creates vulnerability signatures from intermediate byte code. The drawback to this approach is that it does not isolate the lines of source code that represents the vulnerability. Execution traces, on the other hand, where traces are classified as \emph{potentially exploitative} or \emph{non-exploitative} allow for great flexibility matching programs against vulnerability signatures. A drawback to this approach, is that to increase the accuracy of the data, currently one must manually refine the traces.
+
+\section{Advantages of chroot jail}
+
 {\bf The web application cannot contaminate our testing environment}.  If a web application crashes due to the malicious script, we can ensure that it does not crash our corpus environment.  In the worst case the {\tt chroot} becomes corrupt for which we can treat in an isolated scenario that does not have un-intended side effects in our testing environment.\par
 {\bf The web application will never be contaminated}.  We store a separate backup in order to verify that the selenium scripts did not modify the Web Application in any way.  If the Web Application is corrupt, then we simply copy the web application from the backup folder to the package folder.  Future implementations will store only the md5 hash of the program on the corpus server and the backups on an external server.  This will allow for a quick comparison followed by a remote copy for mismatched hashes.  This separation will ensure that backups will never be corrupted through use of the corpus and expedite checking.\par
 {\bf Applications with different OS environments can be run}.  If an application was built for Debian 6 as opposed to Debian 4, we can setup a {\tt chroot} environment that has support for that specific OS.  This gives us the flexibility to test the web application in whatever OS environment we choose.\par
 {\bf Scalability}.  In order to create a system that can handle a growing amount of vulnerabilities that are independent from one another, we represent an exploit on an application through exploit scripts, as noted in the Framework section.  Exploit scripts allow us to perform operations on web applications without fear of working in an un-intended, compromised environment.  Scalability is critical because we ultimately want to do mass, automated experiments in tandem. 
 {\bf Introspection} Since the {\tt chroot} environments exist on the host machine as simple directories, it is trivial to write scripts for managing the environment. This property allows for easy management of web applications, simple maintenance using incremental backups, and provides for other paths of research such as system taint analysis.
 
-\subsection{Development}
+\subsection{Developing BugBox modules}
 
 To add a new entry to the corpus one has to create two to four main entities. Writing an exploit, and generating an execution trace are required, and depending on the target application, one may have to define a new target module. Sometimes, like when an application requires old versions of PHP or Apache, one may have to also setup a new target OS environment. However, because PHP web applications do not tend to have a large range of system dependencies, the majority of targets require at most a handful of different OS environments. \par
-The format of a BugBox exploit should look familiar to anyone who has worked with the Metasploit framework. An exploit in BugBox is simply a subclass of the framework's Exploit module, with various overridden methods and defined attributes that allow the Engine to do work with it.  Among the attributes is an exploit name, description, target application name, and exploit type. These attributes are the basis for organization in the corpus. They are defined in a class-level dictionary in the Exploit class, and are used throughout the framework in the following ways: by the engine for running the environment and exploit, by the command-line interface to query and display information about the available exploits, and finally by a Query module that provides functionality to grab collections of Exploit instances based on regular expression matching against the attributes. \par
-Each exploit must define a method that crafts and sends the payload(called exploit()), and can optionally include one or two others for doing pre-exploitation checks of the target, and post exploitation cleanup of the target's environment (for example, removing any files that were uploaded to a web server). The exploit method mostly interact with the world through a {\bf SeleniumDriver} class that serves as a wrapper to Selenium's Firefox web driver. This allows the framework to leverage Selenium's powerful browser automation. Selenium integrates nicely with the framework using stable and well-documented Python bindings, providing demonstration/visualization capabilities, JavaScript support, and easy interaction with HTML objects. \par
+
+An exploit module in BugBox is simply a subclass of the framework's base exploit class, with various overridden methods and defined attributes that allow the Engine to do work with it.
+
 The execution trace is generated using XDebug to capture the application's state throughout exploitation. XDebug is a feature-rich PHP extension that provides debugging and profiling capabilities. The BugBox engine instructs the debuger to capture execution traces bysetting global environment variables in a configuration file prior to exploitation. Post-exploitation, the engine collects and organizes the traces on a per-session basis. XDebug also supports managing trace collection using cookies, which when implemented in BugBox, will allow further separating traces on a per-request basis.  \par
 
 To add a new vulnerability to the corpus, we first select an application vulnerability and determine whether the package is defined in the corpus, and proceed to create a target module otherwise. Although we focus primarily on open source applications, it is sometimes hard to obtain the vulnerable versions of an application. Therefore, creating the target module may involve hunting down patches in a mailing list or searching through the branches of a source repository. We then perform a manual execution of the exploit to verify that we understand the scope of the exploit, from which we proceed to write the exploit so that the process will be integrated into the corpus. Finally, we collect the trace of the program while our script is being executed and add it to our corpus.\par
 
 
-\subsection{Methods for Localization}
-
-A key question across many applications of empirical vulnerability research is how to represent which functionality, or piece of code accounts for the vulnerable condition in a program. In studying this problem, referred to as \emph{vulnerability localization}, it is important to have a large quantity of structured data to test hypotheses. The desired properties of this structured data may vary by line of study, but in the BugBox framework the primary method proposed for capturing code vulnerabilities is through the collection of execution traces. We accomplish this task by collecting execution traces during exploitation using XDebug, and then manually highlight the program paths relevant to the vulnerability.\par 
-Line-based, run-based, and trace-based approaches are all effective types of vulnerability localization definitions. A line-based~\cite{4630094} approach for vulnerability collection uses line numbers represented in program patches to identify the location of the vulnerabilities.  However, there are many ways to fix a vulnerability and a patch represents only one of these ways or may represent irrelevant changes.  A run-based~\cite{Song:2008:BNA:1496255.1496257} approach creates vulnerability signatures from intermediate byte code. The drawback to this approach is that it does not isolate the lines of source code that represents the vulnerability. Execution traces, on the other hand, where traces are classified as \emph{potentially exploitative} or \emph{non-exploitative} allow for great flexibility matching programs against vulnerability signatures. A drawback to this approach, is that to increase the accuracy of the data, currently one must manually refine the traces.   \par
-
-
-\section {An Application and Framework}
-
-\subsection {An Example Execution of BugBox}
+\section {An Example Execution of BugBox}
 
 The following Python scripts illustrate two use-cases for the BugBox framework. Both of these examples show ways to make use of vulnerability meta-data to run different experiments. In the first example, all XSS vulnerabilities existing in the the corpus are sequentially invoked, and execution traces are collected for analysis:
 
@@ -206,7 +231,9 @@ Usage: ./bbmanage.py [command] <options>
 
 The process of setting up an OS environment, configuring the target application, interacting with the PHP debugger, and all post-job cleanup occur behind the scenes in the BugBox framework. Any of these tasks would have taken hours to accomplish using our previous approach, which was based on manually managing various virtual machine snapshots. Using Python as a layer of abstraction above the OS, target application, and exploits, it is now possible to easily automate research tasks. The following sections give an overview of the system design that makes this abstraction possible.
 
-\subsection{Framework}
+It is the job of the {\bf Engine} to then match exploits with target modles and actualy perform setup, configuration, and teardown work. The Engine will actually mount the web application's folders within an associated chroot jail, load a stored MySQL database, install the appropriate XDebug PHP debugger configuration file, start the web server, and eventually perform cleanup operations associated with these steps.
+
+\section{Framework}
 
 %{\bf SeleniumDriver}, {\bf Exploit},
 Figure 1 illustrates the structure of the corpus, with boxes and arrows showing lines of control or communication. The framework breaks down logically into the following five components: {\bf Host Environment} (currently the Virtual Machine), {\bf Engine}, {\bf Target Environment}, {\bf Target}, and {\bf Exploit}. The diagram shows that the corpus is composed of any number of exploits, {\tt chroot} jails, target applications, and associated target plugins, that exploits and {\tt chroot} jails are under control of the vulnerability engine, the exploits interact directly with the target application (during exploitation) both through the Selenium Server and directly using libraries such as \emph{urllib}, all databases associates with the target applications are hosted directly on the host environment, and the database server is under control of the vulnerability engine.\par
@@ -220,7 +247,7 @@ Except for the host environment, each of the five major components are represent
 \end{figure}
 
 
-\subsubsection{Engine}
+\subsection{Engine}
 The {\bf Engine} drives the environment setup, tear-down, and exploitation process. The engine was created to abstract away details so that researchers can easily run exploit scripts without having to worry about getting the target application running every time. \par
 The vulnerability engine controls the actions of a given exploit, and ensures that the proper target environment, application, and application plugins are properly setup in the {\tt chroot} environment. The role of the engine is illustrated in the two use-cases. For example, following relevant lines in Use-Case 1:
 \begin{description}
@@ -240,7 +267,7 @@ The vulnerability engine controls the actions of a given exploit, and ensures th
 %\end{figure}
 
 
-\subsubsection{Targets}
+\subsection{Targets}
    The {\bf Target} module controls all the application targets that the exploits may be applied to.  More specifically, this represents web applications such as WordPress, SimplePHPAgenda, etc. A copy of the target program with a typical configuration, is always loaded before any exploit script is run.  Init scripts are written per application to provide the {\bf Engine} with the proper details for the setup, for example:
 
 \begin{minipage}{\textwidth}
@@ -262,26 +289,14 @@ chroot_environment = "Debian7"
 Some large web applications, such as WordPress, have many plugins that in themselves, have vulnerabilities. Therefore {\bf Target} modules also allow for the inclusion of plugins in the exploit framework.Both targets, and target plugins are resolved against the exploit attributes by the Engine during the setup process. 
 
 
-\subsubsection{Exploit}
+\subsection{Exploit}
 The {\bf Exploit} class is the superclass for each exploit in the corpus, defining interfaces and attributes that the engine uses to manage the environment and exploitation. The structure of Exploit is designed so that exploits can be written as a concise code statement. Each exploit is simply a subclass of Exploit residing in it's own Python file in which all actions taken by the exploit are clearly visible. In addition, a Query module is provided that will return a set of Exploit instances based on matching against the meta-data specified in the exploit (as shown in the use-cases).\par
 
 This separation accomplishes a step-like approach for getting involved with the corpus, where developing exploits for the corpus is more approachable and quick for novice programmers that wants to contribute and a robust framework that can be understood incrementally for larger contributions to the framework.\par
  
 This template ensures that the selenium driver is properly initialized bound to the exploit and makes sure that an exploit script has been defined as well as defines any specific actions on tear-down.\par
 
-The exploit module is annotated by it's attribute dictionary. This structure is inspired by the exploit class from the Metasploit~\cite{MetaSploit:2012:Online} module. In it we declare the name, description, references, target, type and wiki page for the exploit by the attributes dictionary.  The name is the technical name specified in one of the online databases of exploits and vulnerabilities mentioned earlier in the paper.  The description is a brief statement of what the exploit is supposed to do, because the name is typically not descriptive enough for a person to understand what type of exploit is being applied.  The Target is the web application target that is being used for the exploit.  The type is the type of exploit being conducted.  The VulWikiPage is the wiki page setup for an author to place auxiliary information about the exploit or script.  The following represents the attributes entries for an example XSS exploit:\\
-
-
-{\tt \small
-\begin{tabular} { l l }
-\noindent{\bf Name}&CVE\_2012\_2403\\
-{\bf Description}&Creates a post containing a\\& XSS payload.\\
-{\bf References}&CVE 2012-2403, OSVDB 81463 \\
-{\bf Target}&Wordpress 3.3.1\\
-{\bf Type}&XSS\\
-{\bf VulWikiPage}&WIKIHOST/CVE-2012-2403
-\end{tabular}
-}
+The exploit module is annotated by it's attribute dictionary. This structure is inspired by the exploit class from the Metasploit~\cite{MetaSploit:2012:Online} module. In it we declare the name, description, references, target, type and wiki page for the exploit by the attributes dictionary.  The name is the technical name specified in one of the online databases of exploits and vulnerabilities mentioned earlier in the paper.  The description is a brief statement of what the exploit is supposed to do, because the name is typically not descriptive enough for a person to understand what type of exploit is being applied.  The Target is the web application target that is being used for the exploit.  The type is the type of exploit being conducted.  The VulWikiPage is the wiki page setup for an author to place auxiliary information about the exploit or script.
 
 Here is an example body of an exploit procedure used for the simplest of XSS attacks.  The entire exploit consists only of instantiating the selenium driver and submitting a post on the WordPress site with the payload: 
 
@@ -310,64 +325,30 @@ get("submit").click()
 }
 \end{minipage}
 
-\section {On-Going Development and Conclusion}
+\subsection {Cleanup and maintenance}
 
-\subsection{Security Demonstrations}
-
+\section {Lessons learned}
 
 This wrapper class allows the exploit writer to choose whether to display the Firefox browser during exploitation. This feature has proven very useful for debugging exploits, and has lead to quicker turn-around in the exploit development. With the Selenium Driver, one can also orchestrate demonstrations to teach others the principles behind web vulnerabilities.  A setup could entail showing a live feed of tcpdump and the Apache logs on one screen, while in real-time one Firefox process shows the actions taken by an attacker posting a malicious script on a forum, after which the session for an unsuspecting admin in an adjacent Firefox process shows the activation of a CSRF exploit. 
 
-\subsection{On-going Development}
+Some research projects conducted in our software engineering group at the University of Maryland are centered around collection of metrics data for vulnerabilities.  Since we were unable to find a corpus that suited our needs, we started to build an in-house corpus.  Originally our corpus architecture was a VM based. \par
+The idea was to be able to mount web application targets onto VMs.  We had a similar idea in th sense that the VM's could be setup and brought down, saving the current state that they were in.  Once the application was mounted, we performed an exploit manually and saved a snapshot of the VM instance.  All exploits applied to "tainted`` applications, so we had to be careful that one exploit did not interfere with another.  We hired summer students to create exploits and save new snapshots, from which we had them report their progress on the wiki we had built.\par
+We found that because the process was not sufficiently documented, it was harder to verify that the exploit was executed in the correct manner.  Many times pages that were logged as exploited, did not show the representation of the exploit. Furthermore it was not possible to perform automated query-able tests for the collection of exploits.\par
+
+\section{Future work}
   Future development on the framework will include features for controlling trace collection through cookie manipulation via XDebug. This will reduce the collection of insignificant interactions and provide a more refined break-down of the exploitation process since traces can be grouped by HTML request. In order to achieve this, we may have to explore the possibility of forcing the exploit writer to use a single communication interface, instead of the Selenium/cookielib/urllib combination in the current approach. This may be necessary in order to cleanly interact with XDebug with appropriate cookies set on a per-request basis (especially when modules other than Selenium are used for communication).\par
 For each exploit currently in the corpus, there is no standard for the payload used in the attack. Since many studies may be sensitive to the payload type and encoding, it makes sense to provide the researcher with fine-grained control over this property. The Metasploit Framework has a very robust system for managing exploits along with their payloads and encodings, and can be a model for implementing this.
 
-\subsection{Lessons Learned}
 
-Some research projects conducted in our software engineering group at the University of Maryland are centered around collection of metrics data for vulnerabilities.  Since we were unable to find a corpus that suited our needs, we started to build an in-house corpus.  Originally our corpus architecture was a VM based. \par
-The idea was to be able to mount web application targets onto VMs.  We had a similar idea in th sense that the VM's could be setup and brought down, saving the current state that they were in.  Once the application was mounted, we performed an exploit manually and saved a snapshot of the VM instance.  All exploits applied to "tainted" applications, so we had to be careful that one exploit did not interfere with another.  We hired summer students to create exploits and save new snapshots, from which we had them report their progress on the wiki we had built.\par
-We found that because the process was not sufficiently documented, it was harder to verify that the exploit was executed in the correct manner.  Many times pages that were logged as exploited, did not show the representation of the exploit. Furthermore it was not possible to perform automated query-able tests for the collection of exploits.\par
+BugBox is designed to work on the Debian GNU/Linux and compatible distributions.  It will be distributed both as as a self-contained virtual machine, and as a package that can be installed on an existing system. The machine must have sufficient storage (roughly 4 GB per OS environment, and up to 2 GB for the application, engine, and exploit sources), with access rights to use run Linux {\tt chroot} jails.  Dependencies for the BugBox host system include MySQL, Selenium Server, debootstrap, the Advanced Packaging Tool (APT.), and any minimum hardware requirements for running the target web applications.\par
 
-\subsection{Availability}
-
-BugBox is designed to work on the Debian GNU/Linux and compatible distributions.  It is distributed both as as a self-contained virtual machine, and as a package that can be installed on an existing system. The machine must have sufficient storage (roughly 4 GB per OS environment, and 2 GB for the application, engine, and exploit sources), with access rights to use run Linux {\tt chroot} jails.  Dependencies for the BugBox host system include MySQL, Selenium Server, debootstrap, the Advanced Packaging Tool (APT.), and any minimum hardware requirements for running the target web applications.\par
-
-Community contributions will be key to building a corpus of sufficient size. Therefore, all code and data is licensed by the University of Maryland under the GPL v3, so that contributions and modifications will remain Open Source. In addition, we maintain a vulnerability wiki detailing the entries in the corpus, and a web-interface for the git repository that where the code is managed. Collaboration will be coordinated through the issue tracking system on the website, with git, and through the mailing list. \par
-
-The corpus can be downloaded at:
-
-\begin{center}
-{\tt  http://bugbox.cs.umd.edu}
-\end{center}
-
-Or can be checked out from the git repository using:
-
-\begin{center}
-{\tt git clone bugbox.cs.umd.edu/bbframework.git}
-\end{center}
-
-Details on the existing corpus entries can be found on our wiki at:
-
-\begin{center}
-{\tt http://www.vulnwiki.com}
-\end{center}
+Community contributions will be key to building a corpus of sufficient size, and the BugBox framework code will be made generally available under an open-source license. Because the corpus is composed entirely of open-source applications, target modules are distributed under the application's respective license. In addition, we maintain a vulnerability wiki detailing the entries in the corpus, and a web-interface for the git repository that where the code is managed. Collaboration will be coordinated through the issue tracking system on the website, with git, and through the mailing list.
 
 \section*{Acknowledgments}
 
-The authors thank the United States Office of Naval Research for its support for this research under contract N000141210147.
-
-
-While there is not a general definition of corpus quality, we choose to define quality in the statistical sense as a representative sample.  Deriving the following criteria for establishing the suitability of our corpus: type of the samples, quantity of the samples, diversity of the samples, and testing reproducibility to retrieve the samples.
-
-
+The authors thank the United States Office of Naval Research for its support for this research.
 
 {\footnotesize \bibliographystyle{acm}
 \bibliography{ref}}
 
 \end{document}
-
-
-
-
-
-
-
