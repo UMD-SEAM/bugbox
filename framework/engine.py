@@ -3,12 +3,13 @@ import os
 import sys
 import Targets
 import datetime
+import logging
 
-OKGREEN = '\033[92m'
-FAIL = '\033[91m'
 GRAY = '\033[90m'
 ENDC = '\033[0m'
 
+OKLVL = 22
+logger = logging.getLogger("Engine")
 
 class Engine:
     
@@ -23,13 +24,13 @@ class Engine:
         try:
             target_app = Targets.get_target_module(self.exploit.attributes['Target'])
         except Targets.TargetModuleNotFound as e:
-            print "[%sError%s]: No module found for target application \"%s\"" % (FAIL, ENDC, e.value,)
-            exit() 
+            logger.error("No module found for target application \"%s\"", e.value)
+            exit(-1) 
 
         self.chroot_environment = target_app.chroot_environment
         self.exploitname = self.exploit.attributes['Name'].replace(' ', '_').replace('.','_')
         
-        #this is to not break existing exploits, a better convention could be had
+        # this is to not break existing exploits, a better convention could be had
         self.application_dir = target_app.name.replace(' ', '_').replace('.','_').split('_')[0].lower() 
         self.target_system_dir = "%s/%s" % (self.live_systems_dir, self.exploitname)
         self.application_dir_mapping = target_app.application_dir_mapping
@@ -46,11 +47,10 @@ class Engine:
                 pname = self.exploit.attributes['Plugin']
                 self.plugin_src, self.plugin_dest = Targets.get_plugin(target_app, pname)
             except Targets.TargetPluginNotFound as e:
-                print "[%sError%s]: Plugin \"%s\" not found for target application \"%s\"" % (FAIL, 
-                                                                                              ENDC, 
-                                                                                              pname,
-                                                                                              e.value)
-                exit() 
+                logger.error("Plugin \"%s\" not found for target application \"%s\"",
+                             pname,
+                             e.value)
+                exit(-1) 
         else:
             self.plugin_src = None
             
@@ -139,7 +139,7 @@ class Engine:
             self.execute_commands(stop_script)
 
         else:
-            print "[%sError%s]: attempting to shutdown a system that is not running." % (FAIL, ENDC)
+            logger.error("attempting to shutdown a system that is not running.")
 
         return
 
@@ -157,7 +157,7 @@ class Engine:
                                    "chroot %s /etc/init.d/apache2 restart" %(self.target_system_dir,)]
             self.execute_commands(autotrace_on_script)
         else:
-            print "[%sError%s]: attempting to turn on autotrace for a system that is not running" % (FAIL, ENDC)
+            logger.error("attempting to turn on autotrace for a system that is not running")
 
         return
 
@@ -179,40 +179,13 @@ class Engine:
 
 
     def execute_commands(self, cmdlist):
+       
         for cmd in cmdlist:
-            print "EXEC: %s%s%s" % (GRAY, cmd, ENDC),
+            logger.info("EXEC: %s%s%s", GRAY, cmd, ENDC)
             ret = os.system(cmd)
-            sys.stdout.flush()
-            if ret == os.EX_OK:
-                print "[%sSuccess%s]" % (OKGREEN, ENDC)
-            else:
-                print "\n[%sError%s] Nonzero exit status" %(FAIL, ENDC), ret
-                exit()
+            if ret != os.EX_OK:
+                logger.error("Nonzero exit status %s", str(ret))
+                exit(-1)
            
 
-        return
-
-    def parse_args(self, argv):
-
-        if len(argv) != 2:
-            print "Usage: python %s [options]" % (argv[0],)
-            print "Options:"
-            print "\tstart:\t\tStart exploit instance"
-            print "\tstop:\t\tStop exploit instance"
-            print "\texploit:\tRun the exploit"
-            print "\tcheck:\t\tCheck if the corresponding environment is running"
-            print "\txdebug_on:\tTurn on xdebug autotrace"
-            print "\txdebug_off:\tTurn off and collect xdebug autotrace"
-            exit()
-
-
-        elif argv[1] == "xdebug_off":
-            self.xdebug_autotrace_off()
-
-        elif argv[1] == "check":
-            if self.is_running():
-                print "System is running (%s)" % (self.target_system_dir,)
-            else:
-                print "System is not running (%s)" % (self.target_system_dir,)
-                
         return
