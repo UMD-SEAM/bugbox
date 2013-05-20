@@ -1,6 +1,9 @@
 
 import pkgutil
 import os
+import logging
+
+logger = logging.getLogger("Targets")
 
 class TargetModuleNotFound(Exception):
 
@@ -31,8 +34,8 @@ def get_target_module(target_name):
                 if (module.name == target_name):
                     return module
             except ImportError:
-                print "Error: failed to import module ", name
-                exit()
+                logger.error("failed to import module \"%s\"", name)
+                exit(-1)
 
     raise TargetModuleNotFound(target_name)
 

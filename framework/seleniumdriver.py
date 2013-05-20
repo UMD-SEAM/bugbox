@@ -3,6 +3,9 @@ import time
 from selenium import webdriver
 import selenium.common.exceptions
 from pyvirtualdisplay import Display
+import logging
+
+logger = logging.getLogger("SeleniumDriver")
 
 class SeleniumDriver (webdriver.Firefox):
     """This is a class that encapsulates the selenium webdriver, adding some useful functionality."""
@@ -25,18 +28,18 @@ class SeleniumDriver (webdriver.Firefox):
             try:
                 if by_xpath:
                     elem = self.find_element_by_xpath(by_xpath)
-                    print "Found %s element" % (by_xpath)
+                    logger.info("Found %s element", by_xpath)
                 elif by_id:
                     elem = self.find_element_by_id(by_id)
-                    print "Found %s element" % (by_id)
+                    logger.info("Found %s element", by_id)
                 elif by_link_text:
                     elem = self.find_element_by_link_text(by_link_text)
-                    print "Found %s element" % (by_link_text)
+                    logger.info("Found %s element", by_link_text)
                 break
             except selenium.common.exceptions.NoSuchElementException:
                 if i == attempts-1:
                     raise selenium.common.exceptions.NoSuchElementException
-                print "Element not found... try again (%s)" %(i,)
+                logger.warning("Element not found... try again (%s)", i)
                 time.sleep(delay)
 
         return elem

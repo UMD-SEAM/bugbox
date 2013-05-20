@@ -1,6 +1,7 @@
 #!/usr/bin/python
 
 import sys
+import logging
 
 ULINE = '\033[4m'
 ENDC = '\033[0m'
@@ -18,6 +19,46 @@ def usage():
            "\ttrace_on\t<exploit_name>\n"                               \
            "\ttrace_off\t<exploit_name>\n"                              \
            "\tautorun\t\t<exploit_name>"
+
+
+class ColoredFormatter(logging.Formatter):
+
+    def __init__(self, msg):
+        logging.Formatter.__init__(self, msg)
+        
+        self.COLORS = {
+            'WARNING' :  '\033[33m',
+            'INFO' :     '\033[34m',
+            'DEBUG' :    '\033[34m',
+            'CRITICAL' : '\033[33m',
+            'ERROR' :    '\033[91m',
+            'OK' :       '\033[92m',
+            'GRAY' :     '\033[90m',
+            'ULINE' :    '\033[4m',
+            'ENDC' :     '\033[0m'
+            }
+        return
+
+    def format(self, record):
+        levelname = record.levelname
+        if levelname in self.COLORS:
+            levelname_color = "%s%s%s" % (self.COLORS[levelname], 
+                                          levelname, 
+                                          self.COLORS['ENDC'])
+            record.levelname = levelname_color
+        return logging.Formatter.format(self, record)
+
+# setup logging
+OKLVL = 22
+logging.addLevelName(OKLVL,'OK')
+logger = logging.getLogger('') # root level logger
+logger.setLevel(logging.INFO)
+formatter = ColoredFormatter("[%(levelname)s] <%(name)s> %(message)s")
+ch = logging.StreamHandler()
+ch.setFormatter(formatter)
+logger.addHandler(ch)
+ch.setLevel(logging.INFO)
+logger = logging.getLogger("bbmanage")
 
 if __name__ == "__main__":
     
@@ -73,7 +114,7 @@ if __name__ == "__main__":
 
 
         elif sys.argv[2] == "running":
-            print "ERROR NOT YET IMPLEMENTED"
+            logger.warn("feature \"running\" not yet implemented")
             pass
 
     elif sys.argv[1] == "info":
@@ -87,7 +128,7 @@ if __name__ == "__main__":
                         print "%s%s%s: %s" %(ULINE, attr, ENDC, expl.attributes[attr])
                 exit()
             
-        print "Error: exploit \"%s\" not found" % (sys.argv[2],)
+        logger.error("Error: exploit \"%s\" not found", sys.argv[2])
         exit(-1)
 
     elif len(sys.argv) > 2:
@@ -100,40 +141,40 @@ if __name__ == "__main__":
         Exploit = Query().get_by_name(sys.argv[2])
         
         if not Exploit:
-            print "Error: exploit \"%s\" not found" % (sys.argv[2],)
+            logger.error("exploit \"%s\" not found", sys.argv[2])
             exit(-1)
 
         engine = Engine(Exploit(), config)        
 
         if sys.argv[1] == "start":
-            print "Starting exploit instance (%s)" % (Exploit.attributes['Name'],)
+            logger.info("Starting exploit instance (%s)", Exploit.attributes['Name'])
             print "Description:\n", Exploit.attributes['Description']
             engine.startup()
             exit()
 
         elif sys.argv[1] == "exploit":
-            print "Running exploit", sys.argv[2]
+            logger.info("Running exploit %s", sys.argv[2])
             engine.exploit.exploit()
             exit()
 
         elif sys.argv[1] == "stop":
-            print "Stopping exploit instance (%s)" %(Exploit.attributes['Name'],)
+            logger.info("Stopping exploit instance (%s)", Exploit.attributes['Name'])
             engine.shutdown()
             exit()
 
         elif sys.argv[1] == "trace_on":
-            print "Trace on for exploit", sys.argv[2]
+            logger.info("Trace on for exploit %s", sys.argv[2])
             engine.xdebug_autotrace_on()
             exit()
 
         elif sys.argv[1] == "trace_off":
-            print "Trace off for exploit", sys.argv[2]
+            logger.info("Trace off for exploit", sys.argv[2])
             engine.xdebug_autotrace_off()
             exit()
 
             
         elif sys.argv[1] == "autorun":
-            print "Autorun exploit", sys.argv[2]
+            logger.info("Autorun exploit", sys.argv[2])
             engine.startup()
             engine.xdebug_autotrace_on()
             engine.exploit.exploit()

@@ -1,5 +1,8 @@
 import pkgutil
 import re
+import logging
+
+logger = logging.getLogger("Query")
 
 try:
     import framework.Exploits
@@ -17,9 +20,8 @@ try:
                     try:
                         self.exploits += [module_loader.find_module(name).load_module(name).Exploit]
                     except ImportError as e:
-                        print "Error: failed to import exploit module ", name
-                        print "Exception:", e
-                        exit()
+                        logging.error("failed to import exploit module \"%s\"\n%s", name, e)
+                        exit(-1)
                         
             return
         
@@ -55,7 +57,7 @@ try:
             return None
 
 except ImportError:
-    print "not importing Exploits"
+    logging.error("not importing exploits")
     class Query:
         def __init__(self):
             raise NotImplementedError("Cannot import exploit modules, Query not possible")
