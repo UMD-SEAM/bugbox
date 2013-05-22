@@ -25,9 +25,9 @@ try:
                         
             return
         
-        def get_by_re(self, attr, re):
+        def get_by_re(self, attr, re_str):
             
-            rec = re.compile(re)
+            rec = re.compile(re_str)
             expl_list = []
             
             for expl in self.exploits:

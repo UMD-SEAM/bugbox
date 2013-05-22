@@ -131,13 +131,13 @@ if __name__ == "__main__":
             exit()
 
         elif sys.argv[1] == "trace_off":
-            logger.info("Trace off for exploit", sys.argv[2])
+            logger.info("Trace off for exploit %s", sys.argv[2])
             engine.xdebug_autotrace_off()
             exit()
 
             
         elif sys.argv[1] == "autorun":
-            logger.info("Autorun exploit", sys.argv[2])
+            logger.info("Autorun exploit %s", sys.argv[2])
             engine.startup()
             engine.xdebug_autotrace_on()
             engine.exploit.exploit()
