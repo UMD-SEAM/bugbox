@@ -152,8 +152,11 @@ class Engine:
 
 
     def xdebug_autotrace_on(self):
+
         if self.is_running():
-            autotrace_on_script = ["cp %s/xdebug.ini.on %s/etc/php5/mods-available/xdebug.ini" % (self.xdebug_dir, self.target_system_dir),
+            autotrace_on_script = ["cp %s/xdebug.%s.ini.on %s/etc/php5/mods-available/xdebug.ini" % (self.xdebug_dir, 
+                                                                                                     self.chroot_environment, 
+                                                                                                     self.target_system_dir),
                                    "chroot %s /etc/init.d/apache2 restart" %(self.target_system_dir,)]
             self.execute_commands(autotrace_on_script)
         else:
@@ -166,7 +169,9 @@ class Engine:
         if self.is_running():
             datestr = datetime.datetime.now().strftime('%Y_%m_%d')
             movetodir = "%s/%s_%s" %(self.traces_dir, self.exploitname, datestr)
-            autotrace_on_script = ["cp %s/xdebug.ini.off %s/etc/php5/mods-available/xdebug.ini" % (self.xdebug_dir, self.target_system_dir),
+            autotrace_on_script = ["cp %s/xdebug.%s.ini.off %s/etc/php5/mods-available/xdebug.ini" % (self.xdebug_dir, 
+                                                                                                      self.chroot_environment, 
+                                                                                                      self.target_system_dir),
                                    "chroot %s /etc/init.d/apache2 restart" % (self.target_system_dir,),
                                    "mkdir -p %s" % (movetodir,),
                                    "mv %s/tmp/traces/* %s" % (self.target_system_dir, movetodir,)]
