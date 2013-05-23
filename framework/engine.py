@@ -73,7 +73,8 @@ class Engine:
                         "mkdir %s%s/%s"                         %(self.target_system_dir,
                                                                   self.application_dir_mapping[1],
                                                                   self.application_dir),
-                        "mount --bind %s %s%s/%s"               %(self.application_dir_mapping[0], 
+                        #"mount --bind %s %s%s/%s"               %(self.application_dir_mapping[0],
+                        "cp -R %s %s%s/%s"                      %(self.application_dir_mapping[0], 
                                                                   self.target_system_dir,
                                                                   self.application_dir_mapping[1],
                                                                   self.application_dir),
@@ -86,7 +87,8 @@ class Engine:
         if self.plugin_src: 
             start_script += ["mkdir %s/%s"            %(self.target_system_dir,
                                                         self.plugin_dest),
-                             "mount -o bind %s %s/%s" %(self.plugin_src,
+                             #"mount -o bind %s %s/%s" %(self.plugin_src,
+                             "cp -R %s %s/%s"         %(self.plugin_src,
                                                         self.target_system_dir,
                                                         self.plugin_dest)]
 
@@ -108,26 +110,27 @@ class Engine:
                            "chroot %s /etc/init.d/apache2 stop" %(self.target_system_dir,)]
             
             if self.plugin_src: 
-                stop_script += ["umount %s/%s"  %(self.target_system_dir,
-                                                  self.plugin_dest),
+                stop_script += [#"umount %s/%s"  %(self.target_system_dir,
+                                #                  self.plugin_dest),
                                 "rm -rf %s/%s"  %(self.target_system_dir,
                                                   self.plugin_dest)]
 
             stop_script += ["umount %s/proc"                     %(self.target_system_dir,),
                             "umount %s/dev/pts"                  %(self.target_system_dir,),
                             "umount %s/dev"                      %(self.target_system_dir,),
-                            "umount %s%s/%s"                     %(self.target_system_dir,
+                            #"umount %s%s/%s"                     %(self.target_system_dir,
+                            "rm -rf %s%s/%s"                     %(self.target_system_dir,
                                                                    self.application_dir_mapping[1],
                                                                    self.application_dir),
-                            "[ \"$(ls -A %s%s/%s)\" ] "
-                            "&& echo \"Directory not empty!\" "
-                            "&& exit 1 "
-                            "|| rm -rf %s%s/%s"                  %(self.target_system_dir,
-                                                                   self.application_dir_mapping[1],
-                                                                   self.application_dir,
-                                                                   self.target_system_dir,
-                                                                   self.application_dir_mapping[1],
-                                                                   self.application_dir),
+                            #"[ \"$(ls -A %s%s/%s)\" ] "
+                            #"&& echo \"Directory not empty!\" "
+                            #"&& exit 1 "
+                            #"|| rm -rf %s%s/%s"                  %(self.target_system_dir,
+                            #                                       self.application_dir_mapping[1],
+                            #                                       self.application_dir,
+                            #                                       self.target_system_dir,
+                            #                                       self.application_dir_mapping[1],
+                            #                                       self.application_dir),
                             "umount %s"                          %(self.target_system_dir,),
                             "[ \"$(ls -A %s)\" ] "
                             "&& echo \"Directory not empty!\" "
