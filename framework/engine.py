@@ -73,8 +73,14 @@ class Engine:
                         "mkdir %s%s/%s"                         %(self.target_system_dir,
                                                                   self.application_dir_mapping[1],
                                                                   self.application_dir),
+                        "chown www-data %s%s/%s"                %(self.target_system_dir,
+                                                                  self.application_dir_mapping[1],
+                                                                  self.application_dir),
+                        "chgrp www-data %s%s/%s"                %(self.target_system_dir,
+                                                                  self.application_dir_mapping[1],
+                                                                  self.application_dir),
                         #"mount --bind %s %s%s/%s"               %(self.application_dir_mapping[0],
-                        "cp -R %s %s%s/%s"                      %(self.application_dir_mapping[0], 
+                        "cp -pR %s/* %s%s/%s"                   %(self.application_dir_mapping[0], 
                                                                   self.target_system_dir,
                                                                   self.application_dir_mapping[1],
                                                                   self.application_dir),
@@ -88,7 +94,7 @@ class Engine:
             start_script += ["mkdir %s/%s"            %(self.target_system_dir,
                                                         self.plugin_dest),
                              #"mount -o bind %s %s/%s" %(self.plugin_src,
-                             "cp -R %s %s/%s"         %(self.plugin_src,
+                             "cp -pR %s/* %s/%s"      %(self.plugin_src,
                                                         self.target_system_dir,
                                                         self.plugin_dest)]
 
@@ -109,6 +115,9 @@ class Engine:
                            "|| exit 0"                          %(self.live_systems_dir,),
                            "chroot %s /etc/init.d/apache2 stop" %(self.target_system_dir,)]
             
+            logger.info("Waiting for apache2 process to stop")
+            stop_script += ["while pgrep \"apache2\">/dev/null; do sleep 1; done;"]
+
             if self.plugin_src: 
                 stop_script += [#"umount %s/%s"  %(self.target_system_dir,
                                 #                  self.plugin_dest),
@@ -172,12 +181,13 @@ class Engine:
         if self.is_running():
             datestr = datetime.datetime.now().strftime('%Y_%m_%d')
             movetodir = "%s/%s_%s" %(self.traces_dir, self.exploitname, datestr)
-            autotrace_on_script = ["cp %s/xdebug.%s.ini.off %s/etc/php5/mods-available/xdebug.ini" % (self.xdebug_dir, 
+            autotrace_on_script = ["mkdir -p %s" % (movetodir,),
+                                   "mv %s/tmp/traces/* %s" % (self.target_system_dir, movetodir,),
+                                   "cp %s/xdebug.%s.ini.off %s/etc/php5/mods-available/xdebug.ini" % (self.xdebug_dir, 
                                                                                                       self.chroot_environment, 
                                                                                                       self.target_system_dir),
-                                   "chroot %s /etc/init.d/apache2 restart" % (self.target_system_dir,),
-                                   "mkdir -p %s" % (movetodir,),
-                                   "mv %s/tmp/traces/* %s" % (self.target_system_dir, movetodir,)]
+                                   "chroot %s /etc/init.d/apache2 restart" % (self.target_system_dir,)]
+                                   
 
             self.execute_commands(autotrace_on_script)
         else:
