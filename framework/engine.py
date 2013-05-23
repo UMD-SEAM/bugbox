@@ -84,7 +84,8 @@ class Engine:
                                                                   self.target_system_dir,
                                                                   self.application_dir_mapping[1],
                                                                   self.application_dir),
-                        "chroot %s /etc/init.d/apache2 start"   %(self.target_system_dir,)]
+                        "chroot %s /etc/init.d/apache2 start"   %(self.target_system_dir,),
+                        "while [ \"`pgrep apache2`\" = \"\" ]; do sleep 0.5; done;"] # wait for apache to prevent races with restart etc..
 
         if self.database_name:
             start_script += ["mysql -u root -pconnection452 %s < %s" %(self.database_name,
@@ -113,10 +114,8 @@ class Engine:
                            "echo \"Error: live_systems is empty\" "
                            "&& exit 1 "
                            "|| exit 0"                          %(self.live_systems_dir,),
-                           "chroot %s /etc/init.d/apache2 stop" %(self.target_system_dir,)]
-            
-            logger.info("Waiting for apache2 process to stop")
-            stop_script += ["while pgrep \"apache2\">/dev/null; do sleep 1; done;"]
+                           "chroot %s /etc/init.d/apache2 stop" %(self.target_system_dir,),
+                           "while pgrep \"apache2\">/dev/null; do sleep 0.5; done;"]
 
             if self.plugin_src: 
                 stop_script += [#"umount %s/%s"  %(self.target_system_dir,
