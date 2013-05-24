@@ -24,7 +24,7 @@ class ColoredFormatter(logging.Formatter):
         levelname = record.levelname
         if levelname in self.COLORS:
             levelname_color = "%s%s%s" % (self.COLORS[levelname], 
-                                          levelname, 
+                                          levelname.lower(), 
                                           self.COLORS['ENDC'])
             record.levelname = levelname_color
         return logging.Formatter.format(self, record)
