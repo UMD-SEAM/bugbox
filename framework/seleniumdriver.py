@@ -11,6 +11,7 @@ class SeleniumDriver (webdriver.Firefox):
     """This is a class that encapsulates the selenium webdriver, adding some useful functionality."""
 
     def __init__(self, visible=False):
+        self.display = None
         if not visible:
             self.display = Display(visible=0, size=(800, 600))
             self.display.start()

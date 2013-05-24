@@ -107,37 +107,48 @@ if __name__ == "__main__":
             logger.error("exploit \"%s\" not found", sys.argv[2])
             exit(-1)
 
-        engine = Engine(Exploit(), config)        
 
         if sys.argv[1] == "start":
             logger.info("Starting exploit instance (%s)", Exploit.attributes['Name'])
+            engine = Engine(Exploit(), config)        
             print "Description:\n", Exploit.attributes['Description']
             engine.startup()
             exit()
 
         elif sys.argv[1] == "exploit":
+            
+            visible = False
+            if len(sys.argv) > 3:
+                if sys.argv[3] == "display_on":
+                    visible = True
+                           
+            engine = Engine(Exploit(visible), config)        
             logger.info("Running exploit %s", sys.argv[2])
             engine.exploit.exploit()
             exit()
 
         elif sys.argv[1] == "stop":
             logger.info("Stopping exploit instance (%s)", Exploit.attributes['Name'])
+            engine = Engine(Exploit(), config)        
             engine.shutdown()
             exit()
 
         elif sys.argv[1] == "trace_on":
             logger.info("Trace on for exploit %s", sys.argv[2])
+            engine = Engine(Exploit(), config)        
             engine.xdebug_autotrace_on()
             exit()
 
         elif sys.argv[1] == "trace_off":
             logger.info("Trace off for exploit %s", sys.argv[2])
+            engine = Engine(Exploit(), config)        
             engine.xdebug_autotrace_off()
             exit()
 
             
         elif sys.argv[1] == "autorun":
             logger.info("Autorun exploit %s", sys.argv[2])
+            engine = Engine(Exploit(), config)        
             engine.startup()
             engine.xdebug_autotrace_on()
             engine.exploit.exploit()
