@@ -22,38 +22,38 @@ class Engine:
 
         self.exploit = exploit
         try:
-            target_app = Targets.get_target_module(self.exploit.attributes['Target'])
+            Target = Targets.get_target_class(self.exploit.attributes['Target'])
         except Targets.TargetModuleNotFound as e:
             logger.error("No module found for target application \"%s\"", e.value)
             exit(-1) 
+            
+        self.target_app = Target()
 
-        self.chroot_environment = target_app.chroot_environment
+        self.chroot_environment = self.target_app.chroot_environment
         self.exploitname = self.exploit.attributes['Name'].replace(' ', '_').replace('.','_')
         
         # this is to not break existing exploits, a better convention could be had
-        self.application_dir = target_app.name.replace(' ', '_').replace('.','_').split('_')[0].lower() 
+        
         self.target_system_dir = "%s/%s" % (self.live_systems_dir, self.exploitname)
-        self.application_dir_mapping = target_app.application_dir_mapping
+        self.application_dir_mapping = self.target_app.application_dir_mapping
+        self.application_dir = self.target_app.application_dir
 
-        try:
-            self.database_restore_file = target_app.database_filename
-            self.database_name = target_app.database_name
-        except AttributeError:
-            self.database_restore_file = None
-            self.database_name = None
+        #try:
+        #    self.database_restore_file = self.target_app.database_filename
+        #    self.database_name = self.target_app.database_name
+        #except AttributeError:
+        #    self.database_restore_file = None
+        #    self.database_name = None
 
         if self.exploit.attributes.has_key('Plugin'):
             try:
                 pname = self.exploit.attributes['Plugin']
-                self.plugin_src, self.plugin_dest = Targets.get_plugin(target_app, pname)
+                target_app.set_plugin(pname)
             except Targets.TargetPluginNotFound as e:
                 logger.error("Plugin \"%s\" not found for target application \"%s\"",
                              pname,
                              e.value)
                 exit(-1) 
-        else:
-            self.plugin_src = None
-            
                     
         return
 
@@ -73,32 +73,13 @@ class Engine:
                         "mkdir %s%s/%s"                         %(self.target_system_dir,
                                                                   self.application_dir_mapping[1],
                                                                   self.application_dir),
-                        "chown www-data %s%s/%s"                %(self.target_system_dir,
-                                                                  self.application_dir_mapping[1],
-                                                                  self.application_dir),
-                        "chgrp www-data %s%s/%s"                %(self.target_system_dir,
-                                                                  self.application_dir_mapping[1],
-                                                                  self.application_dir),
-                        #"mount --bind %s %s%s/%s"               %(self.application_dir_mapping[0],
+                        #"mount --bind %s %s%s/%s"              %(self.application_dir_mapping[0],
                         "cp -pR %s/* %s%s/%s"                   %(self.application_dir_mapping[0], 
                                                                   self.target_system_dir,
                                                                   self.application_dir_mapping[1],
-                                                                  self.application_dir),
-                        "chroot %s /etc/init.d/apache2 start"   %(self.target_system_dir,),
-                        "while [ \"`pgrep apache2`\" = \"\" ]; do sleep 0.5; done;"] # wait for apache to prevent races with restart etc..
+                                                                  self.application_dir)]
 
-        if self.database_name:
-            start_script += ["mysql -u root -pconnection452 %s < %s" %(self.database_name,
-                                                                       self.database_restore_file)]
-
-        if self.plugin_src: 
-            start_script += ["mkdir %s/%s"            %(self.target_system_dir,
-                                                        self.plugin_dest),
-                             #"mount -o bind %s %s/%s" %(self.plugin_src,
-                             "cp -pR %s/* %s/%s"      %(self.plugin_src,
-                                                        self.target_system_dir,
-                                                        self.plugin_dest)]
-
+        start_script += self.target_app.get_start_service_script(self.target_system_dir)
 
         self.execute_commands(start_script)
 
@@ -109,36 +90,19 @@ class Engine:
         
         if self.is_running():
 
-            self.exploit.cleanup(self.target_system_dir)
             stop_script = ["[ -z \"$(ls -A %s)\" ]  && "
                            "echo \"Error: live_systems is empty\" "
                            "&& exit 1 "
-                           "|| exit 0"                          %(self.live_systems_dir,),
-                           "chroot %s /etc/init.d/apache2 stop" %(self.target_system_dir,),
-                           "while pgrep \"apache2\">/dev/null; do sleep 0.5; done;"]
-
-            if self.plugin_src: 
-                stop_script += [#"umount %s/%s"  %(self.target_system_dir,
-                                #                  self.plugin_dest),
-                                "rm -rf %s/%s"  %(self.target_system_dir,
-                                                  self.plugin_dest)]
+                           "|| exit 0"                          %(self.live_systems_dir,)]
+            
+            stop_script += self.target_app.get_stop_service_script(self.target_system_dir)
 
             stop_script += ["umount %s/proc"                     %(self.target_system_dir,),
                             "umount %s/dev/pts"                  %(self.target_system_dir,),
                             "umount %s/dev"                      %(self.target_system_dir,),
-                            #"umount %s%s/%s"                     %(self.target_system_dir,
                             "rm -rf %s%s/%s"                     %(self.target_system_dir,
                                                                    self.application_dir_mapping[1],
                                                                    self.application_dir),
-                            #"[ \"$(ls -A %s%s/%s)\" ] "
-                            #"&& echo \"Directory not empty!\" "
-                            #"&& exit 1 "
-                            #"|| rm -rf %s%s/%s"                  %(self.target_system_dir,
-                            #                                       self.application_dir_mapping[1],
-                            #                                       self.application_dir,
-                            #                                       self.target_system_dir,
-                            #                                       self.application_dir_mapping[1],
-                            #                                       self.application_dir),
                             "umount %s"                          %(self.target_system_dir,),
                             "[ \"$(ls -A %s)\" ] "
                             "&& echo \"Directory not empty!\" "
@@ -156,6 +120,8 @@ class Engine:
 
     def exploit():
 	self.exploit.exploit()
+        if not self.exploit.verrify():
+            logger.error("Verrify failed: exploit did not succeed")
 	return
 
     def is_running(self):
