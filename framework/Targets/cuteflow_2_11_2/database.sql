@@ -221,7 +221,7 @@ CREATE TABLE `cf_config` (
 
 LOCK TABLES `cf_config` WRITE;
 /*!40000 ALTER TABLE `cf_config` DISABLE KEYS */;
-INSERT INTO `cf_config` VALUES ('http://128.8.127.115/cuteflow','','','25','','','cuteflow@localhost.de','','en','true','COL_CIRCULATION_PROCESS_DAYS','true','true','NAME---1---STATION---1---DAYS---1---START---1---SENDER---1---WHOLETIME---0---MAILLIST---0---TEMPLATE---0',7,10,12,'HTML','IFRAME',1,'DAYS',1,'ASC','2.11.2',50,60,'b29be15ab02bd20badf254b2f97035e5',1363662098,0,'user-defined1','user-defined2','m-d-Y','PHP','','ALL','NONE',1,0);
+INSERT INTO `cf_config` VALUES ('http://127.0.0.1/cuteflow','','','25','','','cuteflow@localhost.de','','en','true','COL_CIRCULATION_PROCESS_DAYS','true','true','NAME---1---STATION---1---DAYS---1---START---1---SENDER---1---WHOLETIME---0---MAILLIST---0---TEMPLATE---0',7,10,12,'HTML','IFRAME',1,'DAYS',1,'ASC','2.11.2',50,60,'b29be15ab02bd20badf254b2f97035e5',1363662098,0,'user-defined1','user-defined2','m-d-Y','PHP','','ALL','NONE',1,0);
 /*!40000 ALTER TABLE `cf_config` ENABLE KEYS */;
 UNLOCK TABLES;
 
