@@ -52,7 +52,7 @@ class Engine:
             except Targets.TargetPluginNotFound as e:
                 logger.error("Plugin \"%s\" not found for target application \"%s\"",
                              pname,
-                             e.value)
+                             self.target_app.name)
                 exit(-1) 
                     
         return
