@@ -48,7 +48,7 @@ class Engine:
         if self.exploit.attributes.has_key('Plugin'):
             try:
                 pname = self.exploit.attributes['Plugin']
-                target_app.set_plugin(pname)
+                self.target_app.set_plugin(pname)
             except Targets.TargetPluginNotFound as e:
                 logger.error("Plugin \"%s\" not found for target application \"%s\"",
                              pname,
