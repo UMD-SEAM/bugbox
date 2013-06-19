@@ -12,6 +12,7 @@ class ApacheTarget(Target):
     plugins = []
     plugin_src = None
     plugin_dest = None
+    plugin_db = None
     chroot_environment = None
     application_dir = None
 
@@ -25,9 +26,9 @@ class ApacheTarget(Target):
     def get_plugin(self, plugin_name):
         
         try:
-            for name, src, dest in self.plugins:
+            for name, src, db, dest in self.plugins:
                 if name == plugin_name:
-                    return (src, dest)
+                    return (src, db, dest)
         except AttributeError:
             pass
         
@@ -35,7 +36,7 @@ class ApacheTarget(Target):
 
 
     def set_plugin(self, plugin_name):
-        self.plugin_src, self.plugin_dest = self.get_plugin(plugin_name)
+        self.plugin_src, self.plugin_db, self.plugin_dest = self.get_plugin(plugin_name)
         return
 
     def get_start_service_script(self, target_system_dir):
@@ -52,8 +53,11 @@ class ApacheTarget(Target):
 								self.application_dir),
 			"chroot %s /etc/init.d/apache2 start" %(target_system_dir,),
 			"while [ \"`pgrep apache2`\" = \"\" ]; do sleep 0.5; done;"] # wait for apache
-
-        if self.database_name:
+        
+        if self.plugin_db:
+            start_script += ["mysql -u root -pconnection452 %s < %s" %(self.database_name,
+                                                                       self.plugin_db)]
+        elif self.database_name:
             start_script += ["mysql -u root -pconnection452 %s < %s" %(self.database_name,
                                                                        self.database_filename)]
 
@@ -61,7 +65,7 @@ class ApacheTarget(Target):
             start_script += ["mkdir %s/%s"            %(target_system_dir,
                                                         self.plugin_dest),
                              #"mount -o bind %s %s/%s" %(self.plugin_src,
-                             "cp -pR %s/* %s/%s"      %(self.plugin_src,
+                             "cp -pR %s/plugin/* %s/%s"      %(self.plugin_src,
                                                         target_system_dir,
                                                         self.plugin_dest)]
 
