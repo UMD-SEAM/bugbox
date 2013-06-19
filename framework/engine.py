@@ -58,7 +58,7 @@ class Engine:
         return
 
     def startup(self):
-        
+        logger.info("Running application startup")
         start_script = ["[ \"$(ls -A %s)\" ]  && "
                         "echo \"Error: live_systems not empty\" "
                         "&& exit 1 "
@@ -82,7 +82,8 @@ class Engine:
         start_script += self.target_app.get_start_service_script(self.target_system_dir)
 
         self.execute_commands(start_script)
-
+        logger.info("Running exploit setup")
+        self.exploit.setup()
         return
 
 
