@@ -21,7 +21,8 @@ class SeleniumDriver (webdriver.Firefox):
     def get_element(self, by_xpath=None, by_class=None, by_id=None, by_link_text=None, attempts=4, delay=4):
         #alternatively I could use selenium.webdriver.support.ui import WebDriverWait
 
-        if not (by_xpath or by_id or by_link_text):
+        if not (by_xpath or by_id or by_link_text or by_class):
+            logger.error("get_element missing parameter")
             return
 
         for i in range(0, attempts):
@@ -32,7 +33,7 @@ class SeleniumDriver (webdriver.Firefox):
                     logger.info("Found %s element", by_xpath)
                 elif by_class:
                     elem = self.find_element_by_class_name(by_class)
-                    logger.info("Found %s element", by_id)
+                    logger.info("Found %s element", by_class)
                 elif by_id:
                     elem = self.find_element_by_id(by_id)
                     logger.info("Found %s element", by_id)
