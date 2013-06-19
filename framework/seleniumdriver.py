@@ -31,7 +31,7 @@ class SeleniumDriver (webdriver.Firefox):
                     elem = self.find_element_by_xpath(by_xpath)
                     logger.info("Found %s element", by_xpath)
                 elif by_class:
-                    elem = self.find_element_by_class_name(by_id)
+                    elem = self.find_element_by_class_name(by_class)
                     logger.info("Found %s element", by_id)
                 elif by_id:
                     elem = self.find_element_by_id(by_id)
