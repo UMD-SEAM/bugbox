@@ -8,6 +8,6 @@ class Target(ApacheTarget):
     
     name = "Drupal 7.14"
     application_dir_mapping = [get_path("application"), "/var/www"]
-    database_filename = None #get_path("database.sql")
-    database_name = None # "drupal_7_14"
+    database_filename = get_path("database.sql")
+    database_name = "drupal_7_14"
     chroot_environment = "Debian7"
