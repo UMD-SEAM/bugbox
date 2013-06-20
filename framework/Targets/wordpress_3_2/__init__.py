@@ -25,8 +25,7 @@ class Target(ApacheTarget):
                 "/var/www/wordpress/wp-content/plugins/schreikasten"],
                ["Pretty Link 1.5.2", 
                 get_path("plugins/pretty-link"),
-                None,
-                #get_path("plugins/pretty-link/database.sql"), 
+                get_path("plugins/pretty-link/database.sql"), 
                 "/var/www/wordpress/wp-content/plugins/pretty-link"]]
 
     chroot_environment = "Debian7"
