@@ -8,4 +8,4 @@ class Target(ApacheTarget):
     
     name = "eXtplorer 2.1"
     application_dir_mapping = [get_path("application"), "/var/www"]
-    chroot_environment = "Debian7"
+    chroot_environment = "Debian5"

@@ -10,12 +10,18 @@ logger = logging.getLogger("SeleniumDriver")
 class SeleniumDriver (webdriver.Firefox):
     """This is a class that encapsulates the selenium webdriver, adding some useful functionality."""
 
-    def __init__(self, visible=False):
+    def __init__(self, visible=False, javascript=True):
         self.display = None
         if not visible:
             self.display = Display(visible=0, size=(800, 600))
             self.display.start()
-        webdriver.Firefox.__init__(self)
+
+        if javascript:
+            webdriver.Firefox.__init__(self)
+        else:
+            fp = webdriver.FirefoxProfile()
+            fp.set_preference("javascript.enabled", False)
+            webdriver.Firefox.__init__(self, firefox_profile=fp)
         return
 
     def get_element(self, by_xpath=None, by_class=None, by_id=None, by_link_text=None, attempts=4, delay=4):
@@ -31,23 +37,31 @@ class SeleniumDriver (webdriver.Firefox):
                 if by_xpath:
                     elem = self.find_element_by_xpath(by_xpath)
                     logger.info("Found %s element", by_xpath)
+                    return elem
+
                 elif by_class:
                     elem = self.find_element_by_class_name(by_class)
                     logger.info("Found %s element", by_class)
+                    return elem
+
                 elif by_id:
                     elem = self.find_element_by_id(by_id)
                     logger.info("Found %s element", by_id)
+                    return elem
+                
                 elif by_link_text:
                     elem = self.find_element_by_link_text(by_link_text)
                     logger.info("Found %s element", by_link_text)
+                    return elem
+
                 break
+            
             except selenium.common.exceptions.NoSuchElementException:
-                if i == attempts-1:
-                    raise selenium.common.exceptions.NoSuchElementException
-                logger.warning("Element not found... try again (%s)", i)
+                logger.warning("Element not found... try again (%s)", attempts-i)
                 time.sleep(delay)
 
-        return elem
+    
+        raise selenium.common.exceptions.NoSuchElementException
 
     def cleanup(self):
         self.quit()
