@@ -2,8 +2,8 @@
 /* Database settings for Glossword */
 define('GW_DB_HOST', '127.0.0.1');
 define('GW_DB_DATABASE', 'glossword_1_8_12');
-define('GW_DB_USER', 'glosswordadmin');
-define('GW_DB_PASSWORD', 'glosswordpw21');
+define('GW_DB_USER', 'root');
+define('GW_DB_PASSWORD', 'connection452');
 $sys['tbl_prefix'] = 'gw_';
 $sys['db_type'] = 'mysql';
 /* Path names for Glossword */
@@ -25,6 +25,6 @@ $sys['path_tpl'] = 'templates';
 $sys['path_css_script'] = $sys['server_dir'];
 $sys['page_admin'] = $sys['server_dir'] .'/'. $sys['file_admin'];
 $sys['page_login'] = $sys['server_dir'] .'/'. $sys['file_login'];
-$sys['token'] = '985582a4';
+$sys['token'] = 'b7d472a4';
 $sys['is_allow_tech_support'] = 0;
 ?>

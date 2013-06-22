@@ -121,8 +121,8 @@ class Engine:
 
     def exploit():
 	self.exploit.exploit()
-        if not self.exploit.verrify():
-            logger.error("Verrify failed: exploit did not succeed")
+        if not self.exploit.verify():
+            logger.error("Verify failed: exploit did not succeed")
 	return
 
     def is_running(self):
