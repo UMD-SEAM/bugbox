@@ -102,7 +102,58 @@ These modules also provide metadata describing vulnerabilities and scripts which
 
 A key responsibility of BugBox is to manage packaged vulnerable applications in an automated way. BugBox first prepares environments for the applications by setting up the operating system, web server, and other dependencies. Preconfigured applications can then be automatically installed in this environment, where their prerequisites are guaranteed to be present and they are in a state that is exploitable. These environments are constructed by setting up {\tt chroot} jails on a Debian Linux host machine, providing a virtual environment with less overhead than a full virtual machine.
 
+
+
 A \texttt{chroot} jail supplies an isolated operating system installation (sharing the kernel of the host), allowing for applications, libraries, and configuration to be customized and discarded as needed. These characteristics are important for BugBox, as some applications have conflicting dependencies, and exploits should not be able to corrupt the host environment. We create a \texttt{chroot} environment by running the \texttt{debbootstrap} utility supplied by Debian which generates a fresh installation from the official distribution repositories. Because this environment can be based on any Debian release, different versions of the application dependencies can coexist on a single host machine. 
+
+
+The chroot jail serves as an environment that is more light-weight than a virtual machine, and yet fulfills all of BugBox's needs for virtualization and state management. Many of the advantages of full virtualization are not needed because PHP web applicaitons are platform independent, as are most web application vulnerabilities \cite{NVD}. 
+
+
+
+The full virtualization provided by virtual machines was found to be cumbersome
+
+
+application rather than system level
+
+
+
+
+
+1. chroot meets all needs
+2. advantages over VMs
+
+
+VMS:
+---------------------------------------------
+cons:
+ size: need to store file system
+       -redistribution of bugbox
+ speed: overhead starting
+ more difficult to automate
+
+pros:
+  robust state management, checkpointing (depenbilitiy)
+  support for different os versions
+---------------------------------------------
+
+CHROOT:
+pros:
+  can distribute in the form of build scripts
+  sufficient
+  simplicity (manage with basic IO)
+  
+
+Sufficiency:
+  Can be run from within an existing virtual machine as a layer of security/separation
+
+Sufficient (exploits, dependancies), portability
+speed: fast startup,
+       don't need to divide system resources
+       
+
+ parallelization 
+
 
 Applications that are installed in our environment are packaged in Python modules called \textit{target} modules. Target modules include the vulnerable application's PHP files, the application's database, and metadata on the target's dependencies. The BugBox framework loads the target module into the \texttt{chroot} environment by identifying an environment that satisfies the module's dependencies, mounting the module into the environment's filesystem, and running the database scripts against the local MySQL installation. Modules are removed by removing the module's files from the environment. Because we load a clean application into the {\tt chroot} jail every time we wish to run a new test, there is no corruption of the original web application, providing reproducible results when testing.
 
