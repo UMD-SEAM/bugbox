@@ -53,21 +53,21 @@
 
 %for single author (just remove % characters)
 \author{
-{\rm First Author}\\
-Institution
+{\rm Gary Nilson}\\
+Computer Science Department\\
+University of Maryland
 \and
-{\rm Second Author}\\
-Institution
+{\rm Kent Wills}\\
+Computer Science Department\\
+University of Maryland
 \and
-{\rm Third Author}\\
-Institution
+{\rm Jeff Stuckman}\\
+Computer Science Department\\
+University of Maryland
 \and
-{\rm Fourth Author}\\
-Institution
-% copy the following lines to add more authors
-% \and
-% {\rm Name}\\
-%Name Institution
+{\rm Jim Purtilo}\\
+Computer Science Department\\
+University of Maryland
 } % end author
 
 \maketitle
@@ -375,11 +375,11 @@ In collecting samples for our original corpus, we failed to focus on collecting 
 \section{Future work}
 We plan to implement additional features for controlling trace collection through cookie manipulation via XDebug. This will reduce the collection of insignificant interactions and provide a more refined break-down of the exploitation process since traces can be grouped by HTML request. For each exploit currently in the corpus, there is no standard for the payload used in the attack. Since studies on intrusion detection or prevention systems may be sensitive to the payload type and encoding, researchers may desire finer-grained control over this property. The Metasploit Framework has a  robust system for managing exploits along with their payloads and encodings and serves as a model for implementing this.
 
-We also plan to make BugBox available to the security community in the near future. BugBox is designed to work on the Debian GNU/Linux and compatible distributions.  The framework will be distributed under an open-source license, both as as a self-contained virtual machine and as a package that can be installed on an existing system. The machine must have sufficient storage (roughly 4 GB per OS environment, and up to 2 GB for the application, engine, and exploit sources), with access rights to use run Linux {\tt chroot} jails.  Dependencies for the BugBox host system include MySQL, Selenium Server, \texttt{debootstrap}. Community contributions will be key to building a corpus of sufficient size, and we also intend to deploy a wiki allowing contributers to download, submit and discuss BugBox exploit and target modules. Because the corpus is composed entirely of open-source applications, target modules will be distributed under the application's respective license.
+We also plan to make BugBox available to the security community in the near future. BugBox is designed to work on the Debian GNU/Linux and compatible distributions.  The framework will be distributed under an open-source license, both as as a self-contained virtual machine and as a package that can be installed on an existing system. The machine must have sufficient storage (roughly 4 GB per OS environment, and up to 2 GB for the application, engine, and exploit sources), with access rights to use run Linux {\tt chroot} jails.  Dependencies for the BugBox host system include MySQL, Selenium Server, \texttt{debootstrap}. Community contributions will be key to building a corpus of sufficient size, therefore, BugBox exploit and target modules are available at {\tt http://seam.cs.umd.edu/Projects/BugBox/}. Because the corpus is composed entirely of open-source applications, target modules will be distributed under the application's respective license.
 
 \section*{Acknowledgments}
 
-The authors thank the United States Office of Naval Research for its support for this research.
+The authors thank the United States Office of Naval Research for its support for this research under contract N000141210147.
 
 {\footnotesize \bibliographystyle{acm}
 \bibliography{ref}}
