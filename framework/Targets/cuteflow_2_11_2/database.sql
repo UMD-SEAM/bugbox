@@ -16,6 +16,14 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
+-- Current Database: `cuteflow_2_11_2`
+--
+
+CREATE DATABASE /*!32312 IF NOT EXISTS*/ `cuteflow_2_11_2` /*!40100 DEFAULT CHARACTER SET latin1 */;
+
+USE `cuteflow_2_11_2`;
+
+--
 -- Table structure for table `cf_additional_text`
 --
 
@@ -573,4 +581,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2013-03-18 23:03:56
+-- Dump completed on 2013-06-23 23:31:06

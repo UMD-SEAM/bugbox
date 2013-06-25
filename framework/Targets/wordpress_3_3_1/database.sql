@@ -15,6 +15,11 @@
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
+CREATE DATABASE /*!32312 IF NOT EXISTS*/ `wordpress_3_3_1_A` /*!40100 DEFAULT CHARACTER SET latin1 */;
+ 
+USE `wordpress_3_3_1_A`;
+
+
 --
 -- Table structure for table `wp_commentmeta`
 --
