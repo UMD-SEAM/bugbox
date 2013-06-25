@@ -341,6 +341,15 @@ Exploit script development is a repetitive and necessary process. We found that 
 
 In collecting samples for our original corpus, we failed to focus on collecting a representative sample across independent variables such as vulnerability type and age. Because we intend for our corpus to be representative and suitable for statistical analysis, we are remediating this by collecting new vulnerabilities and stratifying the sample across these variables. We recommend that future teams collecting vulnerability data introduce proper sampling procedures as early in the process as possible.\par
 
+\subsection {Ethical Considerations}
+BugBox is a powerful tool for researchers which could potentially provide a foundation for a fully automated attack platform for malicious attackers.  With this in mind, we implemented measures to decrease the potential effect and malicious use of our system through two rules:
+
+First, no zero-day exploits will be added or accepted to the main distribution of BugBox. Because BugBox is used for research and education, it is sufficient to limit the scope of BugBox to historical vulnerabilities which are already cataloged in any well-known vulnerability or exploit database.
+%Secondly, we will require users to submit information about their institution before they are able to download their copy of the framework.  By requiring a person to submit their institution and an email associated with their institution we can thwart downloads from a subset of users who wish to use the program anonymously and potentially maliciously.  
+Next, all new exploits created or accepted for the framework will only include functionality necessary to show the vulnerability in the BugBox environment and will not contain code that is tailed toward a general-purpose attack.  This provides more overhead for an attacker considering this tool for malicious use, thus impeding a ``script kiddie'' from using the tool maliciously.  
+
+Although it is beyond anyone's reach to keep a user from maliciously using any vulnerability or exploit repository, including our own, by implementing these measures we can hope to limit the audience of malicious users.
+
 \section{Future work}
 We plan to implement additional features for controlling trace collection through cookie manipulation via XDebug. This will reduce the collection of insignificant interactions and provide a more refined break-down of the exploitation process since traces can be grouped by HTML request. For each exploit currently in the corpus, there is no standard for the payload used in the attack. Since studies on intrusion detection or prevention systems may be sensitive to the payload type and encoding, researchers may desire finer-grained control over this property. The Metasploit Framework has a  robust system for managing exploits along with their payloads and encodings and serves as a model for implementing this.
 
