@@ -8,7 +8,7 @@ class Target(ApacheTarget):
     
     name = "Wordpress 2.8.3"
     application_dir_mapping = [get_path("application"), "/var/www"]
-    database_filename = None
-    database_name = None
+    database_filename = get_path("database.sql")
+    database_name = "wordpress_2_8_3"
     plugins = None
     chroot_environment = "Debian7"
