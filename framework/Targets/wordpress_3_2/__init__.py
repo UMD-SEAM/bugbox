@@ -26,6 +26,10 @@ class Target(ApacheTarget):
                ["Pretty Link 1.5.2", 
                 get_path("plugins/pretty-link_1_5_2"),
                 get_path("plugins/pretty-link_1_5_2/database.sql"), 
-                "/var/www/wordpress/wp-content/plugins/pretty-link"]]
+                "/var/www/wordpress/wp-content/plugins/pretty-link"],
+               ["Knews 1.1.0",
+                get_path("plugins/knews_1_1_0"),
+                None,
+                "/var/www/wordpress/wp-content/plugins/knews"]]
 
     chroot_environment = "Debian7"
