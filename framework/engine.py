@@ -83,7 +83,7 @@ class Engine:
 
         self.execute_commands(start_script)
         logger.info("Running exploit setup")
-        self.exploit.setup()
+        self.exploit.setup(self.target_system_dir)
         return
 
 
