@@ -61,11 +61,11 @@ University of Maryland
 Computer Science Department\\
 University of Maryland
 \and
-{\rm Jeffrey Stuckman}\\
+{\rm Jeff Stuckman}\\
 Computer Science Department\\
 University of Maryland
 \and
-{\rm James Purtilo}\\
+{\rm Jim Purtilo}\\
 Computer Science Department\\
 University of Maryland
 } % end author
@@ -81,9 +81,9 @@ University of Maryland
  
 
 \subsection*{Abstract}
-\textit{
-Web applications are a rich source of vulnerabilities due to their high exposure, diversity, and popularity. Accordingly, web application vulnerabilities are useful subjects for empirical security research. Although some information on vulnerabilities is publicly available, there are no publicly available datasets that couple vulnerabilities with their source code, metadata, and exploits through an executable test environment. We describe BugBox, a corpus and exploit simulation environment for PHP web application vulnerabilities. BugBox provides a test environment and a packaging mechanism which allows for the distribution and sharing of vulnerability data, facilitating empricial vulnerability studies, security tool evaluation, and security metrics research. In addition, the framework fosters developer education by demonstrating exploits and providing a sandbox where they can safely be attempted. BugBox and its modules are open-source and available online, and new modules may be contributed by community members.
-}
+
+Web applications are a rich source of vulnerabilities due to their high exposure, diversity, and popularity. Accordingly, they are attractive subjects for empirical vulnerability research. However, there are no structured, public available vulnerability datasets that tie vulnerabilities to their applications and exploits. BugBox is an open-source corpus and exploit simulation environment for PHP web application vulnerabilities created to fill this void and facilitate quality security research. The packaging mechanism provided by BugBox encourages the distribution and sharing of vulnerability data, supporting research in vulnerability prediction and the testing of intrusion detection systems and static analysis tools. BugBox also facilitates developer education by demonstrating exploits and providing a sandbox where they can safely be attempted.
+
 
 \section{Introduction}
 PHP web applications are subject to a rich variety of exploit types, such as cross-site scripting (XSS), cross-site request forgery (CSRF), buffer overflow, and SQL injection.  A recent study by White Hat Security~\cite{WhiteHat:2010:Online} analyzed seven web application languages: ASP, ASPX, CFM (Cold Fusion Markup), DO (Struts), JSP, PHP, and PL (Perl) showing that PHP, while having the smallest attack surface in their tests, produced one of the highest average number of serious vulnerabilities per website.
@@ -171,7 +171,8 @@ The following Python scripts illustrate two use-cases for the BugBox framework. 
  import config
  from framework import Query, Engine
  
- for Exploit in Query().get_by_type('XSS'):
+ for Exploit in Query().get_by_type(...
+ 																'XSS'):
     engine = Engine(Exploit(), config)
     engine.startup()
     engine.xdebug_autotrace_on()
@@ -272,8 +273,10 @@ The vulnerability engine controls the actions of a given exploit, and ensures th
 \begin{lstlisting}
 name = "Wordpress 3.3.1"
 application_dir_mapping = ...
-     [get_path("application"), "/var/www"]
-database_filename = get_path("database.sql")
+    [get_path("application"), ...
+     "/var/www"]
+database_filename = ...
+    get_path("database.sql")
 database_name = "wordpress_3_3_1_A"
 chroot_environment = "Debian7"
 \end{lstlisting}
@@ -300,19 +303,25 @@ Here is an example body of an exploit procedure used for the simplest of XSS att
 {\tt \footnotesize
 %\begin{verbatim}
 \begin{lstlisting}
-payload = "<a href=\"#\" title=\"XSS http:" \
-          "//example.com/onmouseover=eval(" \
-          "unescape(/%61%6c%65%72%74%28%31" \
-          "%29%3b%61%6c%65%72%74%28%32%29%" \
-          "3b%61%6c%65%72%74%28%33%29%3b/." \
+payload = "<a href=\"#\" title=\"XSS	\
+          http:" //example.com/				\
+          onmouseover=eval(" 					\
+          "unescape(/%61%6c%65%"			\
+          "72%74%28%31%29%3b%61"			\
+          "%6c%65%72%74%28%32"				\
+          "%29%3b%61%6c%65%72"				\
+          "%74%28%33%29%3b/." 				\
           "source))//\">XSS</a>"
 
 driver = self.create_selenium_driver()
 
-driver.get("http://localhost/wordpress/?p=1")
+driver.get(...
+     "http://localhost/wordpress/?p=1")
 get = driver.find_element_by_id
-get("author").send_keys("selenium script")
-get("email").send_keys("selenium@python.org")
+get("author").send_keys(...
+     "selenium script")
+get("email").send_keys(...
+    "selenium@python.org")
 get("url").send_keys("www.python.org")
 get("comment").send_keys(payload)
 get("submit").click()
@@ -345,19 +354,20 @@ In collecting samples for our original corpus, we failed to focus on collecting 
 BugBox is a powerful tool for researchers which could potentially provide a foundation for a fully automated attack platform for malicious attackers.  With this in mind, we implemented measures to decrease the potential effect and malicious use of our system through two rules:
 
 First, no zero-day exploits will be added or accepted to the main distribution of BugBox. Because BugBox is used for research and education, it is sufficient to limit the scope of BugBox to historical vulnerabilities which are already cataloged in any well-known vulnerability or exploit database.
-Next, all new exploits created or accepted for the framework will only include functionality necessary to show the vulnerability in the BugBox environment and will not contain code that is tailored toward a general-purpose attack.  This provides more overhead for an attacker considering this tool for malicious use, thus impeding a ``script kiddie'' from using the tool maliciously.  Significant modification would be required for an exploit script to carry an actual malicious payload.
-Although it is beyond anyone's reach to keep a user from maliciously using any vulnerability or exploit repository, including our own, by implementing these measures, we seek to limit the audience of malicious users.
+Next, all new exploits created or accepted for the framework will only include functionality necessary to show the vulnerability in the BugBox environment and will not contain code that is tailored toward a general-purpose attack.  This provides more overhead for an attacker considering this tool for malicious use, thus impeding a ``script kiddie'' from using the tool maliciously.  This is an important point to expand on.  Significant modification would have to be done to change the payload or enable the system for externally attacks.
+
+Although it is beyond anyone's reach to keep a user from maliciously using any vulnerability or exploit repository, including our own, by implementing these measures we can hope to limit the audience of malicious users.
 
 \section{Future work}
 We plan to implement additional features for controlling trace collection through cookie manipulation via XDebug. This will reduce the collection of insignificant interactions and provide a more refined break-down of the exploitation process since traces can be grouped by HTML request. For each exploit currently in the corpus, there is no standard for the payload used in the attack. Since studies on intrusion detection or prevention systems may be sensitive to the payload type and encoding, researchers may desire finer-grained control over this property. The Metasploit Framework has a  robust system for managing exploits along with their payloads and encodings and serves as a model for implementing this.
 
-We also plan to make BugBox available to the security community in the near future. BugBox is designed to work on the Debian GNU/Linux and compatible distributions.  The framework will be distributed under an open-source license, both as as a self-contained virtual machine and as a package that can be installed on an existing system. The machine must have sufficient storage (roughly 4 GB per OS environment, and up to 2 GB for the application, engine, and exploit sources), with access rights to use run Linux {\tt chroot} jails.  Dependencies for the BugBox host system include MySQL, Selenium Server, \texttt{debootstrap}. Community contributions will be key to building a corpus of sufficient size, therefore, BugBox exploit and target modules are available at \url{http://seam.cs.umd.edu/Projects/BugBox/}. Because the corpus is composed entirely of open-source applications, target modules will be distributed under the application's respective license.
+We also plan to make BugBox available to the security community in the near future. BugBox is designed to work on the Debian GNU/Linux and compatible distributions.  The framework will be distributed under an open-source license, both as as a self-contained virtual machine and as a package that can be installed on an existing system. The machine must have sufficient storage (roughly 4 GB per OS environment, and up to 2 GB for the application, engine, and exploit sources), with access rights to use run Linux {\tt chroot} jails.  Dependencies for the BugBox host system include MySQL, Selenium Server, \texttt{debootstrap}. Community contributions will be key to building a corpus of sufficient size, therefore, BugBox exploit and target modules are available at {\tt http://seam.cs.umd.edu/Projects/BugBox/}. Because the corpus is composed entirely of open-source applications, target modules will be distributed under the application's respective license.
 
 \section*{Acknowledgments}
 
 The authors thank the United States Office of Naval Research for its support for this research under contract N000141210147.
 
 {\footnotesize \bibliographystyle{acm}
-\bibliography{ref,jeffref}}
+\bibliography{ref}}
 
 \end{document}

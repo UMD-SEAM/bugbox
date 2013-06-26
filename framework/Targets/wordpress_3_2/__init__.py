@@ -30,6 +30,10 @@ class Target(ApacheTarget):
                ["Knews 1.1.0",
                 get_path("plugins/knews_1_1_0"),
                 None,
-                "/var/www/wordpress/wp-content/plugins/knews"]]
+                "/var/www/wordpress/wp-content/plugins/knews"],
+                ["Artiss 2.0.1",                                                                                                                                                 
+                get_path("plugins/artiss-2.0.1"),                                                                                                                                
+                None,                                                                                                                                                            
+                "/var/www/wordpress/wp-content/plugins/artiss-2.0.1"]]
 
     chroot_environment = "Debian7"
