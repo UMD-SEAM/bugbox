@@ -10,5 +10,8 @@ class Target(ApacheTarget):
     application_dir_mapping = [get_path("application"), "/var/www"]
     database_filename = get_path("database.sql")
     database_name = "wordpress_2_8_3"
-    plugins = None
+    plugins = [["Relevanssi 2.7.2",
+                get_path("plugins/relevanssi_2_7_2"),
+                get_path("plugins/relevanssi_2_7_2/database.sql"),
+                "var/www/wordpress/wp-content/plugins/relevanssi_2_7_2"]]
     chroot_environment = "Debian7"
