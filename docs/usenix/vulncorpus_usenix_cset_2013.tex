@@ -224,10 +224,6 @@ Usage: ./bbmanage.py [command] <options>
 \end{verbatim}
 }
 
-The process of setting up an OS environment, configuring the target application, interacting with the PHP debugger, and all post-job cleanup occur behind the scenes in the BugBox framework. Any of these tasks would have taken hours to accomplish using our previous approach, which was based on manually managing various virtual machine snapshots. Using Python as a layer of abstraction above the OS, target application, and exploits, it is now possible to easily automate research tasks. The following sections give an overview of the system design that makes this abstraction possible.
-
-It is the job of the {\bf Engine} to then match exploits with target modules and actually perform setup, configuration, and teardown work. The Engine will actually mount the web application's folders within an associated chroot jail, load a stored MySQL database, install the appropriate XDebug PHP debugger configuration file, start the web server, and eventually perform cleanup operations associated with these steps.
-
 \section{Framework}
 
 %{\bf SeleniumDriver}, {\bf Exploit},
@@ -244,7 +240,9 @@ Except for the host environment, each of the five major components are represent
 
 
 \subsection{Engine}
-The {\bf Engine} controls the actions of a given exploit, and ensures that the proper target environment, application, and application plugins are properly setup in the {\tt chroot} environment. To illustrate the role of the engine, the following lines in Use-Case 1 are relevant:
+It is the job of the {\bf Engine} to match exploits with target modules and actually perform setup, configuration, and teardown work. The Engine will actually mount the web application's folders within an associated chroot environment, load a stored MySQL database, install the appropriate XDebug PHP debugger configuration file, start the web server, and eventually perform cleanup operations associated with these steps. 
+
+To illustrate the role of the engine, the following lines in the first use case are relevant:
 \begin{description}
   \item[Line 5] {\tt \footnotesize    engine = Engine(Exploit(), config)} \\ A new engine instance is constructed with an exploit instance and system configuration as arguments.
   \item[Line 6] {\tt \footnotesize     engine.startup()} \\The engine creates a {\tt chroot} environment on the host system to which the target application is copied and the pertinent MYSQL databases are established. The choice of application is determined by the 'Target' attribute in the exploit instance. 
@@ -345,6 +343,8 @@ Having flexibility over choosing the environment in which web applications are i
 Exploit script development is a repetitive and necessary process. We found that the instant feedback provided by the Selenium visual framework allowed us to more rapidly create exploit scripts.  This increase in productivity is due to the visual execution monitoring of the scripts, allowing developers to efficiently pinpoint errors, enhancing script generation.  \par
 
 In collecting samples for our original corpus, we failed to focus on collecting a representative sample across independent variables such as vulnerability type and age. Because we intend for our corpus to be representative and suitable for statistical analysis, we are remediating this by collecting new vulnerabilities and stratifying the sample across these variables. We recommend that future teams collecting vulnerability data introduce proper sampling procedures as early in the process as possible.\par
+
+The process of setting up an OS environment, configuring the target application, interacting with the PHP debugger, and all post-job cleanup occur behind the scenes in the BugBox framework. Any of these tasks would have taken hours to accomplish using our previous approach, which was based on manually managing various virtual machine snapshots. Using Python as a layer of abstraction above the OS, target application, and exploits, it is now possible to easily automate research tasks.
 
 \subsection {Ethical Considerations}
 BugBox is a powerful tool for researchers which could potentially provide a foundation for a fully automated attack platform for malicious attackers.  With this in mind, we implemented measures to decrease the potential effect and malicious use of our system through two rules:
