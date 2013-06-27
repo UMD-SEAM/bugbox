@@ -160,7 +160,7 @@ Sometimes, like when an application requires old versions of PHP or Apache, one 
 
 \section {An Example Execution of BugBox}
 
-The following Python scripts illustrate two use-cases for the BugBox framework. Both of these examples show ways to make use of vulnerability metadata to run different experiments. In the first example, all XSS vulnerabilities existing in the the corpus are sequentially invoked, and execution traces are collected for analysis:
+The following Python scripts illustrate two use cases for the BugBox framework. Both of these examples show ways to make use of vulnerability metadata to perform different tasks. In the first example, all XSS vulnerabilities in the the corpus are sequentially exploited, and execution traces are collected for analysis:
 
 \begin{minipage}{\textwidth}
 {\tt \footnotesize
@@ -183,7 +183,7 @@ The following Python scripts illustrate two use-cases for the BugBox framework. 
 
 %\caption{Example 1:}
 
-Here, instead of collecting traces for all vulnerabilities of the same type, we are interested in running all exploits across all versions of a given application:
+Here, instead of collecting traces for all vulnerabilities of the same type, we are interested in running all exploits across all versions of a given application (for example, to test an intrusion detection system which was installed in the test environment before running this process):
 
 \begin{minipage}{\textwidth}
 {\tt \footnotesize
@@ -205,7 +205,7 @@ for Exploit
 \end{minipage}
 %\caption{Example 2:}
 
-For simple jobs where the focus of study is a single vulnerability or vulnerable application, the run-time management of a single corpus entry can be done from the command-line. The most basic commands are provided in the \emph{bbmanage.py} utility with the following options:
+For simple tasks where the focus of study is a single vulnerability or vulnerable application, the application can be managed from the command line. Some basic commands are provided in the \emph{bbmanage.py} utility with the following options:
 
 %{\tt \small
 {\tt \footnotesize
@@ -231,10 +231,11 @@ It is the job of the {\bf Engine} to then match exploits with target modules and
 \section{Framework}
 
 %{\bf SeleniumDriver}, {\bf Exploit},
-Figure 1 illustrates the structure of the BugBox system, with boxes and arrows showing lines of control or communication. The framework breaks down logically into the following five components: {\bf Host Environment} (currently the Virtual Machine), {\bf Engine}, {\bf Target Environment}, {\bf Target}, and {\bf Exploit}. The diagram shows that the corpus is composed of any number of exploits, {\tt chroot} jails, target applications, and associated target plugins, that exploits and {\tt chroot} jails are under control of the vulnerability engine, the exploits interact directly with the target application (during exploitation) both through the Selenium Server and directly using libraries such as \emph{urllib}, all databases associates with the target applications are hosted directly on the host environment, and the database server is under control of the vulnerability engine.\par
+Figure \ref{fig:diagram} illustrates the structure of the BugBox system, with boxes and arrows showing lines of control or communication. The framework breaks down logically into the following five components: {\bf Host Environment} (currently the Virtual Machine), {\bf Engine}, {\bf Target Environment}, {\bf Target}, and {\bf Exploit}. The diagram shows that the corpus is composed of any number of exploits, {\tt chroot} jails, target applications, and associated target plugins, that exploits and {\tt chroot} jails are under control of the vulnerability engine, the exploits interact directly with the target application (during exploitation) both through the Selenium Server and directly using libraries such as \emph{urllib}, all databases associates with the target applications are hosted directly on the host environment, and the database server is under control of the vulnerability engine.\par
 Except for the host environment, each of the five major components are represented directly in BugBox as either a Python module or a package. The design is intended to make it practical to manage a large database of exploits, along with their target environments. For each exploit, all relevant details of a vulnerability are maintained for the researcher. A given corpus entry we include the software in which a vulnerability exists, the configuration of the software in it's vulnerable state, exploit code that will trigger the security breach, and any relevant meta-data.\par
 
 \begin{figure}[!tp]
+\label{fig:diagram}
 \begin{center}
 \includegraphics[scale=1.17]{system_diagram.eps}
 \end{center}
