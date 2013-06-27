@@ -107,7 +107,7 @@ Finally, the corpus of vulnerabilities provided by BugBox can facilitate observa
 
 At the core of BugBox is a packaging system that wraps vulnerabilities, vulnerable applications, and their exploits into self-contained, redistributable modules. These modules are automatically installed in an isolated \texttt{chroot} environment, which allows for the user to execute the exploit without manually installing the application or risking contaminating a live system. Because only one application is deployed in the target environment at any given time, BugBox remains scalable as new modules are developed and installed.
 
-Modules also contain metadata which encodes properties of the vulnerability, including identifiers which link the vulnerability to other databases which also describe it. The included exploits are in the form of scripts which automatically execute the exploit against the application installed in the local, target environment. Because vulnerability installation and exploitation is automated through Python modules, large-scale automated security experiments can be run by calling the relevant functions in the provided API. The collection of exploit execution traces is also automated, easing the process of localizing vulnerabilities and exploits to particular sections of source code.
+Modules also contain metadata which encodes properties of the vulnerability, including an identifier which links the vulnerability to one of the public vulnerability databases which also describes it. The included exploits are in the form of scripts which automatically execute the exploit against the application installed in the local, target environment. Because vulnerability installation and exploitation is automated through Python modules, large-scale automated security experiments can be run by calling the relevant functions in the provided API. The collection of exploit execution traces is also automated, easing the process of localizing vulnerabilities and exploits to particular sections of source code.
 
 \subsection{Application packaging and the {\tt chroot} environment}
 
@@ -247,7 +247,7 @@ Except for the host environment, each of the five major components are represent
 The {\bf Engine} controls the actions of a given exploit, and ensures that the proper target environment, application, and application plugins are properly setup in the {\tt chroot} environment. To illustrate the role of the engine, the following lines in Use-Case 1 are relevant:
 \begin{description}
   \item[Line 5] {\tt \footnotesize    engine = Engine(Exploit(), config)} \\ A new engine instance is constructed with an exploit instance and system configuration as arguments.
-  \item[Line 6] {\tt \footnotesize     engine.startup()} \\The engine creates a {\tt chroot} environment on the host system to which the target application is copied and the pertinent MYSQL databases are established. The choice of environment is determined by the 'Target' attribute in the exploit instance. 
+  \item[Line 6] {\tt \footnotesize     engine.startup()} \\The engine creates a {\tt chroot} environment on the host system to which the target application is copied and the pertinent MYSQL databases are established. The choice of application is determined by the 'Target' attribute in the exploit instance. 
   \item[Lines 7 \& 9] {\tt \footnotesize engine.xdebug\_autotrace\_on()\\ engine.xdebug\_autotrace\_on()}\\The engine can modify the state of the trace collection in X\_Debug to ensure that only the trace pertinent to the exploitation is collected.
   \item[Line 10] {\tt \footnotesize engine.shutdown()}\\This cleanup code unmounts the {\tt chroot} environment and returns the corpus environment back to an un-altered state.
 \end{description}
@@ -263,7 +263,7 @@ The {\bf Engine} controls the actions of a given exploit, and ensures that the p
 
 
 \subsection{Target module}
-   The {\bf Target} module controls all the application targets that the exploits may be applied to.  More specifically, this represents web applications such as WordPress, SimplePHPAgenda, etc. A copy of the target program with a typical configuration, is always loaded before any exploit script is run.  Init scripts are written per application to provide the {\bf Engine} with the proper details for the setup, for example:
+The {\bf Target} module contains logic relevant to deploying the application target that the exploit may be applied to.  More specifically, an application target is a specific version of a PHP web application such as WordPress. A copy of the target application with a typical configuration is always loaded before any exploit script is run.  For each application, an initialization script is written to provide the {\bf Engine} with the proper details for the installation; for example:
 
 \begin{minipage}{\textwidth}
 {\tt \footnotesize
@@ -283,19 +283,17 @@ chroot_environment = "Debian7"
 \end{minipage}
 
 
-Some large web applications, such as WordPress, have many plugins that in themselves, have vulnerabilities. Therefore {\bf Target} modules also allow for the inclusion of plugins in the exploit framework. Both targets and target plugins are resolved against the exploit attributes by the Engine during the setup process. 
+Some large web applications, such as WordPress, have many plugins that have vulnerabilities themselves. Therefore, {\bf Target} modules also allow for the inclusion of plugins in the exploit framework. Both targets and target plugins are resolved against the exploit attributes by the Engine during the setup process. 
 
 
 \subsection{Exploit class}
-The {\bf Exploit} class is the superclass for each exploit in the corpus, defining interfaces and attributes that the engine uses to manage the environment and exploitation. The structure of Exploit is designed so that exploits can be written as a concise code statement. Each exploit is simply a subclass of Exploit residing in it's own Python file in which all actions taken by the exploit are clearly visible. In addition, a Query module is provided that will return a set of Exploit instances based on matching against the meta-data specified in the exploit (as shown in the use-cases).\par
+The {\bf Exploit} class is the superclass for each exploit in the corpus, defining interfaces and attributes that the engine uses to manage the environment and exploitation. The Exploit class is structured such that exploits can be written with concise code functions. Each exploit is simply a subclass of Exploit residing in its own Python file. This class ensures that the Selenium driver is properly initialized and bound to each exploit, and that each exploit script defines specific actions on tear-down.
 
-This separation accomplishes an easy approach to get involved with the corpus, making developing exploits for the corpus is more approachable and quick for novice programmers that wants to contribute and a robust framework that can be understood incrementally for larger contributions to the framework.\par
+The separation between targets and exploits allows for those unfamiliar with the framework to develop exploits without being concerned with the application or environment setup process, allowing BugBox to be extended without having to learn the intricacies of the entire framework.\par
  
-This template ensures that the Selenium driver is properly initialized bound to the exploit and makes sure that an exploit script has been defined as well as defines any specific actions on tear-down.\par
+Metadata for the exploit module is provided by its attribute dictionary. In it, we declare the name, description, references, target, type, and wiki page for the exploit .  The name is the identifier specified in one of the online databases of vulnerabilities mentioned earlier in this paper.  The description is a brief statement of what the exploit is supposed to do, because the name is typically does not describe what type of exploit is being applied.  The Target is the web application module which is being used for the exploit. The type is the type of exploit being conducted (such as XSS). The wiki page directs a user to a page where auxiliary information about the exploit or script is recorded. The Query module, also part of BugBox, allows for this metadata queried across all exploits (as described in the use cases).
 
-The exploit module is annotated by its attribute dictionary. In it we declare the name, description, references, target, type and wiki page for the exploit by the attribute dictionary.  The name is the technical name specified in one of the online databases of exploits and vulnerabilities mentioned earlier in the paper.  The description is a brief statement of what the exploit is supposed to do, because the name is typically not descriptive enough for a person to understand what type of exploit is being applied.  The Target is the web application target that is being used for the exploit.  The type is the type of exploit being conducted.  The wiki page directs an author to record auxiliary information about the exploit or script.
-
-Here is an example body of an exploit procedure used for the simplest of XSS attacks.  The entire exploit consists only of instantiating the selenium driver and submitting a post on the WordPress site with the payload: 
+Here is an example body of an exploit procedure used for a simple XSS attack. Scripting the exploit only requires instantiating the Selenium driver and submitting a request on the WordPress site with the payload: 
 
 \begin{minipage}{\textwidth}
 {\tt \footnotesize
@@ -327,6 +325,7 @@ get("submit").click()
 %\end{verbatim}
 }
 \end{minipage}
+
 
 \subsection {Cleanup and maintenance}
 
