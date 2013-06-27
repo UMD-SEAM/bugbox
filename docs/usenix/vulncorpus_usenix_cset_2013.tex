@@ -109,6 +109,8 @@ At the core of BugBox is a packaging system that wraps vulnerabilities, vulnerab
 
 Modules also contain metadata which encodes properties of the vulnerability, including an identifier which links the vulnerability to one of the public vulnerability databases which also describes it. The included exploits are in the form of scripts which automatically execute the exploit against the application installed in the local, target environment. Because vulnerability installation and exploitation is automated through Python modules, large-scale automated security experiments can be run by calling the relevant functions in the provided API. The collection of exploit execution traces is also automated, easing the process of localizing vulnerabilities and exploits to particular sections of source code.
 
+The exploit modules can also display a Firefox browser during exploitation, depicting the actions taken by the Selenium driver. This feature has been useful for debugging exploits, and has lead to quicker turn-around in the exploit development. This also allows for demonstrations to teach others the principles behind web vulnerabilities.  Such a setup could entail showing a live feed of tcpdump and Apache logs on one screen, while one Firefox window shows the actions taken by an attacker posting a malicious script on a forum, and another Firefox window shows how an unsuspecting administrator can activate a CSRF exploit and execute the script. 
+
 \subsection{Application packaging and the {\tt chroot} environment}
 
 A key function of BugBox is to manage packaged vulnerable applications in an automated way. BugBox provides an environment for the applications by creating an operating system, a web server, and other dependencies. Preconfigured applications can then be automatically copied in this environment, so their prerequisites are guaranteed to be present and they are in a state that is exploitable. These environments are constructed by setting up {\tt chroot} jails on a Debian Linux host machine, providing a virtual environment with less overhead than a full VM (virtual machine).
@@ -151,6 +153,7 @@ An important activity associated with empirical vulnerability research is repres
 We categorize the vulnerability representations previously used in research as being \textit{line-based}, \textit{run-based}, or \textit{trace-based}. A line-based approach for vulnerability representation associates particular lines of a program with a vulnerability. This data can easily be collected by mining vulnerability data from program patches~\cite{4630094}; however, there can be multiple ways to fix a vulnerability, and a patch represents only one of those ways and may contain irrelevant changes.  Run-based representations and signatures~\cite{Song:2008:BNA:1496255.1496257} characterize vulnerabilities by describing the inputs that may exploit them, rather than the lines of code that were faulty.
 
 We are developing a third, \textit{trace-based} approach for localizing vulnerabilities. Execution traces of individual requests are classified by a regular language as \emph{potentially exploitative} or \emph{non-exploitative}. This approach allows for representations to be crafted that include the source code artifacts that were invoked during exploitative runs, capturing each opportunity where sanitization or other defensive programming could have prevented the attack. By collecting execution traces of exploits, BugBox facilitates the construction of run-based or trace-based representations.
+
 
 \section{Adding vulnerabilities to BugBox}
 
@@ -240,12 +243,12 @@ Except for the host environment, each of the five major components are represent
 
 
 \subsection{Engine}
-It is the job of the {\bf Engine} to match exploits with target modules and actually perform setup, configuration, and teardown work. The Engine will actually mount the web application's folders within an associated chroot environment, load a stored MySQL database, install the appropriate XDebug PHP debugger configuration file, start the web server, and eventually perform cleanup operations associated with these steps. 
+It is the job of the {\bf Engine} to match exploits with target modules and actually perform setup, configuration, and teardown work. The Engine will prepare a \texttt{chroot} environment by mounting target operating system and web application folders under the environment, load a stored MySQL database, install the appropriate XDebug PHP debugger configuration file, start the web server, and eventually perform cleanup operations associated with these steps. 
 
 To illustrate the role of the engine, the following lines in the first use case are relevant:
 \begin{description}
   \item[Line 5] {\tt \footnotesize    engine = Engine(Exploit(), config)} \\ A new engine instance is constructed with an exploit instance and system configuration as arguments.
-  \item[Line 6] {\tt \footnotesize     engine.startup()} \\The engine creates a {\tt chroot} environment on the host system to which the target application is copied and the pertinent MYSQL databases are established. The choice of application is determined by the 'Target' attribute in the exploit instance. 
+  \item[Line 6] {\tt \footnotesize     engine.startup()} \\The engine creates a {\tt chroot} environment on the host system to which the target application is copied. The choice of application is determined by the 'Target' attribute in the exploit instance. 
   \item[Lines 7 \& 9] {\tt \footnotesize engine.xdebug\_autotrace\_on()\\ engine.xdebug\_autotrace\_on()}\\The engine can modify the state of the trace collection in X\_Debug to ensure that only the trace pertinent to the exploitation is collected.
   \item[Line 10] {\tt \footnotesize engine.shutdown()}\\This cleanup code unmounts the {\tt chroot} environment and returns the corpus environment back to an un-altered state.
 \end{description}
@@ -285,7 +288,7 @@ Some large web applications, such as WordPress, have many plugins that have vuln
 
 
 \subsection{Exploit class}
-The {\bf Exploit} class is the superclass for each exploit in the corpus, defining interfaces and attributes that the engine uses to manage the environment and exploitation. The Exploit class is structured such that exploits can be written with concise code functions. Each exploit is simply a subclass of Exploit residing in its own Python file. This class ensures that the Selenium driver is properly initialized and bound to each exploit, and that each exploit script defines specific actions on tear-down.
+The {\bf Exploit} class is the superclass for each exploit in the corpus, defining interfaces and attributes that the engine uses to manage the environment and exploitation. The Exploit class is structured such that exploits can be written with concise code functions. Each exploit is simply a subclass of Exploit residing in its own Python file. This class ensures that the Selenium driver is properly initialized and bound to each exploit, and that each exploit script can define actions to take upon installation.
 
 The separation between targets and exploits allows for those unfamiliar with the framework to develop exploits without being concerned with the application or environment setup process, allowing BugBox to be extended without having to learn the intricacies of the entire framework.\par
  
@@ -331,8 +334,6 @@ get("submit").click()
 Functionality that performs cleanup and maintenance are included in BugBox to ensure that results based on the framework are reproducible. There are many changes that occur in the system over the course of the exploit cycle that will potentially need to be eliminated. Even changes that would normally seem innocuous, like recording events to a log file, have the potential to at some point change program behaviour.  
 
 Since the {\tt chroot} environments on the host machine are represented as directories in the host filesystem, simple scripts are used to maintain them.  Scripts using {\tt rsync} are employed to periodically overwrite the {\tt chroot} jails with fresh copies to maintain the integrity of their operating systems. Exploit scripts are also responsible for removing their own side-effects from the target application. For instance, many exploits upload an arbitrary file to be executed by the webserver. The exploit classes can implement a cleanup method which has direct access to the target filesystem, allowing for the environment to be restored to its pre-exploitation state. 
-
-This wrapper class allows the exploit writer to choose whether to display the Firefox browser during exploitation. This feature has been useful for debugging exploits, and has lead to quicker turn-around in the exploit development. With the Selenium Driver, one can also orchestrate demonstrations to teach others the principles behind web vulnerabilities.  A setup could entail showing a live feed of tcpdump and the Apache logs on one screen, while in real-time one Firefox process shows the actions taken by an attacker posting a malicious script on a forum, after which the session for an unsuspecting admin in an adjacent Firefox process shows the activation of a CSRF exploit. 
 
 \section {Lessons learned}
 
