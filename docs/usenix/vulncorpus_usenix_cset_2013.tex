@@ -152,7 +152,7 @@ We categorize the vulnerability representations previously used in research as b
 
 We are developing a third, \textit{trace-based} approach for localizing vulnerabilities. Execution traces of individual requests are classified by a regular language as \emph{potentially exploitative} or \emph{non-exploitative}. This approach allows for representations to be crafted that include the source code artifacts that were invoked during exploitative runs, capturing each opportunity where sanitization or other defensive programming could have prevented the attack. By collecting execution traces of exploits, BugBox facilitates the construction of run-based or trace-based representations.
 
-\section{Developing BugBox modules}
+\section{Adding vulnerabilities to BugBox}
 
 To add a new vulnerability to the corpus, several artifacts must be compiled. A new exploit script and metadata are always required. If a module does not yet exist for the target application, a new target module must also be developed.  Although the BugBox corpus compiles vulnerabilities from open-source applications, it is sometimes hard to obtain the vulnerable versions of an application. Therefore, creating the target module may involve hunting down application versions from third-party website or searching through the branches of a source repository. Once the application has been obtained, a manual execution of the exploit is performed to verify the vulnerability report's claims and that the exploit mechanism is fully understood. Subsequently, the exploit script is written so that the entire process can be recorded in an entry in the corpus. As a final step, the exploit is run against the target while the debugger collects the execution trace of the program, which is then added the corpus.\par
 
@@ -231,8 +231,8 @@ It is the job of the {\bf Engine} to then match exploits with target modules and
 \section{Framework}
 
 %{\bf SeleniumDriver}, {\bf Exploit},
-Figure \ref{fig:diagram} illustrates the structure of the BugBox system, with boxes and arrows showing lines of control or communication. The framework breaks down logically into the following five components: {\bf Host Environment} (currently the Virtual Machine), {\bf Engine}, {\bf Target Environment}, {\bf Target}, and {\bf Exploit}. The diagram shows that the corpus is composed of any number of exploits, {\tt chroot} jails, target applications, and associated target plugins, that exploits and {\tt chroot} jails are under control of the vulnerability engine, the exploits interact directly with the target application (during exploitation) both through the Selenium Server and directly using libraries such as \emph{urllib}, all databases associates with the target applications are hosted directly on the host environment, and the database server is under control of the vulnerability engine.\par
-Except for the host environment, each of the five major components are represented directly in BugBox as either a Python module or a package. The design is intended to make it practical to manage a large database of exploits, along with their target environments. For each exploit, all relevant details of a vulnerability are maintained for the researcher. A given corpus entry we include the software in which a vulnerability exists, the configuration of the software in it's vulnerable state, exploit code that will trigger the security breach, and any relevant meta-data.\par
+Figure \ref{fig:diagram} illustrates the structure of the BugBox system, with arrows representing lines of control or communication. The framework contains five components: {\bf Host Environment} (the physical or virtual machine running BugBox), {\bf Engine}, {\bf Target Environment} (the \texttt{chroot} environment), {\bf Target Module}, and {\bf Exploit Module}. The corpus is composed of exploits, {\tt chroot} jails, target applications, and associated plugins for target applications. Exploits and {\tt chroot} jails are under control of the engine, and the exploits interact directly with the target application (during exploitation) through the Selenium Server or libraries such as \emph{urllib}. All databases associated with the target applications are hosted directly on the host environment, and the database server is under control of the  engine.
+Except for the host environment, each of the five major components are represented directly in BugBox as either a Python module or a package.
 
 \begin{figure}[!tp]
 \label{fig:diagram}
@@ -244,13 +244,12 @@ Except for the host environment, each of the five major components are represent
 
 
 \subsection{Engine}
-The {\bf Engine} drives the environment setup, tear-down, and exploitation process. The engine was created to abstract away details so that researchers can easily run exploit scripts without having to worry about getting the target application running every time. \par
-The vulnerability engine controls the actions of a given exploit, and ensures that the proper target environment, application, and application plugins are properly setup in the {\tt chroot} environment. The role of the engine is illustrated in the two use-cases. For example, following relevant lines in Use-Case 1:
+The {\bf Engine} controls the actions of a given exploit, and ensures that the proper target environment, application, and application plugins are properly setup in the {\tt chroot} environment. To illustrate the role of the engine, the following lines in Use-Case 1 are relevant:
 \begin{description}
   \item[Line 5] {\tt \footnotesize    engine = Engine(Exploit(), config)} \\ A new engine instance is constructed with an exploit instance and system configuration as arguments.
-  \item[Line 6] {\tt \footnotesize     engine.startup()} \\The engine creates a {\tt chroot} environment on the host system to which the target application is copied and the pertinent MYSQL databases are established. The setup of the environment is determined by the 'Target' attribute in the exploit instance. 
-  \item[Lines 7 \& 9] {\tt \footnotesize engine.xdebug\_autotrace\_on()\\ engine.xdebug\_autotrace\_on()}\\The engine can modify the state of the trace collection in X\_Debug to ensure that we collect only the trace pertinent to the exploitation.
-  \item[Line 10] {\tt \footnotesize engine.shutdown()}\\Cleanup unmounts the {\tt chroot} environment and returns the corpus environment back to an un-altered state.
+  \item[Line 6] {\tt \footnotesize     engine.startup()} \\The engine creates a {\tt chroot} environment on the host system to which the target application is copied and the pertinent MYSQL databases are established. The choice of environment is determined by the 'Target' attribute in the exploit instance. 
+  \item[Lines 7 \& 9] {\tt \footnotesize engine.xdebug\_autotrace\_on()\\ engine.xdebug\_autotrace\_on()}\\The engine can modify the state of the trace collection in X\_Debug to ensure that only the trace pertinent to the exploitation is collected.
+  \item[Line 10] {\tt \footnotesize engine.shutdown()}\\This cleanup code unmounts the {\tt chroot} environment and returns the corpus environment back to an un-altered state.
 \end{description}
 
 
@@ -263,7 +262,7 @@ The vulnerability engine controls the actions of a given exploit, and ensures th
 %\end{figure}
 
 
-\subsection{Targets}
+\subsection{Target module}
    The {\bf Target} module controls all the application targets that the exploits may be applied to.  More specifically, this represents web applications such as WordPress, SimplePHPAgenda, etc. A copy of the target program with a typical configuration, is always loaded before any exploit script is run.  Init scripts are written per application to provide the {\bf Engine} with the proper details for the setup, for example:
 
 \begin{minipage}{\textwidth}
@@ -287,7 +286,7 @@ chroot_environment = "Debian7"
 Some large web applications, such as WordPress, have many plugins that in themselves, have vulnerabilities. Therefore {\bf Target} modules also allow for the inclusion of plugins in the exploit framework. Both targets and target plugins are resolved against the exploit attributes by the Engine during the setup process. 
 
 
-\subsection{Exploit}
+\subsection{Exploit class}
 The {\bf Exploit} class is the superclass for each exploit in the corpus, defining interfaces and attributes that the engine uses to manage the environment and exploitation. The structure of Exploit is designed so that exploits can be written as a concise code statement. Each exploit is simply a subclass of Exploit residing in it's own Python file in which all actions taken by the exploit are clearly visible. In addition, a Query module is provided that will return a set of Exploit instances based on matching against the meta-data specified in the exploit (as shown in the use-cases).\par
 
 This separation accomplishes an easy approach to get involved with the corpus, making developing exploits for the corpus is more approachable and quick for novice programmers that wants to contribute and a robust framework that can be understood incrementally for larger contributions to the framework.\par
