@@ -3,6 +3,7 @@
 import sys
 import bblogger
 import logging
+import readline
 
 logger = logging.getLogger("bbmanage")
 

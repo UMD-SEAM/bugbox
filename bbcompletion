@@ -1,0 +1,30 @@
+_bbmanage ()
+{
+	local cur prev opts
+	COMPREPLY=()
+	cur="${COMP_WORDS[COMP_CWORD]}"
+	prev="${COMP_WORDS[COMP_CWORD-1]}"
+	prevprev="${COMP_WORDS[COMP_CWORD-2]}"
+    	opts="list info start exploit stop trace_on trace_off autorun"
+
+
+	case "${prev}" in
+	     list)
+	        opts="exploits targets types running"
+		;;
+	     info|start|exploit|stop|trace_on|trace_off|autorun)
+		opts=`cat framework/Exploits/*.py | grep "'Name'" | sed "s/.*'Name'.*:.*\"\([a-zA-Z0-9_].*\)\".*/\1/" | tr '\n' ' '`     
+	        ;;
+	esac
+
+	case "${prevprev}" in
+	     exploit)
+	       opts="display_on display_off"
+	       ;;
+	esac
+
+	COMPREPLY=( $(compgen -W "${opts}" -- ${cur}) )
+        return 0
+    	
+}
+complete -F _bbmanage ./bbmanage.py
