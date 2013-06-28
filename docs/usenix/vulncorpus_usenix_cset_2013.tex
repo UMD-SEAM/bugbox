@@ -353,7 +353,7 @@ BugBox is a powerful tool for researchers which could potentially provide a foun
 
 First, no zero-day exploits will be added or accepted to the main distribution of BugBox. Because BugBox is used for research and education, it is sufficient to limit the scope of BugBox to historical vulnerabilities which are already cataloged in any well-known vulnerability or exploit database.
 Next, all new exploits created or accepted for the framework will only include functionality necessary to test the vulnerability in the BugBox environment and will not contain code that is tailored toward a general-purpose attack.  This provides more overhead for an attacker considering using this tool maliciously.  Significant modification would be required for an exploit script to carry an actual malicious payload or target vulnerable applications in an unpredictable, real-life environment.
-Although it is beyond anyone's reach to prevent a user from maliciously using any vulnerability or exploit repository, including our own, by implementing these measures, we seek to limit the audience of malicious users.
+Although it is not practical to prevent any user from maliciously using an exploit repository, including our own, by implementing these measures, we seek to limit the audience of malicious users.
 
 \section{Future work}
 We plan to implement additional features for controlling trace collection through cookie manipulation via XDebug. This will reduce the collection of insignificant interactions (such as pre-exploit setup requests) and provide a more refined break-down of the exploitation process, as traces would be grouped by HTTP request.
