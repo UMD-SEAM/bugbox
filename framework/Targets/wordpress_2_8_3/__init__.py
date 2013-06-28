@@ -13,5 +13,5 @@ class Target(ApacheTarget):
     plugins = [["Relevanssi 2.7.2",
                 get_path("plugins/relevanssi_2_7_2"),
                 get_path("plugins/relevanssi_2_7_2/database.sql"),
-                "var/www/wordpress/wp-content/plugins/relevanssi_2_7_2"]]
+                "var/www/wordpress/wp-content/plugins/relevanssi"]]
     chroot_environment = "Debian7"
