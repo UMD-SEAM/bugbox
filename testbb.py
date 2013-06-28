@@ -9,6 +9,6 @@ def main():
     testRunner = unittest.runner.TextTestRunner()
     testRunner.run(tests)
     print('yay')
-
+    
 if __name__ == "__main__":
     main()
