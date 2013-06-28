@@ -174,7 +174,7 @@ The following Python scripts illustrate two use cases for the BugBox framework. 
  from framework import Query, Engine
  
  for Exploit in Query().get_by_type(...
- 																'XSS'):
+ 																`XSS'):
     engine = Engine(Exploit(), config)
     engine.startup()
     engine.xdebug_autotrace_on()
@@ -196,8 +196,8 @@ import config
 from framework import Query, Engine
 
 for Exploit 
-    in Query().get_by_re('Target', 
-                         'Wordpress.*"):
+    in Query().get_by_re(`Target', 
+                         `Wordpress.*"):
     engine = Engine(Exploit(), config)
     engine.startup()
     engine.xdebug_autotrace_on()
