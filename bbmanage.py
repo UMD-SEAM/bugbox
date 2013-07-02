@@ -18,7 +18,7 @@ def usage():
            "\tlist\t\t<exploits | targets | types | running>\n"         \
            "\tinfo\t\t<exploit_name>\n"                                 \
            "\tstart\t\t<exploit_name>\n"                                \
-           "\texploit\t\t<exploit_name <display_on | display_off>>\n"   \
+           "\texploit\t\t< <--display | --noverify> exploit_name>\n"   \
            "\tstop\t\t<exploit_name>\n"                                 \
            "\ttrace_on\t<exploit_name>\n"                               \
            "\ttrace_off\t<exploit_name>\n"                              \
@@ -117,15 +117,30 @@ if __name__ == "__main__":
             exit()
 
         elif sys.argv[1] == "exploit":
-            
+            # exploit [display|noverrify]
+            # 1            2   3
             visible = False
-            if len(sys.argv) > 3:
-                if sys.argv[3] == "display_on":
-                    visible = True
+            noverify = False
+            if len(sys.argv) == 4:
+                visible = sys.argv[3] == "--display"
+                noverify = sys.argv[3] == "--noverify"
+            elif len(sys.argv) == 5:
+                visible = (sys.argv[3] == "--display") || (sys.argv[4] == "--display")
+                noverify = (sys.argv[3] == "--noverify") || (sys.argv[4] == "--noverify")
+                
                            
             engine = Engine(Exploit(visible), config)        
             logger.info("Running exploit %s", sys.argv[2])
             engine.exploit.exploit()
+            if noverify:
+                logger.info("Verifying exploit %s", sys.argv[2])
+                
+                try:
+                    if not engine.exploit.verify():
+                        logger.error("Verification failed for exploit %s", sys.argv[2])
+                except NotImplementedError as e:
+                    logger.error("Verification not defined for for exploit %s", sys.argv[2])
+                
             exit()
 
         elif sys.argv[1] == "stop":
