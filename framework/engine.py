@@ -86,11 +86,13 @@ class Engine:
         self.exploit.setup(self.target_system_dir)
         return
 
+    def test(self):
+        return self.exploit.test()
 
     def shutdown(self):
         
         if self.is_running():
-
+            self.check_chroot_in_use()
             stop_script = ["[ -z \"$(ls -A %s)\" ]  && "
                            "echo \"Error: live_systems is empty\" "
                            "&& exit 1 "
@@ -128,6 +130,14 @@ class Engine:
     def is_running(self):
         return os.path.isdir(self.target_system_dir)
 
+    
+    def check_chroot_in_use(self):
+        checkcmd = "lsof -Fcp +D %s | tr '\\n' ' ' | sed -e 's/p\\([0-9]\\+\\) c\\([^ ]\\+\\)/\\2(\\1) /g' -e 's/apache2/wut/g'" % (self.target_system_dir,)
+        
+        logger.info("EXEC: %s%s%s", GRAY, checkcmd, ENDC)
+        if os.system(checkcmd) == os.EX_OK:
+            return False
+        return True
 
     def xdebug_autotrace_on(self):
 
