@@ -18,7 +18,7 @@ def usage():
            "\tlist\t\t<exploits | targets | types | running>\n"         \
            "\tinfo\t\t<exploit_name>\n"                                 \
            "\tstart\t\t<exploit_name>\n"                                \
-           "\texploit\t\t< <--display | --noverify> exploit_name>\n"   \
+           "\texploit\t\t--display --noverify <exploit_name>\n"   \
            "\tstop\t\t<exploit_name>\n"                                 \
            "\ttrace_on\t<exploit_name>\n"                               \
            "\ttrace_off\t<exploit_name>\n"                              \
@@ -102,10 +102,11 @@ if __name__ == "__main__":
         from framework import Engine
         import config
 
-        Exploit = Query().get_by_name(sys.argv[2])
-        
+        exploitname = sys.argv[-1]
+        Exploit = Query().get_by_name(exploitname)
+
         if not Exploit:
-            logger.error("exploit \"%s\" not found", sys.argv[2])
+            logger.error("exploit \"%s\" not found", exploitname)
             exit(-1)
 
 
@@ -117,29 +118,29 @@ if __name__ == "__main__":
             exit()
 
         elif sys.argv[1] == "exploit":
-            # exploit [display|noverrify]
-            # 1            2   3
+            
             visible = False
             noverify = False
+            
             if len(sys.argv) == 4:
-                visible = sys.argv[3] == "--display"
-                noverify = sys.argv[3] == "--noverify"
+                visible = sys.argv[2] == "--display"
+                noverify = sys.argv[2] == "--noverify"
             elif len(sys.argv) == 5:
-                visible = (sys.argv[3] == "--display") || (sys.argv[4] == "--display")
-                noverify = (sys.argv[3] == "--noverify") || (sys.argv[4] == "--noverify")
-                
-                           
+                visible = (sys.argv[2] == "--display") or (sys.argv[3] == "--display")
+                noverify = (sys.argv[2] == "--noverify") or (sys.argv[3] == "--noverify")
+            
             engine = Engine(Exploit(visible), config)        
-            logger.info("Running exploit %s", sys.argv[2])
+            logger.info("Running exploit %s", exploitname)
             engine.exploit.exploit()
-            if noverify:
-                logger.info("Verifying exploit %s", sys.argv[2])
+            
+            if not noverify:
+                logger.info("Verifying exploit %s", exploitname)
                 
                 try:
                     if not engine.exploit.verify():
-                        logger.error("Verification failed for exploit %s", sys.argv[2])
+                        logger.error("Verification failed for exploit %s", exploitname)
                 except NotImplementedError as e:
-                    logger.error("Verification not defined for for exploit %s", sys.argv[2])
+                    logger.error("Verification not defined for for exploit %s", exploitname)
                 
             exit()
 
@@ -150,20 +151,20 @@ if __name__ == "__main__":
             exit()
 
         elif sys.argv[1] == "trace_on":
-            logger.info("Trace on for exploit %s", sys.argv[2])
+            logger.info("Trace on for exploit %s", exploitname)
             engine = Engine(Exploit(), config)        
             engine.xdebug_autotrace_on()
             exit()
 
         elif sys.argv[1] == "trace_off":
-            logger.info("Trace off for exploit %s", sys.argv[2])
+            logger.info("Trace off for exploit %s", exploitname)
             engine = Engine(Exploit(), config)        
             engine.xdebug_autotrace_off()
             exit()
 
             
         elif sys.argv[1] == "autorun":
-            logger.info("Autorun exploit %s", sys.argv[2])
+            logger.info("Autorun exploit %s", exploitname)
             engine = Engine(Exploit(), config)        
             engine.startup()
             engine.xdebug_autotrace_on()
