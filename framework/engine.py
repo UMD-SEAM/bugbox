@@ -59,31 +59,31 @@ class Engine:
 
     def startup(self):
         logger.info("Running application startup")
-        start_script = ["[ \"$(ls -A %s)\" ]  && "
-                        "echo \"Error: live_systems not empty\" "
-                        "&& exit 1 "
-                        "|| exit 0"                             %(self.live_systems_dir,),
-                        "mkdir %s"                              %(self.target_system_dir,),
-                        "mount --bind %s/%s %s"                 %(self.chroot_dirs, 
-                                                                  self.chroot_environment, 
-                                                                  self.target_system_dir),
-                        "mount --bind /dev %s/dev"              %(self.target_system_dir,),
-                        "mount --bind /dev/pts %s/dev/pts"      %(self.target_system_dir,),
-                        "mount --bind /proc %s/proc"            %(self.target_system_dir,),
-                        "mkdir %s%s/%s"                         %(self.target_system_dir,
-                                                                  self.application_dir_mapping[1],
-                                                                  self.application_dir),
-                        #"mount --bind %s %s%s/%s"              %(self.application_dir_mapping[0],
-                        "cp -pR %s/* %s%s/%s"                   %(self.application_dir_mapping[0], 
-                                                                  self.target_system_dir,
-                                                                  self.application_dir_mapping[1],
-                                                                  self.application_dir)]
+        if self.is_running():
+            start_script = ["mkdir %s"                              %(self.target_system_dir,),
+                            "mount --bind %s/%s %s"                 %(self.chroot_dirs, 
+                                                                      self.chroot_environment, 
+                                                                      self.target_system_dir),
+                            "mount --bind /dev %s/dev"              %(self.target_system_dir,),
+                            "mount --bind /dev/pts %s/dev/pts"      %(self.target_system_dir,),
+                            "mount --bind /proc %s/proc"            %(self.target_system_dir,),
+                            "mkdir %s%s/%s"                         %(self.target_system_dir,
+                                                                      self.application_dir_mapping[1],
+                                                                      self.application_dir),
+                            #"mount --bind %s %s%s/%s"              %(self.application_dir_mapping[0],
+                            "cp -pR %s/* %s%s/%s"                   %(self.application_dir_mapping[0], 
+                                                                      self.target_system_dir,
+                                                                      self.application_dir_mapping[1],
+                                                                      self.application_dir)]
 
-        start_script += self.target_app.get_start_service_script(self.target_system_dir)
+            start_script += self.target_app.get_start_service_script(self.target_system_dir)
 
-        self.execute_commands(start_script)
-        logger.info("Running exploit setup")
-        self.exploit.setup(self.target_system_dir)
+            self.execute_commands(start_script)
+            logger.info("Running exploit setup")
+            self.exploit.setup(self.target_system_dir)
+        else:
+            logger.error("There is already a system running under %s", self.target_system_dir)
+            
         return
 
     def test(self):
@@ -96,12 +96,7 @@ class Engine:
                 logger.error("Shutdown failed: one or more processes is using a resource in %s", self.target_system_dir)
                 exit(-1)
                 
-            stop_script = ["[ -z \"$(ls -A %s)\" ]  && "
-                           "echo \"Error: live_systems is empty\" "
-                           "&& exit 1 "
-                           "|| exit 0"                          %(self.live_systems_dir,)]
-            
-            stop_script += self.target_app.get_stop_service_script(self.target_system_dir)
+            stop_script = self.target_app.get_stop_service_script(self.target_system_dir)
 
             stop_script += ["umount %s/proc"                     %(self.target_system_dir,),
                             "umount %s/dev/pts"                  %(self.target_system_dir,),
@@ -133,9 +128,10 @@ class Engine:
     def is_running(self):
         return os.path.isdir(self.target_system_dir)
 
-    
     def check_chroot_in_use(self):
-        checkcmd = "if [ ! -z `lsof -Fcp +D %s | tr '\\n' ' ' | sed -e 's/p\\([0-9]\\+\\) c\\([^ ]\\+\\)/\\2(\\1) /g' -e 's/apache2.* //g'` ]; then exit 1; fi" % (self.target_system_dir,)
+        checkcmd = "if [ ! -z `lsof -Fcp +D %s | tr '\\n' ' ' | "           \
+                   "sed -e 's/p\\([0-9]\\+\\) c\\([^ ]\\+\\)/\\2(\\1) /g' " \
+                   "-e 's/apache2.* //g'` ]; then exit 1; fi" % (self.target_system_dir,)
         
         logger.info("EXEC: %s%s%s", GRAY, checkcmd, ENDC)
         if os.system(checkcmd) == os.EX_OK:
