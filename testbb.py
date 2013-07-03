@@ -1,6 +1,7 @@
 #!/usr/bin/python
 import unittest
-from tests import ExploitVerification;
+from tests import ExploitVerification
+from framework import Query
 import bblogger
 
 import logging 
@@ -12,8 +13,7 @@ def main():
     suite = unittest.TestSuite()
     loader = unittest.TestLoader()
     
-    for exploit in Query().exploits:
-        # logger.info("starting exploit %s", Exploit.attributes['Name'])
+    for exploit in Query().exploits:        
         suite.addTest(ExploitVerification(exploit))
         
     testRunner = unittest.runner.TextTestRunner()
