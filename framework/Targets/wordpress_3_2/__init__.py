@@ -34,6 +34,14 @@ class Target(ApacheTarget):
                 ["Artiss 2.0.1",                                                                                                                                                 
                 get_path("plugins/artiss-2.0.1"),                                                                                                                                
                 None,                                                                                                                                                            
-                "/var/www/wordpress/wp-content/plugins/artiss-2.0.1"]]
+                "/var/www/wordpress/wp-content/plugins/artiss-2.0.1"],
+               ["Newsletter Manager 1.0.2",
+                get_path("plugins/newletter_manager_1.0.2"),
+                None,
+                "/var/www/wordpress/wp-content/plugins/newletter_manager_1.0.2"],
+               ["CMS Tree Page View 0.8.8",
+                get_path("plugins/cms_tree_page_view_0_8_8"),
+                get_path("plugins/cms_tree_page_view_0_8_8/database.sql"),
+                "/var/www/wordpress/wp-content/plugins/cms-tree-page-view"]]
 
     chroot_environment = "Debian7"
