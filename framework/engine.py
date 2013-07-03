@@ -92,7 +92,10 @@ class Engine:
     def shutdown(self):
         
         if self.is_running():
-            self.check_chroot_in_use()
+            if self.check_chroot_in_use():
+                logger.error("Shutdown failed: one or more processes is using a resource in %s", self.target_system_dir)
+                exit(-1)
+                
             stop_script = ["[ -z \"$(ls -A %s)\" ]  && "
                            "echo \"Error: live_systems is empty\" "
                            "&& exit 1 "
@@ -132,7 +135,7 @@ class Engine:
 
     
     def check_chroot_in_use(self):
-        checkcmd = "lsof -Fcp +D %s | tr '\\n' ' ' | sed -e 's/p\\([0-9]\\+\\) c\\([^ ]\\+\\)/\\2(\\1) /g' -e 's/apache2.* //g'" % (self.target_system_dir,)
+        checkcmd = "if [ ! -z `lsof -Fcp +D %s | tr '\\n' ' ' | sed -e 's/p\\([0-9]\\+\\) c\\([^ ]\\+\\)/\\2(\\1) /g' -e 's/apache2.* //g'` ]; then exit 1; fi" % (self.target_system_dir,)
         
         logger.info("EXEC: %s%s%s", GRAY, checkcmd, ENDC)
         if os.system(checkcmd) == os.EX_OK:
