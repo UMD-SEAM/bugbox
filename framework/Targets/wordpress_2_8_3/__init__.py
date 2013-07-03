@@ -13,5 +13,9 @@ class Target(ApacheTarget):
     plugins = [["Relevanssi 2.7.2",
                 get_path("plugins/relevanssi_2_7_2"),
                 get_path("plugins/relevanssi_2_7_2/database.sql"),
-                "var/www/wordpress/wp-content/plugins/relevanssi"]]
+                "var/www/wordpress/wp-content/plugins/relevanssi"],
+               ["Proplayer 4.7.7",
+                get_path("plugins/proplayer_4_7_7"),
+                get_path("plugins/proplayer_4_7_7/database.sql"),
+                "var/www/wordpress/wp-content/plugins/proplayer"]]
     chroot_environment = "Debian7"
