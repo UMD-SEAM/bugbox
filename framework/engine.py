@@ -132,7 +132,7 @@ class Engine:
 
     
     def check_chroot_in_use(self):
-        checkcmd = "lsof -Fcp +D %s | tr '\\n' ' ' | sed -e 's/p\\([0-9]\\+\\) c\\([^ ]\\+\\)/\\2(\\1) /g' -e 's/apache2/wut/g'" % (self.target_system_dir,)
+        checkcmd = "lsof -Fcp +D %s | tr '\\n' ' ' | sed -e 's/p\\([0-9]\\+\\) c\\([^ ]\\+\\)/\\2(\\1) /g' -e 's/apache2.* //g'" % (self.target_system_dir,)
         
         logger.info("EXEC: %s%s%s", GRAY, checkcmd, ENDC)
         if os.system(checkcmd) == os.EX_OK:
