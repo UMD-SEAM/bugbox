@@ -1,3 +1,6 @@
+# Copyright 2013 University of Maryland.  All rights reserved.
+# Use of this source code is governed by a BSD-style
+# license that can be found in the LICENSE.TXT file.
 
 wordpress_2_8_3_username = "admin"
 wordpress_2_8_3_password = "wpadminpw21"
