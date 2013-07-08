@@ -64,7 +64,7 @@ class Engine:
 
     def startup(self):
         logger.info("Running application startup")
-        if self.is_running():
+        if not self.is_running():
             start_script = ["mkdir %s"                              %(self.target_system_dir,),
                             "mount --bind %s/%s %s"                 %(self.chroot_dirs, 
                                                                       self.chroot_environment, 
