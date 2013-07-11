@@ -64,7 +64,7 @@ class Engine:
 
     def startup(self):
         logger.info("Running application startup")
-        if not self.is_running():
+        if self.none_running():
             start_script = ["mkdir %s"                              %(self.target_system_dir,),
                             "mount --bind %s/%s %s"                 %(self.chroot_dirs, 
                                                                       self.chroot_environment, 
@@ -87,7 +87,7 @@ class Engine:
             logger.info("Running exploit setup")
             self.exploit.setup(self.target_system_dir)
         else:
-            logger.error("There is already a system running under %s", self.target_system_dir)
+            logger.error("There is already a system running under %s", self.live_systems_dir)
             
         return
 
@@ -132,6 +132,10 @@ class Engine:
 
     def is_running(self):
         return os.path.isdir(self.target_system_dir)
+    
+    def none_running(self):
+        return len(os.listdir(self.live_systems_dir)) == 0
+
 
     def check_chroot_in_use(self):
         checkcmd = "if [ ! -z `lsof -Fcp +D %s | tr '\\n' ' ' | "           \

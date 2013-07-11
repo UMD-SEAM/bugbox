@@ -48,6 +48,10 @@ class Target(ApacheTarget):
                ["CMS Tree Page View 0.8.8",
                 get_path("plugins/cms_tree_page_view_0_8_8"),
                 get_path("plugins/cms_tree_page_view_0_8_8/database.sql"),
-                "/var/www/wordpress/wp-content/plugins/cms-tree-page-view"]]
+                "/var/www/wordpress/wp-content/plugins/cms-tree-page-view"],
+               ["Store Locator Plus 3.0.1",
+                get_path("plugins/store_locator_plus_3_0_1"),
+                get_path("plugins/store_locator_plus_3_0_1/database.sql"),
+                "/var/www/wordpress/wp-content/plugins/store-locator-le"]]
 
     chroot_environment = "Debian7"
