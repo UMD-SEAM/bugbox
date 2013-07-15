@@ -67,6 +67,20 @@ class SeleniumDriver (webdriver.Firefox):
     
         raise selenium.common.exceptions.NoSuchElementException
 
+    def get_alert(self, attempts=4, delay=4):
+
+        for i in range(0, attempts):
+            alert = self.switch_to_alert()
+            try:
+                text = alert.text
+                return alert
+            except selenium.common.exceptions.NoAlertPresentException:
+                logger.warning("Alert not found... try again (%s)", attempts-i)
+                time.sleep(delay)
+
+        raise selenium.common.exceptions.NoAlertPresentException
+
+
     def cleanup(self):
         self.quit()
         #self.close()
