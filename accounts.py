@@ -10,3 +10,9 @@ wordpress_3_8_password = "wpadminpw21"
 
 phpaccounts_0_5_3_username = "phpaccounts@umd.edu"
 phpaccounts_0_5_3_password = "phpaccountspw21"
+
+#php address book has two user accounts, one admin, one user
+phpaddressbook_7_0_0_adminusername = "admin"
+phpaddressbook_7_0_0_adminpassword = "secret"
+phpaddressbook_7_0_0_username = "view"
+phpaddressbook_7_0_0_password = "apassword"
