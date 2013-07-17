@@ -129,7 +129,7 @@
   $keep_history = true;
 
   // Setup language usage (auto, choose, en, de)
-  $lang  = 'choose';
+  $lang  = 'en';
   
   // Change the location of the images (e.g. Google Appspot)
   $url_images = "";
