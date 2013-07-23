@@ -16,3 +16,6 @@ phpaddressbook_7_0_0_adminusername = "admin"
 phpaddressbook_7_0_0_adminpassword = "secret"
 phpaddressbook_7_0_0_username = "view"
 phpaddressbook_7_0_0_password = "apassword"
+
+drupal_7_14_username = "drupaladmin"
+drupal_7_14_password = "drupaladminpw21"
