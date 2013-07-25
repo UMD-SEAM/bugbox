@@ -1,0 +1,501 @@
+<patTemplate:tmpl name="menu">
+<div id="topmenu">
+<div id="menutitle">
+<img src="images/icons/gnome/stock/generic/stock_people.png">Clients
+</div>
+<ul>
+  <li><form action="?page=clients&action=new" method="POST">New:
+  <input type="submit" name="Submit" value="invoice">
+  <input type="submit" name="Submit" value="project">
+  <input type="submit" name="Submit" value="quote">
+  <input type="submit" name="Submit" value="timesheet"></form></li>
+  <li><a href="?page=clients&action=list_clients"><img src="images/icons/gnome/stock/form/stock_insert-form.png">List ({CLIENTS}) Clients</a></li>
+  <li><a href="?page=clients&action=new_client"><img src="images/icons/gnome/stock/document/stock_new.png">Create New Client</a></li>
+</ul>
+</div>
+</patTemplate:tmpl>
+
+
+<patTemplate:tmpl name="no_clients">
+<div class="centered">
+<fieldset>
+<legend>You have no clients!</legend>
+Please create a client to begin:<br>
+<a href="?page=clients&action=new_client"><img src="images/icons/gnome/stock/document/stock_new.png">Create New Client</a>
+</fieldset>
+
+</div>
+</patTemplate:tmpl>
+
+
+
+<patTemplate:tmpl name="list_clients">
+<div class="centered">
+<table class="results">
+ <tr>
+  <td colspan="9" class="heading2">
+	<img src="images/icons/gnome/stock/generic/stock_people.png"> {CLIENTS} Clients
+  </td>
+ </tr>
+ <tr>
+  <th class="cella"><a href="?page=clients&action=list_clients&order=Company_Name&order_direction={COMPANY_NAME}" title="Sort by name {COMPANY_NAME}">Company Name</a></th>
+  <th class="cellb">Invoices</th>
+  <th class="cella">Unpaid</th>
+  <th class="cellb">Quotes</th>
+  <th class="cella">Projects</th>
+  <th class="cellb"><a href="?page=clients&action=list_clients&order=Timesheets&order_direction={TIMESHEETS}" title="Sort by timesheets {TIMESHEETS}">Timesheets</a></th>
+  <th class="cella">Statement</th>
+  <th class="cellb">View</th>
+  <th class="cella">Delete</th>
+ </tr>
+<patTemplate:link src="results" />
+ <tr>
+  <td colspan="2"></td>
+  <th class="cella">_HTML_CURENCY_SYMBOL_{GRAND_TOTAL_UNPAID}</td>
+</table>
+</div>
+</patTemplate:tmpl>
+
+<patTemplate:tmpl name="results">
+<tr>
+  <td class="cell{I}a"><a title="view client" href="?page=clients&action=view_client&Client_ID={ID}">{COMPANY_NAME}</a></td>
+  <td class="cell{I}b"><a title="view invoices" href="?page=clients&action=view_invoices&Client_ID={ID}">{INVOICES}</a></td>
+  <td class="cell{I}a">
+  _HTML_CURENCY_SYMBOL_{TOTAL_UNPAID}
+  <patTemplate:link src="unpaid_invoices" />
+  </td>
+  <td class="cell{I}b"><a title="view quotes" href="?page=clients&action=view_quotes&Client_ID={ID}">{QUOTES}</a></td>
+  <td class="cell{I}a"><a title="view projects" href="?page=clients&action=view_projects&Client_ID={ID}">{PROJECTS}</a></td>
+  <td class="cell{I}b"><a title="view timesheets" href="?page=clients&action=timesheet_summary&Client_ID={ID}">{TIMESHEETS}</a></td>
+  <td class="cell{I}a"><a title="view statement" href="?page=clients&action=view_statement&Client_ID={ID}"><img src="images/icons/16x16/spreadsheet.png"></a></td>
+    <td class="cell{I}b"><a title="view client" href="?page=clients&action=view_client&Client_ID={ID}"><img src="images/icons/16x16/viewmag.png"></a></td>
+  <td class="cell{I}a"><a title="delete client" href="?page=clients&action=delete_client&Client_ID={ID}"><img src="images/icons/gnome_small/stock/generic/stock_stop.png"></a></td>
+ </tr>
+</patTemplate:tmpl>
+
+<patTemplate:tmpl name="unpaid_invoices">
+<a href="?page=clients&action=edit_invoice&Invoice_ID={ID}" class="red" title="{DATE} value: _HTML_CURENCY_SYMBOL_{VALUE} paid: _HTML_CURENCY_SYMBOL_{PAID} balance: _HTML_CURENCY_SYMBOL_{BALANCE} ">{REFERENCE}</a> 
+</patTemplate:tmpl>
+
+<patTemplate:tmpl name="view_client">
+
+<div class="centered">
+
+<h3><a href="?page=clients&action=list_clients">Back to client list <img src="images/icons/32x32/undo.png" class="inlineicon"></a></h3>
+
+{FORM}
+<fieldset>
+<legend>Actions</legend>
+<table>
+</tr>
+<tr>
+<td>
+<ul class="menu">
+<li><a href="?page=clients&action=view_statement&Client_ID={CLIENT_ID}"><img src="images/icons/gnome/stock/text/stock_insert-footer.png">Statement</a></li>
+<li><a href="?page=clients&action=timesheet_summary&Client_ID={CLIENT_ID}"><img src="images/icons/gnome/stock/generic/stock_new-appointment.png"> {TIMESHEETS} Timesheets</a></li>
+<li> <a href="?page=clients&action=view_invoices&Client_ID={CLIENT_ID}"><img src="images/icons/gnome/stock/chart/stock_chart-toggle-legend.png"> {INVOICES} Invoices</a> </li>
+<li> <a href="?page=clients&action=view_quotes&Client_ID={CLIENT_ID}"><img src="images/icons/gnome/stock/document/stock_task.png"> {QUOTES} Quotes</a> </li>
+<li> <a href="?page=clients&action=view_projects&Client_ID={CLIENT_ID}"><img src="images/icons/gnome/stock/generic/stock_dialog-info.png"> {PROJECTS} Projects</a> </li>
+<li> <a href="?page=clients&action=invoice_wizard&Client_ID={CLIENT_ID}"><img src="images/icons/16x16/pdf.png">Invoice Wizard</a> </li>
+</ul>
+</td>
+</tr>
+</table>
+</fieldset>
+</div>
+</patTemplate:tmpl>
+
+<patTemplate:tmpl name="view_statement">
+
+<div class="centered">
+
+
+<p>
+<table class="results">
+ <tr>
+  <td colspan="9" class="heading">
+  	<a href="?page=clients&action=view_statement&Client_ID={CLIENT_ID}&Start_Timestamp={LAST_START_TIMESTAMP}" title="back"><img src="images/icons/arrow-left.gif"></a>
+	Statement {YEAR} <a href="?page=clients&action=view_client&Client_ID={CLIENT_ID}"><span class="client">{CLIENT}</span></a> <a href="?page=clients&action=view_statement&pdf=true&Client_ID={CLIENT_ID}&Start_Timestamp={START_TIMESTAMP}"><img src="images/icons/16x16/pdf.png" title="Print PDF Statement"></a> 
+  	<a href="?page=clients&action=view_statement&Client_ID={CLIENT_ID}&Start_Timestamp={NEXT_START_TIMESTAMP}" title="back"><img src="images/icons/arrow-right.gif"></a>
+  </td>
+ </tr>
+ <tr>
+  <th class="cella">Date</th>
+  <th class="cellb">Invoice Ref</th>
+  <th class="cella">Invoice Value</th>
+  <th class="cellb">Payment Value</th>
+  <th class="cella">Balance</th>
+  </tr>
+<patTemplate:link src="statement_results" />
+ <tr>
+  <td></td>
+  <td></td>
+  <td></td>
+  <th>Final Balance</th>
+  <th class="cella"><span class="{CLASS}">{BALANCE}</span></th>
+  </tr>
+ </table>
+</p>
+
+</div>
+</patTemplate:tmpl>
+
+
+<patTemplate:tmpl name="statement_results">
+ <tr>
+  <td class="cell{I}a">{DATE}</td>
+  <td class="cell{I}b"><a title="view invoice" href="?page=clients&action=edit_invoice&Invoice_ID={INVOICE_ID}">{REFERENCE}</a></td>
+   <td class="cell{I}a"><a title="view invoice" href="?page=clients&action=edit_invoice&Invoice_ID={INVOICE_ID}">{INVOICE}</td>
+  <td class="cell{I}b">{PAYMENT}</span></td>
+  <td class="cell{I}a"><b class="{CLASS}">_HTML_CURENCY_SYMBOL_{BALANCE}</b></td>
+ </tr>
+</patTemplate:tmpl>
+
+
+
+<patTemplate:tmpl name="edit_invoice">
+<div class="centered">
+<form action="?page=clients&action=submit_invoice&Client_ID={CLIENT_ID}&Invoice_ID={INVOICE_ID}" method="POST">
+<p>
+<table class="edit">
+ <tr>
+  <td colspan="4" class="heading2">
+	<img src="images/icons/gnome/stock/chart/stock_chart-toggle-legend.png" class="middle">
+	Invoice for <a href="?page=clients&action=view_client&Client_ID={CLIENT_ID}"><span class="client">{CLIENT}</span></a>
+	
+  </td>
+ </tr>
+ <tr>
+  <th>Client</th>
+  <td>{CLIENT_SELECT}</td>
+  <th>Date</td>
+  <td>{DATE_SELECT}</td>
+ </tr>
+ <tr>
+  <th>Payments</th>
+  <td>{PAYMENTS}
+  <b>Total Value</b>
+  _HTML_CURENCY_SYMBOL_{PAYMENTS_VALUE}</td>
+  <th>Reference:</th>
+  <td><input type="text" name="Reference" value="{REFERENCE}" size="8">
+ </tr>
+ <tr>
+  <th>Value</th>
+  <td>_HTML_CURENCY_SYMBOL_<input type="text" name="Value" value="{VALUE}" size="8"></td>
+  <th>Invoice Address</td>
+  <td><textarea name="Invoice_Address" rows="4" cols="40">{INVOICE_ADDRESS}</textarea></td>
+ </tr>
+ <tr>
+  <th>Description</td>
+  <td colspan="3"><textarea name="Description" rows="5" cols="80">{DESCRIPTION}</textarea></td>
+ </tr>
+ <tr>
+  <th>Send Reminders</th>
+ <td><input type="checkbox" name="Reminders" value="yes" {REMINDER}></td>
+ <th>Invoicing</th>
+ <th>[ <a title="Mail pdf invoice" href="?page=clients&action=print_invoice&Invoice_ID={INVOICE_ID}&Client_ID={CLIENT_ID}&mail=true">Mail</a> ] [ <a title="print pdf invoice" href="?page=clients&action=print_invoice&Invoice_ID={INVOICE_ID}&Client_ID={CLIENT_ID}" target="_blank"><img 
+  src="images/icons/16x16/pdf.png" >Print</a> ]
+  [ <a title="print pdf invoice reminder" href="?page=clients&action=print_invoice_reminder&Invoice_ID={INVOICE_ID}&Client_ID={CLIENT_ID}" target="_blank"><img 
+  src="images/icons/16x16/pdf.png" target="_blank">Print Reminder</a> ]
+  </tr>
+  <tr>
+	  <th>Sent Reminders</th>
+	  <td>
+		  <patTemplate:link src="sent_reminders" />
+	  <th colspan="2">
+		  <input type="submit" name="Submit" value="Submit">
+		  <patTemplate:link src="make_repeat_invoice_button" />
+		  <patTemplate:link src="repeat_invoice_link" />
+		  <input type="submit" name="Submit" value="Delete" class="delete"> </th>
+
+ </tr>
+</table>
+</p>
+</form>
+<p>
+<form action="?page=clients&action=new_payment&Invoice_ID={INVOICE_ID}" method="POST">
+<table class="results">
+ <tr>
+  <td colspan="5" class="heading2">Payments</td>
+ </tr>
+ <tr>
+  <th class="cella">Date</th>
+  <th class="cellb">Value</th>
+  <th class="cella">Mehtod</th>
+  <th class="cellb">Receipt</th>
+  <th class="cella">Delete</th>
+ </tr>
+ <patTemplate:link src="payment_results" />
+ <tr>
+  <th class="cella">{PAYMENT_DATE_SELECT}</th>
+  <th class="cellb"><input type="text" name="Value" value="{BALANCE}" size="8"></th>
+  <th class="cella">{PAYMENT_METHOD_SELECT}</th>
+  <th class="cellb" colspan="2"><input type="submit" value="Make New Payment"></th>
+ </tr>
+</table>
+</form>
+</p>
+</div>
+</patTemplate:tmpl>
+
+<patTemplate:tmpl name="sent_reminders" visibility="hidden">
+<a target="_blank" href="?page=clients&action=show_mail&Mail_ID={MAIL_ID}">{TYPE}</a>
+</patTemplate:tmpl>
+
+<patTemplate:tmpl name="make_repeat_invoice_button" visibility="hidden">
+<input type="submit" name="Submit" value="Make Repeat Invoice">
+</patTemplate:tmpl>
+
+<patTemplate:tmpl name="repeat_invoice_link" visibility="hidden">
+<a href="?page=clients&action=edit_repeat_invoice&Invoice_ID={INVOICE_ID}">view Repeat Invoice</a>
+</patTemplate:tmpl>
+
+<patTemplate:tmpl name="payment_results" visibility="hidden">
+ <tr>
+  <td class="cell{I}a">{DATE}</td>
+  <td class="cell{I}b">_HTML_CURENCY_SYMBOL_{VALUE}</td>
+  <td class="cell{I}a">{PAYMENT_METHOD}</td>
+  <td class="cell{I}b">[ <a title="print pdf receipt" href="?page=clients&action=print_receipt&Invoice_Payment_ID={ID}&Invoice_ID={INVOICE_ID}" target="_blank">receipt</a> ]</td>
+  <td class="cell{I}a"><a title="delete payment" href="?page=clients&action=delete_payment&Invoice_Payment_ID={ID}&Invoice_ID={INVOICE_ID}"><img 
+  src="images/icons/gnome_small/stock/generic/stock_stop.png"></a></td>
+ </tr>
+</patTemplate:tmpl>
+
+
+
+<patTemplate:tmpl name="edit_repeat_invoice">
+<div class="centered">
+<form action="?page=clients&action=submit_repeat_invoice&Client_ID={CLIENT_ID}&Invoice_ID={INVOICE_ID}" method="POST">
+<p>
+<table class="edit">
+ <tr>
+  <td colspan="4" class="heading2">
+	<img src="images/icons/gnome/stock/chart/stock_chart-toggle-legend.png" class="middle">
+	Repeat Invoice for <a href="?page=clients&action=view_client&Client_ID={CLIENT_ID}"><span class="client">{COMPANY_NAME}</span></a>
+	
+  </td>
+ </tr>
+ <tr>
+  <th>Original Invoice</th>
+  <td><a href="?page=clients&action=edit_invoice&Invoice_ID={INVOICE_ID}">{INVOICE_ID}</a></td>
+  <th>Start Date</td>
+  <td>{DATE}</td>
+ </tr>
+<tr>
+  <th>Value</th>
+  <td>_HTML_CURENCY_SYMBOL_{VALUE}</td>
+  <th>Repeat</td>
+  <td>
+  	On 
+	<select name="Day">
+	<patTemplate:link src="day_results" />
+	</select>
+	of
+	<select name="Month">
+	<patTemplate:link src="month_results" />
+	</select>
+	</td>
+ </tr>
+ <tr>
+ <th>Send Reminders</th>
+ <td><input type="checkbox" name="Reminders" value="yes" {REMINDERS}></td>
+  <th colspan="2">
+  <select name="Active">
+  <option value="yes" {ACTIVE}>Active</option>
+  <option value="no" {INACTIVE}>Inactive</option>
+  </select>
+  <input type="submit" name="Submit" value="Submit">
+  <input type="submit" name="Submit" value="Delete" class="delete"></th>
+ </tr>
+</table>
+</p>
+</form>
+<p>
+<table class="results">
+ <tr>
+  <td colspan="6" class="heading2">Invoices</td>
+ </tr>
+ <tr>
+  <th class="cella">Ref</th>
+  <th class="cellb">Date</th>
+  <th class="cella">Value</th>
+  <th class="cellb">Due</th>
+  <th class="cella">Payments</th>
+  <th class="cellb">Delete</th>
+ </tr>
+ <patTemplate:link src="repeat_invoice_results" />
+ </tr>
+ <tr>
+	 <th class="cella"><a href="?page=clients&action=create_repeat_invoice&Invoice_ID={INVOICE_ID}"><img src="images/icons/gnome/stock/chart/stock_chart-toggle-legend.png" alt="invoice" /></a></th>
+	 <th class="cellb" colspan="5"><a href="?page=clients&action=create_repeat_invoice&Invoice_ID={INVOICE_ID}">Manualy Add An Invoice</a></th>
+ </tr>
+</table>
+</p>
+</div>
+</patTemplate:tmpl>
+
+<patTemplate:tmpl name="day_results">
+<option value="{I}" {SELECTED}>{DAY}</option>
+</patTemplate:tmpl>
+
+<patTemplate:tmpl name="month_results">
+<option value="{I}" {SELECTED}>{MONTH}</option>
+</patTemplate:tmpl>
+
+<patTemplate:tmpl name="repeat_invoice_results" visibility="hidden">
+ <tr>
+  <td class="cell{I}a"><a href="?page=clients&action=edit_invoice&Invoice_ID={INVOICE_ID}">{REFERENCE}</a></td>
+  <td class="cell{I}b">{DATE}</td>
+  <td class="cell{I}a">_HTML_CURENCY_SYMBOL_{VALUE}</td>
+  <td class="cell{I}b"><span class="red">{DUE}</a></td>
+  <td class="cell{I}a"><span class="red">{PAYMENTS}</a></td>
+  <td class="cell{I}b"><a title="delete payment" href="?page=clients&action=delete_invoice&Invoice_ID={INVOICE_ID}&Client_ID={CLIENT_ID}"><img 
+  src="images/icons/gnome_small/stock/generic/stock_stop.png"></a></td>
+ </tr>
+</patTemplate:tmpl>
+
+<patTemplate:tmpl name="cant_delete_invoice">
+<h3 class="warning"><img src="images/icons/gnome/stock/generic/stock_stop.png"> Payments made already, <a href="?{ACTION}&Confirm=true&Double_Confirm=true" title="click here to confirm delete">CONFIRM DELETE</a></h3>
+</patTemplate:tmpl>
+
+
+<patTemplate:tmpl name="cant_delete_repeat_invoice">
+<h3 class="warning"><img src="images/icons/gnome/stock/generic/stock_stop.png"> This is a repeat invoice, deleting this will stop any further repeats aswell, <a href="?{ACTION}&Confirm=true&Double_Confirm=true" title="click here to confirm delete">CONFIRM DELETE</a></h3>
+</patTemplate:tmpl>
+
+
+<patTemplate:tmpl name="invoice_sent">
+<h2>Invoice Sent</h2>
+</patTemplate:tmpl>
+
+
+
+
+<patTemplate:tmpl name="edit_quote">
+<div class="centered">
+<form action="?page=clients&action=submit_quote&Client_ID={CLIENT_ID}&Quote_ID={ID}" method="POST">
+<p>
+<table class="edit">
+ <tr>
+  <td colspan="4" class="heading2">
+	<img src="images/icons/gnome/stock/document/stock_task.png" class="middle">
+	Quote for <a href="?page=clients&action=view_client&Client_ID={CLIENT_ID}"><span class="client">{CLIENT}</span></a>
+	
+  </td>
+ </tr>
+ <tr>
+  <th>Client</th>
+  <td>{CLIENT_SELECT}</td>
+  <th>Date</td>
+  <td>{DATE_SELECT}</td>
+  </tr>
+ <tr>
+  <th>Title</th>
+  <td colspan="3"><input type="text" name="Title" value="{TITLE}"</td>
+ </tr>
+ <tr>
+  <th>Description</td>
+  <td colspan="3"><textarea name="Description" rows="9" cols="80">{DESCRIPTION}</textarea></td>
+ </tr>
+ <tr>
+  <th>Value</th>
+  <td>_HTML_CURENCY_SYMBOL_<input type="text" name="Value" value="{VALUE}" size="8"></td>
+  <th>Quote Address</td>
+  <td><textarea name="Quote_Address" rows="4" cols="40">{QUOTE_ADDRESS}</textarea></td>
+ </tr>
+<tr>
+  <th>Approved By</th>
+  <td><input type="text" name="Approved_Name" value="{APPROVED_NAME}"></td>
+  <th>Date Approved</td>
+  <td>{APPROVED_DATE_SELECT}</td>
+ </tr>
+ <tr>
+   <tr>
+  <th colspan="4">[ <a title="print pdf quote" href="?page=clients&action=print_quote&Quote_ID={ID}&Client_ID={CLIENT_ID}"><img 
+  src="images/icons/16x16/pdf.png" target="_blank" target="_blank">Print</a> ]
+ <input type="submit" name="Submit" value="Submit"> <input type="submit" name="Submit" value="Delete" class="delete"></th>
+ </tr>
+</table>
+</p>
+</form>
+</div>
+</patTemplate:tmpl>
+
+
+<patTemplate:tmpl name="edit_project">
+<div class="centered">
+<form action="?page=clients&action=submit_project&Client_ID={CLIENT_ID}&Project_ID={ID}" method="POST">
+<p>
+<table class="edit">
+ <tr>
+  <td colspan="4" class="heading2">
+	<img src="images/icons/gnome/stock/generic/stock_dialog-info.png" class="middle">
+	Project for <a href="?page=clients&action=view_client&Client_ID={CLIENT_ID}"><span class="client">{CLIENT}</span></a>
+	
+  </td>
+ </tr>
+ <tr>
+  <th>Client</th>
+  <td>{CLIENT_SELECT}</td>
+  <th>Date Opened</td>
+  <td>{DATE_OPENED_SELECT}</td>
+  </tr>
+ <tr>
+  <th>Title</th>
+  <td colspan="3"><input type="text" name="Title" value="{TITLE}"</td>
+ </tr>
+ <tr>
+  <th>Description</td>
+  <td colspan="3"><textarea name="Description" row="4" cols="60">{DESCRIPTION}</textarea></td>
+ </tr>
+<tr>
+  <th>Closed</th>
+  <td><input type="checkbox" name="Closed" value="closed" {CLOSED}></td>
+  <th>Date Closed</td>
+  <td>{DATE_CLOSED_SELECT}</td>
+ </tr>
+ <tr>
+	 <tr>
+		 <td><a href="?page=clients&action=view_timesheet&Client_ID={CLIENT_ID}&Project_ID={ID}">view timesheets</a></td>
+  <th colspan="3">[ <a title="print pdf project" href="?page=clients&action=print_project&Project_ID={ID}&Client_ID={CLIENT_ID}"><img 
+		  
+  src="images/icons/16x16/pdf.png" target="_blank" target="_blank">Print</a> ]
+ <input type="submit" name="Submit" value="Submit"> <input type="submit" name="Submit" value="Delete" class="delete"></th>
+ </tr>
+</table>
+</p>
+</form>
+</div>
+</patTemplate:tmpl>
+<patTemplate:tmpl name="choose_client">
+<div class="centered">
+<fieldset>
+<legend>Choose Client</legend>
+<form action="?page=clients&action={ACTION}" method="post">
+{CLIENT_SELECT_LIST}
+<input type="submit" value="Go">
+</form>
+</fieldset>
+</div>
+</patTemplate:tmpl>
+
+<patTemplate:tmpl name="show_mail">
+<div class="centered">
+	<table class="edit">
+		<tr>
+			<th>Date</th>
+			<td>{DATE}</td>
+			<th>To</th>
+			<td>{EMAIL}</td>
+			<th>Subject</th>
+			<td>{SUBJECT}</td>
+		</tr>
+		<tr>
+			<th>Message</th>
+			<td colspan="5">
+			<pre>{MESSAGE}</pre>
+			</td>
+		</tr>
+	</table>
+</div>
+</patTemplate:tmpl>

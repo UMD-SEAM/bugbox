@@ -1,0 +1,85 @@
+<patTemplate:tmpl name="menu">
+<div id="topmenu">
+<div id="menutitle">
+<img src="images/icons/gnome/stock/generic/stock_book_blue.png">Tax Reports
+</div>
+<ul>
+  <li><a href="?page=tax_reports&year={THIS_YEAR}" title="Tax Report for {THIS_YEAR}/{NEXT_YEAR}"><img src="images/icons/gnome/stock/generic/stock_book_blue.png">{THIS_YEAR}/{NEXT_YEAR}</a>
+</ul>
+</div>
+</patTemplate:tmpl>
+
+
+
+
+<patTemplate:tmpl name="tax_report">
+
+<div class="centered">
+
+<table class="results">
+ <tr>
+  <td colspan="8" class="heading">
+  <a href="?page=tax_reports&year={LAST_YEAR}" title="Tax Report for {LAST_YEAR}/{THIS_YEAR}"><img src="images/icons/arrow-left.gif"></a>
+  TAX REPORT YEAR {THIS_YEAR}/{NEXT_YEAR} <a  href="?page=tax_reports&year={THIS_YEAR}&csv=true">CSV</a> 
+  <a href="?page=tax_reports&year={NEXT_YEAR}" title="Tax Report for {NEXT_YEAR}/{NEXT_YEAR}"><img src="images/icons/arrow-right.gif"></a>
+  </td>
+ </tr>
+ <tr>
+  <th class="cella">Date</th>
+  <th class="cellb">Type</th>
+  <th class="cella">Vendor/Client</th>
+  <th class="cellb">Description</th>
+  <th class="cella">Value IN</th>
+  <th class="cellb">Value OUT</th>
+  <th class="cella">Capital Expenditure</th>
+  </tr>
+<patTemplate:link src="tax_report_results" />
+ <tr>
+  <th>&nbsp;</th>
+  <th>&nbsp;</th>
+  <th>&nbsp;</th>
+  <th>&nbsp;</th>
+  <th class="cella">_HTML_CURENCY_SYMBOL_{TOTAL_IN}</th>
+  <th class="cellb"><span class="red">_HTML_CURENCY_SYMBOL_{TOTAL_OUT}</span></th>
+  <th class="cella"><span class="red">_HTML_CURENCY_SYMBOL_{TOTAL_CAPITAL_EXPENDITURE}</span></th>
+  </tr>
+ </table>
+ 
+<table class="results">
+ <tr>
+  <td colspan="2" class="heading">
+  Total Outgoings by Type
+  </td>
+ </tr>
+ <tr>
+  <th class="cella">Type</th>
+  <th class="cellb">Total</th>
+ </tr>
+<patTemplate:link src="outgoing_types" /> 
+<tr>
+  <th class="cella">TOTAL</th>
+  <th class="cellb">{OUTGOING_TYPE_TOTAL}</th>
+ </tr>
+</table>
+</div>
+</patTemplate:tmpl>
+
+
+<patTemplate:tmpl name="tax_report_results">
+ <tr>
+  <td class="cell{I}a">{DATE}</td>
+  <td class="cell{I}b">{OUTGOING_TYPE}</td>
+  <td class="cell{I}a"><a title="edit outgoings item" href="?page=outgoings&action=edit_outgoings&Outgoing_ID={OUTGOING_ID}">{VENDOR}</a><a title="edit timesheet item" href="?page=clients&action=edit_invoice&Invoice_ID={INVOICE_ID}">{CLIENT}</a></td>
+  <td class="cell{I}b">{DESCRIPTION}</td>
+  <td class="cell{I}a">_HTML_CURENCY_SYMBOL_{VALUE_IN}</td>
+  <td class="cell{I}b"><span class="red">_HTML_CURENCY_SYMBOL_{VALUE_OUT}</span></td>
+  <td class="cell{I}a"><span class="red">_HTML_CURENCY_SYMBOL_{CAPITAL_EXPENDITURE}</span></td>
+ </tr>
+</patTemplate:tmpl>
+
+<patTemplate:tmpl name="outgoing_types">
+ <tr>
+  <td class="cell{I}a">{OUTGOING_TYPE}</th>
+  <td class="cell{I}b">{VALUE}</th>
+ </tr>
+</patTemplate:tmpl>

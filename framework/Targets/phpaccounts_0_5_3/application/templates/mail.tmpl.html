@@ -1,0 +1,125 @@
+<patTemplate:tmpl name="user_invoice_warning">
+Dear {USER},
+
+This email is to notify you that an Invoice is scheduled to be send out:
+
++----- To Be Sent On {DATE_DUE} -----+
+Client: {COMPANY_NAME}
+Ref: {REFERENCE}
+Date: {DATE}
+Value: {VALUE}
+Description:
+{DESCRIPTION}
++-------------------------------------+
+
+
+[This is an automated email]
+</patTemplate:tmpl>
+
+<patTemplate:tmpl name="user_repeat_invoice_created">
+Dear {USER},
+
+This email is to notify you that a repeat Invoice has been created:
+
++------------------------------------+
+Client: {COMPANY_NAME}
+Ref: {REFERENCE}
+Date: {DATE}
+Value: {VALUE}
+Description:
+{DESCRIPTION}
++------------------------------------+
+
+
+[This is an automated email]
+</patTemplate:tmpl>
+
+<patTemplate:tmpl name="invoice">
+Dear {CLIENT_FIRST_NAME},
+
+Please find attatched your invoice dated {DATE}, Ref: {REFERENCE}.
+
+Description:
+{DESCRIPTION}
+
+(Full details are in the attatched PDF)
+
+The file is an acrobat reader pdf file, if it doesn't open, please download acrobat reader from here:
+http://www.adobe.com/products/acrobat/readstep2.html
+
+Kind Regards,
+{FIRST_NAME}
+
+--
+{COMPANY_NAME}
+{WEBSITE}
+{LETTER_FOOTER}
+[This is an automated email]
+</patTemplate:tmpl>
+
+<patTemplate:tmpl name="first_invoice_reminder">
+Dear {CLIENT_FIRST_NAME},
+
+On checking our records, it appears that we have not yet received full payment for
+the invoice we sent you for £{VALUE} dated {DATE}, Ref: {REFERENCE}.
+Payments Recieved: £{PAID}
+Balance Due: £{BALANCE}
+
+If you have sent payment in the last few days, please disregard this message, 
+otherwise please can you send payment as it is now overdue.
+
+Kind Regards,
+{FIRST_NAME}
+
+--
+{COMPANY_NAME}
+{WEBSITE}
+{LETTER_FOOTER}
+[This is an automated email]
+</patTemplate:tmpl>
+
+<patTemplate:tmpl name="second_invoice_reminder">
+Dear {CLIENT_FIRST_NAME},
+
+On checking our records, it appears that we have still not yet received full payment
+for the invoice we sent you for £{VALUE} dated {DATE}, Ref: {REFERENCE}.
+Payments Recieved: £{PAID}
+Balance Due: £{BALANCE}
+
+If you have sent payment in the last few days, please disregard this message, 
+otherwise please note this is the second reminder and the invoice is now very overdue, 
+please make payment as soon as possible, or we may have to suspend your services. 
+Please contact us urgently if you need to negotiate an alternative payment schedule.
+
+Kind Regards,
+{FIRST_NAME}
+
+--
+{COMPANY_NAME}
+{WEBSITE}
+{LETTER_FOOTER}
+[This is an automated email]
+</patTemplate:tmpl>
+
+
+<patTemplate:tmpl name="final_invoice_reminder">
+Dear {CLIENT_FIRST_NAME},
+
+On checking our records, it appears that we have still not yet received full payment
+for the invoice we sent you for £{VALUE} dated {DATE}, Ref: {REFERENCE}.
+Payments Recieved: £{PAID}
+Balance Due: £{BALANCE}
+
+If you have sent payment in the last few days, please disregard this message, 
+otherwise please note this is the final reminder and we will have to suspend 
+your services unless you pay in full or some other repayment plan is agreed..
+
+Kind Regards,
+{FIRST_NAME}
+
+--
+{COMPANY_NAME}
+{WEBSITE}
+{LETTER_FOOTER}
+[This is an automated email]
+</patTemplate:tmpl>
