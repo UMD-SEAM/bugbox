@@ -111,4 +111,12 @@ Files: framework/Targets/php_address_book_7_0_0/application
 Copyright: 2009 Rob Minto
 License: GPL
 
+Files: framework/Targets/wordpress_*/application
+Copyright: 
+License: GPL
+
+Files: lib/selenium-server-standalone-2.31.0.jar
+Copyright: 2008-2012, Selenium Project
+License: Apache
+
 // put fill license text here
