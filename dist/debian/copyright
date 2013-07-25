@@ -103,6 +103,12 @@ Files: framework/Targets/jboss_4_2_0/application/*
 Copyright: 2000-2006 Red Hat Middleware LLC, and individual contributors
 License: LGPL
 
+Files: framework/Targets/phpaccounts_0_5_3/application/*
+Copyright: 2005 - 2007 Chris Kirkland http://www.mrkirkland.com
+License: GPL
 
+Files: framework/Targets/php_address_book_7_0_0/application
+Copyright: 2009 Rob Minto
+License: GPL
 
 // put fill license text here
