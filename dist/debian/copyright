@@ -1,0 +1,108 @@
+Format: http://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
+Upstream-Name: BugBox
+Source: http://seam.cs.umd.edu/UPDATEME
+
+Files: *
+Copyright: 2013 University of Maryland
+License: BSD-3-clause
+
+Files: framework/Targets/AjaXplorer_2_5_1/application/*
+Copyright: 2007-2009 Charles du Jeu
+License: LGPL
+
+Files: framework/Targets/cuteflow_2_11_2/application/*
+Copyright: Timo Haberkern
+License: BSD-3-clause
+
+Files: framework/Targets/drupal_*/application/*
+Copyright: 2001 - 2010 by the original authors
+License: GPL
+
+Files: framework/Targets/eXtplorer_2_1_0/application/debian/*
+Copyright: (c) 2009, Soeren Eberhardt <soeren@virtuemart.net>
+License: GPL-2, MPL 1.1
+
+Files: framework/Targets/eXtplorer_2_1_0/application/libraries/SSH2.php
+Copyright: (c) 2008, Bas Weermann http://www.php.net/manual/de/function.ssh2-sftp.php#83174
+	(c) 2009, Soeren Eberhardt <soeren@virtuemart.net>
+License: GPL-2, MPL 1.1
+
+Files: framework/Targets/eXtplorer_2_1_0/application/libraries/Archive/path.php, 
+       framework/Targets/eXtplorer_2_1_0/application/libraries/Archive/folder.php,
+       framework/Targets/eXtplorer_2_1_0/application/libraries/Archive/file.php, 
+       framework/Targets/eXtplorer_2_1_0/application/libraries/Archive/archive.php
+libraries/Archive/adapter/zip.php
+Copyright: (C) 2005 - 2008 Open Source Matters. All rights reserved.
+	(c) 2009, Soeren Eberhardt <soeren@virtuemart.net>
+License: GPL
+
+File: framework/Targets/eXtplorer_2_1_0/application/libraries/inputfilter.php
+Copyright: (c) Daniel Morris <dan@rootcube.com> with contribution from:
+	(c) Gianpaolo Racca
+	(c) Ghislain Picard
+	(c) Marco Wandschneider
+	(c) Chris Tobin and Andrew Eddie
+	(c) Louis Landry
+	(c) 2007-2009, Soeren Eberhardt <soeren@virtuemart.net>
+License: GPL
+
+Files: framework/Targets/eXtplorer_2_1_0/application/webdav.php, 
+       framework/Targets/eXtplorer_2_1_0/application/webdav_authenticate.php
+Copyright: (c) 2008-2009, Soeren Eberhardt <soeren@virtuemart.net>
+	(c) 2008-2009, Vincent JAULIN <support@keyphrene.com>
+License: GPL-2
+
+Files: framework/Targets/eXtplorer_2_1_0/application/libraries/lib_zip.php, 
+       framework/Targets/eXtplorer_2_1_0/application/include/admin.php, 
+       framework/Targets/eXtplorer_2_1_0/application/include/archive.php, 
+       framework/Targets/eXtplorer_2_1_0/application/include/bookmarks.php, 
+       framework/Targets/eXtplorer_2_1_0/application/include/chmod.php, 
+       framework/Targets/eXtplorer_2_1_0/application/include/copy_move.php, 
+       framework/Targets/eXtplorer_2_1_0/application/include/delete.php, 
+       framework/Targets/eXtplorer_2_1_0/application/include/download.php, 
+       framework/Targets/eXtplorer_2_1_0/application/include/edit.php, 
+       framework/Targets/eXtplorer_2_1_0/application/include/extract.php, 
+       framework/Targets/eXtplorer_2_1_0/application/include/ftp_authentication.php, 
+       framework/Targets/eXtplorer_2_1_0/application/include/functions.php,
+       framework/Targets/eXtplorer_2_1_0/application/include/header.php, 
+       framework/Targets/eXtplorer_2_1_0/application/include/init.php, 
+       framework/Targets/eXtplorer_2_1_0/application/include/list.php,
+       framework/Targets/eXtplorer_2_1_0/application/include/login.php, 
+       framework/Targets/eXtplorer_2_1_0/application/include/mkitem.php, 
+       framework/Targets/eXtplorer_2_1_0/application/include/rename.php,
+       framework/Targets/eXtplorer_2_1_0/application/include/result.class.php, 
+       framework/Targets/eXtplorer_2_1_0/application/include/search.php, 
+       framework/Targets/eXtplorer_2_1_0/application/include/upload.php,
+       framework/Targets/eXtplorer_2_1_0/application/include/users.php, 
+       framework/Targets/eXtplorer_2_1_0/application/include/authentication/extplorer.php,
+       framework/Targets/eXtplorer_2_1_0/application/include/authentication/ftp.php, 
+       framework/Targets/eXtplorer_2_1_0/application/include/authentication/ssh2.php,
+       framework/Targets/eXtplorer_2_1_0/application/admin.extplorer.php, 
+       framework/Targets/eXtplorer_2_1_0/application/extplorer.php, 
+       framework/Targets/eXtplorer_2_1_0/application/extplorer.init.php, 
+       framework/Targets/eXtplorer_2_1_0/application/extplorer.list.php, 
+       framework/Targets/eXtplorer_2_1_0/application/index.php
+Copyright:  (c) 2003 The QuiX project <quix@free.fr>
+	(c) 2009, Soeren Eberhardt <soeren@virtuemart.net>
+License: MPL, GPL
+
+Files: framework/Targets/family_connections_2_7_1/application/*
+Copyright: 2007 Haudenschilt LLC
+License: GPL
+
+Files: framework/Targets/glossword_1_8_12/application/*
+Copyright: 2008-2012 Glossword.biz team <team at glossword dot biz>
+	   2002-2008 Dmitry N. Shilnikov
+License: GPL
+
+Files: framework/Targets/horde_3_3_12/application/*
+Copyright: 1999-2009 The Horde Project
+License: LGPL
+
+Files: framework/Targets/jboss_4_2_0/application/*
+Copyright: 2000-2006 Red Hat Middleware LLC, and individual contributors
+License: LGPL
+
+
+
+// put fill license text here
