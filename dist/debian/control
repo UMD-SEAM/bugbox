@@ -10,6 +10,6 @@ Homepage: <insert the upstream URL, if relevant>
 
 Package: bugbox
 Architecture: all
-Depends: ${misc:Depends}
+Depends: python2.7-minimal (>= 2.7.3-6), mysql-server-5.5 (>= 5.5.28+dfsg-1), debootstrap (>= 1.0.44)
 Description: <insert up to 60 chars description>
  <insert long description, indented with spaces>
