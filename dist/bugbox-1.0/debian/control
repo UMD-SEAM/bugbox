@@ -1,0 +1,12 @@
+Source: bugbox
+Section: unknown
+Priority: extra
+Maintainer: Gary Nilson <gnilson@umd.edu>
+Build-Depends: debhelper (>= 7), python-support
+Homepage: http://bugbox.com
+Standards-Version: 3.8.0
+
+Package: bugbox
+Architecture: all
+Depends: python2.7-minimal (>= 2.7.3-6), mysql-server-5.5 (>= 5.5.28+dfsg-1), debootstrap (>= 1.0.44)
+Description: BugBox

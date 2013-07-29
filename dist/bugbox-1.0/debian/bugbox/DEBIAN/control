@@ -1,0 +1,10 @@
+Package: bugbox
+Version: 1.0-1
+Architecture: all
+Maintainer: Gary Nilson <gnilson@umd.edu>
+Installed-Size: 261372
+Depends: python2.7-minimal (>= 2.7.3-6), mysql-server-5.5 (>= 5.5.28+dfsg-1), debootstrap (>= 1.0.44)
+Section: unknown
+Priority: extra
+Homepage: http://bugbox.com
+Description: BugBox

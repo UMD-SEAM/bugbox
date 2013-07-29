@@ -1,0 +1,169 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Artiss Code Embed\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2012-03-20 14:13-0000\n"
+"PO-Revision-Date: 2012-03-20 14:13-0000\n"
+"Last-Translator: David Artiss <david.artiss@artiss.co.uk>\n"
+"Language-Team: dartiss\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-KeywordsList: __;_e;esc_attr__;esc_attr_e;esc_html__;esc_html_e;_x;_ex;esc_attr_x;esc_html_x;_n;_nx;_n_noop;_nx_noop\n"
+"X-Poedit-Basepath: ../\n"
+"X-Poedit-SearchPath-0: .\n"
+
+#: includes/ace-admin-config.php:29
+msgid "Settings"
+msgstr ""
+
+#: includes/ace-admin-config.php:53
+msgid "Support"
+msgstr ""
+
+#: includes/ace-admin-config.php:54
+msgid "Donate"
+msgstr ""
+
+#: includes/ace-admin-config.php:143
+msgid "Help & Support"
+msgstr ""
+
+#: includes/ace-admin-config.php:163
+msgid "Help"
+msgstr ""
+
+#: includes/ace-admin-config.php:206
+msgid "Artiss Code Embed Plugin Documentation"
+msgstr ""
+
+#: includes/ace-admin-config.php:207
+msgid "Artiss Code Embed Support Forum"
+msgstr ""
+
+#: includes/ace-admin-config.php:208
+msgid "All of my plugins are supported via <a title=\"Artiss.co.uk\" href=\"http://www.artiss.co.uk\" target=\"_blank\">my website</a>. Please feel free to visit the site for plugin updates and development news - either visit the site regularly, follow <a title=\"RSS News Feed\" href=\"http://www.artiss.co.uk/feed\" target=\"_blank\">my news feed</a> or <a title=\"Artiss.co.uk on Twitter\" href=\"http://www.twitter.com/artiss_tech\" target=\"_blank\">follow me on Twitter</a> (@artiss_tech)."
+msgstr ""
+
+#: includes/ace-admin-config.php:209
+#: includes/ace-search.php:55
+msgid "This plugin, and all support, is supplied for free, but <a title=\"Donate\" href=\"http://artiss.co.uk/donate\" target=\"_blank\">donations</a> are always welcome."
+msgstr ""
+
+#: includes/ace-admin-config.php:226
+msgid "This screen allows you to search for the post and pages that a particular code embed has been used in."
+msgstr ""
+
+#: includes/ace-admin-config.php:227
+msgid "Simply enter the code suffix that you wish to search for and press the 'Search' key to display a list of all the posts using it. In addition the code will be shown alongside it. Click on the post name to edit the post."
+msgstr ""
+
+#: includes/ace-admin-config.php:228
+msgid "The search results are grouped together in matching code groups, so posts with the same code will be shown together with the same colour background."
+msgstr ""
+
+#: includes/ace-admin-config.php:289
+msgid "Welcome to Artiss Code Embed"
+msgstr ""
+
+#: includes/ace-admin-config.php:290
+msgid "Thank you for installing this plugin."
+msgstr ""
+
+#: includes/ace-admin-config.php:291
+msgid "A new menu within 'Settings' will allow you to change the keywords and identifiers used for embedding. A search option also exists in the 'Tools' menu for searching for code embeds."
+msgstr ""
+
+#: includes/ace-filter.php:182
+#, php-format
+msgid "Cannot use %s as a global code as it is being used to store %d unique pieces of code in %d posts - <a href=\"%s\">click here</a> for more details"
+msgstr ""
+
+#: includes/ace-filter.php:189
+#, php-format
+msgid "No embed code was found for %s"
+msgstr ""
+
+#: includes/ace-options.php:16
+msgid "Artiss Code Embed Options"
+msgstr ""
+
+#: includes/ace-options.php:40
+msgid "Identifier Format"
+msgstr ""
+
+#: includes/ace-options.php:40
+msgid "Specify the format that will be used to define the way the code is embedded in your post."
+msgstr ""
+
+#: includes/ace-options.php:40
+msgid "The formats are case insensitive and characters &lt; &gt [ ] are invalid."
+msgstr ""
+
+#: includes/ace-options.php:45
+msgid "Keyword"
+msgstr ""
+
+#: includes/ace-options.php:46
+msgid "The keyword that is used to name the custom field and then place in your post where the code should be embedded. A suffix on any type can then be placed on the end."
+msgstr ""
+
+#: includes/ace-options.php:50
+msgid "Opening Identifier"
+msgstr ""
+
+#: includes/ace-options.php:51
+msgid "The character(s) that must be placed in the post before the keyword to uniquely identify it."
+msgstr ""
+
+#: includes/ace-options.php:55
+msgid "Closing Identifier"
+msgstr ""
+
+#: includes/ace-options.php:56
+msgid "The character(s) that must be placed in the post after the keyword to uniquely identify it."
+msgstr ""
+
+#: includes/ace-options.php:63
+msgid "Save Settings"
+msgstr ""
+
+#: includes/ace-options.php:68
+msgid "How to Embed"
+msgstr ""
+
+#: includes/ace-options.php:69
+#, php-format
+msgid "To add a custom field containing embed code simple name it %s, where %s is any suffix you wish. The code to embed is then added as the field value."
+msgstr ""
+
+#: includes/ace-options.php:70
+#, php-format
+msgid "Then, to add the code into your post simple add %s where you wish it to appear. %s is the suffix you used for the custom field name."
+msgstr ""
+
+#: includes/ace-options.php:71
+#, php-format
+msgid "For example, I may add a custom field named %s, where the value is the code I wish to embed. I would then in my post add %s where I wish the code to then appear."
+msgstr ""
+
+#: includes/ace-options.php:72
+msgid "Support Information"
+msgstr ""
+
+#: includes/ace-options.php:77
+msgid "Useful support information and links can be found by clicking on the Help tab at the top right-hand of the screen."
+msgstr ""
+
+#: includes/ace-search.php:21
+msgid "Enter the suffix to search for below and press the 'Search' button to view the results. Further help can be found by clicking on the Help tab at the top right-hand of the screen."
+msgstr ""
+
+#: includes/ace-search.php:51
+msgid "Search"
+msgstr ""
+
+#: includes/ace-search.php:92
+msgid "No posts were found containing that embed code."
+msgstr ""
+

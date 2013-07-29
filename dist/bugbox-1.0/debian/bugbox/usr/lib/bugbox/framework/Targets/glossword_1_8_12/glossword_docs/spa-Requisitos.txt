@@ -1,0 +1,13 @@
+¿Qué se requiere para ejecutar Glossword?
+
+La instalación de Glossword 1.8.x requiere:
+
+    * Servidor web (Apache, IIS u otro).
+    * PHP versión 4.3.9 ó superior (recomendada 5.3.x).
+    * Base de datos MySQL versión 4.1.x ó superior (recomendada 5.1.x).
+    * 3.0 Megabytes de espacio libre en el disco duro. 
+
+El asistente de instalación detecta automáticamente la configuración actual de PHP e informa si se encuentra algún problema.
+
+Para instalar Glossword en un ordenador con sistemas operativos Windows 2000/XP/2003 se recomienda usar el programa Glossword WAMP. Éste instala todas las aplicaciones necesarias (Apache, MySQL, PHP).
+

@@ -1,0 +1,95 @@
+## The XHTML 1.1 document type is made up of the following XHTML modules.
+## Structure Module
+body
+head
+html
+title
+## Text Module
+abbr
+acronym
+address
+blockquote
+br
+cite
+code
+dfn
+div
+em
+h1
+h2
+h3
+h4
+h5
+h6
+kbd
+p
+pre
+q
+samp
+span
+strong
+var
+## Hypertext Module
+a
+## List Module
+dl
+dt
+dd
+ol
+ul
+li
+## Object Module
+object
+param
+## Presentation Module
+b
+big
+hr
+i
+small
+sub
+sup
+tt
+## Edit Module
+del
+ins
+## Bidirectional Text Module
+bdo
+## Forms Module
+button
+fieldset
+form
+input
+label
+legend
+select
+optgroup
+option
+textarea
+## Table Module
+caption
+col
+colgroup
+table
+tbody
+td
+tfoot
+th
+thead
+tr
+## Image Module
+img
+## Client-side Image Map Module
+area
+map
+## Metainformation Module
+meta
+## Scripting Module
+noscript
+script
+## Stylesheet Module
+style
+## Link Module
+link
+## Base Module
+base

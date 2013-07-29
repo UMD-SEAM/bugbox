@@ -1,0 +1,20 @@
+<patTemplate:tmpl name="tax_report">
+"==== Tax Report {START_YEAR}/{END_YEAR} ====="
+
+"Date","Type","Vendor/Client","Description","Value IN","Value Out","Capital Expenditure"
+<patTemplate:link src="tax_report_results" />
+,,,,"{TOTAL_IN}","{TOTAL_OUT}","{TOTAL_CAPITAL_EXPENDITURE}"
+
+
+"==== Total by Type ===="
+"Type","Value"
+<patTemplate:link src="outgoing_types" />
+</patTemplate:tmpl>
+
+<patTemplate:tmpl name="tax_report_results">
+"{DATE}","{OUTGOING_TYPE}","{VENDOR}{CLIENT}","{DESCRIPTION}","{VALUE_IN}","{VALUE_OUT}","{CAPITAL_EXPENDITURE}"
+</patTemplate:tmpl>
+
+<patTemplate:tmpl name="outgoing_types">
+"{OUTGOING_TYPE}","{VALUE}"
+</patTemplate:tmpl>

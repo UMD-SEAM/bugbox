@@ -1,0 +1,179 @@
+<patTemplate:tmpl  name="timesheet_summary">
+
+<div class="centered">
+<h3>
+<a href="?{SUMMARY}">Back to summary<img src="images/icons/32x32/undo.png" class="inlineicon"></a></h3>
+<table class="results">
+ <tr>
+  <td class="heading" colspan="{HEADING_COLSPAN}">
+  <a href="?{ACTION}&Client_ID={CLIENT_ID}&Period={PERIOD}&Start_Timestamp={LAST_PERIOD_START}&End_Timestamp={LAST_PERIOD_END}&Project_ID={PROJECT_ID}" title="last {PERIOD}"><img src="images/icons/arrow-left.gif"></a>
+   <a href="?page=clients&action=view_client&Client_ID={CLIENT_ID}"><span class="client">{CLIENT}</span></a> {TYPE} for <span class="period">{TIMESHEET_PERIOD}</span>
+   
+  <a href="?{ACTION}&Client_ID={CLIENT_ID}&Period={PERIOD}&Start_Timestamp={NEXT_PERIOD_START}&End_Timestamp={NEXT_PERIOD_END}&Project_ID={PROJECT_ID}" title="next {PERIOD}"><img src="images/icons/arrow-right.gif"></a>
+  </td>
+ </tr>
+ <tr>
+  <patTemplate:link src="months" />
+ </tr>
+ <tr valign="bottom">
+  <patTemplate:link src="month_timesheet_graphs" />
+ </tr>
+ <tr>
+  <patTemplate:link src="month_timesheet_figures" />
+ </tr>
+ <tr>
+  <td colspan="{SPACER_COLSPAN}">&nbsp;</td>
+  <th class="cellb" colspan="2">Total Value:</th>
+  <th class="cella" colspan="2">_HTML_CURENCY_SYMBOL_{TOTAL_VALUE}</th>
+ </tr>
+ <tr>
+  <td colspan="{SPACER_COLSPAN}">&nbsp;</td>
+  <th class="cellb" colspan="2">Total Time:</th>
+  <th class="cella" colspan="2">{TOTAL_TIME}h</th>
+ </tr>
+</table>
+</div>
+</patTemplate:tmpl>
+
+<patTemplate:tmpl name="months">
+<th class="cell{I}"><a href="?page=clients&action=view_timesheet&Client_ID={CLIENT_ID}&Start_Timestamp={START_TIMESTAMP}&Period={VIEW_PERIOD}">{PERIOD}</a></th>
+</patTemplate:tmpl>
+
+<patTemplate:tmpl name="month_timesheet_graphs">
+<td class="cell0{I}"><a href="?{GRAPH_ACTION}&Client_ID={CLIENT_ID}&Start_Timestamp={START_TIMESTAMP}&Period={VIEW_PERIOD}">
+<img src="images/misc/green-graph.gif" width="30" height="{VALUE_GRAPH}" title="£{VALUE} in {TIME}" alt="£{VALUE} in {TIME}" class="smallgraph"></a>
+</td>
+</patTemplate:tmpl>
+
+
+<patTemplate:tmpl name="month_timesheet_figures">
+<td class="cell1{I}">
+_HTML_CURENCY_SYMBOL_{VALUE}<br>
+{TIME}h
+</td>
+</patTemplate:tmpl>
+
+<patTemplate:tmpl name="view_timesheet">
+
+<div class="centered">
+<h3>
+<a href="?page=clients&action=timesheet_summary&Client_ID={CLIENT_ID}">Back to summary <img src="images/icons/32x32/undo.png" class="inlineicon"></a></h3>
+
+<table class="results">
+ <tr>
+  <td colspan="8" class="heading">
+     <a href="?page=clients&action=view_timesheet&Client_ID={CLIENT_ID}&Period={PERIOD}&Start_Timestamp={LAST_PERIOD_START}&End_Timestamp={LAST_PERIOD_END}&Project_ID={PROJECT_ID}" title="last {PERIOD}"><img src="images/icons/arrow-left.gif"></a>
+	{TIMESHEETS} Items During {TIMESHEET_PERIOD}
+	<a href="?page=clients&action=view_timesheet&Client_ID={CLIENT_ID}&Period={PERIOD}&Start_Timestamp={LAST_PERIOD_END}&End_Timestamp={NEXT_PERIOD_START}&csv=true&Project_ID={PROJECT_ID}">CSV</a>
+	<a href="?page=clients&action=edit_timesheet&Timesheet_ID=0&Client_ID={CLIENT_ID}">New</a>
+	<a href="?page=clients&action=view_timesheet&Client_ID={CLIENT_ID}&Period={PERIOD}&Start_Timestamp={NEXT_PERIOD_START}&End_Timestamp={NEXT_PERIOD_END}&Project_ID={PROJECT_ID}" title="next {PERIOD}"><img src="images/icons/arrow-right.gif"></a>
+  </td>
+ </tr>
+ <tr>
+  <th class="cella">Client</th>
+  <th class="cellb">Project</th>
+  <th class="cella">Date</th>
+  <th class="cellb">Time</th>
+  <th class="cella">Description</th>
+  <th class="cellb">Value</th>
+  <th class="cella">Edit</th>
+  <th class="cellb">Delete</th>
+  </tr>
+<patTemplate:link src="timesheet_results" />
+ <tr>
+  <th>&nbsp;</th>
+  <th>&nbsp;</th>
+  <th>&nbsp;</th>
+  <th class="cellb">{TOTAL_TIME}</th>
+  <th>&nbsp;</th>
+  <th class="cellb">_HTML_CURENCY_SYMBOL_{TOTAL_VALUE}</th>
+  <th>&nbsp;</th>
+  <th>&nbsp;</th>
+  </tr>
+ </table>
+<br>
+<br>
+
+ <table class="results">
+ <tr>
+  <td class="heading" colspan="3">
+   Client Totals
+   </td>
+  </tr>
+  <tr>
+   <th class="cella">Client</th>
+   <th class="cellb">Total Time</th>
+   <th class="cella">Total Value</th>
+  </tr>
+  <patTemplate:link src="client_results" />
+  </table>
+ 
+</div>
+</patTemplate:tmpl>
+
+
+<patTemplate:tmpl name="timesheet_results">
+ <tr>
+  <td class="cell{I}a"><a title="edit this client" href="?page=clients&action=view_client&Client_ID={CLIENT_ID}">{COMPANY_NAME}</a></td>
+  <td class="cell{I}b"><a href="?page=clients&action=edit_project&Project_ID={PROJECT_ID}">{PROJECT}</a></td>
+  <td class="cell{I}a">{DATE}</td>
+  <td class="cell{I}b">{TIME}</td>
+  <td class="cell{I}a">{DESCRIPTION}</td>
+  <td class="cell{I}b">_HTML_CURENCY_SYMBOL_{VALUE}</td>
+  <td class="cell{I}a"><a title="edit timesheet item" href="?page=clients&action=edit_timesheet&Client_ID={CLIENT_ID}&Timesheet_ID={ID}"><img 
+  src="images/icons/16x16/viewmag.png"></a></td>
+  <td class="cell{I}a"><a title="delete timesheet item" href="?page=clients&action=delete_timesheet&Timesheet_ID={ID}&Client_ID={CLIENT_ID}"><img 
+  src="images/icons/gnome_small/stock/generic/stock_stop.png"></a></td>
+ </tr>
+</patTemplate:tmpl>
+
+<patTemplate:tmpl name="client_results">
+ <tr>
+  <td class="cell{I}a"><a title="edit this client" href="?page=clients&action=view_client&Client_ID={CLIENT_ID}">{COMPANY_NAME}</a></td>
+  <td class="cell{I}b">{TOTAL_TIME}</td>
+  <td class="cell{I}a">{TOTAL_VALUE}</td>
+ </tr>
+</patTemplate:tmpl>
+
+<patTemplate:tmpl name="edit_timesheet">
+
+<div class="centered">
+<form action="?page=clients&action=submit_timesheet" method="POST">
+<input type="hidden" name="ID" value="{ID}">
+<input type="hidden" name="Timesheet_ID" value="{ID}">
+<input type="hidden" name="Client_ID" value="{CLIENT_ID}">
+<h3>
+<a href="?page=clients&action=view_timesheet&Client_ID={CLIENT_ID}">Back to timesheet <img src="images/icons/32x32/undo.png" class="inlineicon"></a></h3>
+
+<table class="edit">
+ <tr>
+  <td colspan="7" class="heading2">
+ <img src="images/icons/gnome/stock/generic/stock_new-appointment.png" class="middle"> Edit Timesheet
+<a href="?page=clients&action=view_client&Client_ID={CLIENT_ID}" title="view client"><span class="client">{COMPANY_NAME}</span></a>	
+  </td>
+ </tr>
+ <tr>
+  <th>Opened:</th>
+  <td><input type="text" name="Opened" value="{OPENED}"></td>
+  <th>Time now:</th>
+  <td colspan="2">{TIME_NOW}</td>
+ </tr>
+ <tr>
+  <th>Time</th>
+  <td>{TIME_SELECT_LIST}</td>
+  <th>Description</th>
+  <td colspan="2"><input type="text" name="Description" value="{DESCRIPTION}"></td>
+  </tr>
+ <tr>
+  <th>Project</th>
+  <td>{PROJECT_SELECT_LIST}</td>
+  <th>Value</th>
+  <td>_HTML_CURENCY_SYMBOL_<input type="text" name="Value" value="{VALUE}"></td>
+  <td>
+  <input type="submit" name="Submit" value="Submit"> <input type="submit" name="Submit" value="Delete" class="delete"></td>
+ </tr>
+ </table>
+ </form>
+</div>
+</patTemplate:tmpl>
+

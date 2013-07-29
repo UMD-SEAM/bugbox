@@ -1,0 +1,129 @@
+<patTemplate:tmpl name="menu">
+<div id="topmenu">
+<div id="menutitle">
+<img src="images/icons/gnome/stock/generic/stock_help.png"> Help 
+</div>
+<ul>
+  <li>
+ <a target="middleFrame"  href="?page=help&section=tasks"><img src="images/icons/gnome/stock/net/stock_mail-compose.png" align="absmiddle"></a>
+  <a target="middleFrame"  href="?page=help&section=tasks">Tasks</a>
+ </li>
+ <li>
+  <a target="middleFrame"  href="?page=help&section=clients"><img src="images/icons/gnome/stock/generic/stock_people.png" align="absmiddle"></a>
+  <a target="middleFrame"  href="?page=help&section=clients">Clients</a>
+ </li>
+ <li>
+  <a target="middleFrame"  href="?page=help&section=outgoings"><img src="images/icons/gnome/stock/form/stock_form-currency-field.png" align="absmiddle"></a>
+  <a target="middleFrame"  href="?page=help&section=outgoings">Outgoings</a>
+ </li>
+  <li>
+ <a target="middleFrame"  href="?page=help&section=reports"><img src="images/icons/gnome/stock/chart/stock_chart-reorganize.png" align="absmiddle"></a>
+  <a target="middleFrame"  href="?page=help&section=reports">Reports</a>
+ </li>
+ <li>
+  <a target="middleFrame"  href="?page=help&section=tax_reports"><img src="images/icons/gnome/stock/generic/stock_book_blue.png" align="absmiddle"></a>
+  <a target="middleFrame"  href="?page=help&section=tax_reports">Tax Reports</a>
+ </li>
+</div>
+</patTemplate:tmpl>
+
+<patTemplate:tmpl name="default">
+<fieldset>
+<legend>Help</legend>
+Please Choose a section:
+<ul>
+  <li>
+ <a target="middleFrame"  href="?page=help&section=tasks"><img src="images/icons/gnome/stock/net/stock_mail-compose.png" align="absmiddle"></a>
+  <a target="middleFrame"  href="?page=help&section=tasks">Tasks</a>
+ </li>
+ <li>
+  <a target="middleFrame"  href="?page=help&section=clients"><img src="images/icons/gnome/stock/generic/stock_people.png" align="absmiddle"></a>
+  <a target="middleFrame"  href="?page=help&section=clients">Clients</a>
+ </li>
+ <li>
+  <a target="middleFrame"  href="?page=help&section=outgoings"><img src="images/icons/gnome/stock/form/stock_form-currency-field.png" align="absmiddle"></a>
+  <a target="middleFrame"  href="?page=help&section=outgoings">Outgoings</a>
+ </li>
+  <li>
+ <a target="middleFrame"  href="?page=help&section=reports"><img src="images/icons/gnome/stock/chart/stock_chart-reorganize.png" align="absmiddle"></a>
+  <a target="middleFrame"  href="?page=help&section=reports">Reports</a>
+ </li>
+ <li>
+  <a target="middleFrame"  href="?page=help&section=tax_reports"><img src="images/icons/gnome/stock/generic/stock_book_blue.png" align="absmiddle"></a>
+  <a target="middleFrame"  href="?page=help&section=tax_reports">Tax Reports</a>
+ </li>
+
+</fieldset>
+
+
+</patTemplate:tmpl>
+
+<patTemplate:tmpl name="tasks">
+<div id="help">
+<fieldset>
+<legend>Tasks</legend>
+<p>This Tasks page has quick links for managing your clients, invoices, timesheets etc. Most buttons should be fairly self explanatory!</p>
+<p>You can also edit your contact details and preferences on this page</p>
+
+</fieldset>
+<div>
+</patTemplate:tmpl>
+
+<patTemplate:tmpl name="clients">
+<div id="help">
+<fieldset>
+<legend>Clients</legend>
+<p>The Clients page is the main page for managing your clients</p>
+
+<ol>
+<li><a href="#creating_a_client">Creating a Client</a></li>
+<li><a href="#invoicing">Invoicing</a></li>
+<li><a href="#timesheets_and_projects">Timesheets and Projects</a></li>
+</ol>
+
+<div class="item">
+<a name="#creating_a_client"></a>
+<h2>Creating a Client</h2>
+<img src="images/help/create_new_client_form.jpg" class="floatLeft">
+<ul>
+ <li>Click on the 'Create New Client' Button at the top right of the clients page</li>
+ <li><img src="images/help/create_new_client.jpg"></li>
+ <li>A new client form will open</li>
+ <li>Fill out the contact details (will be used for invoicing etc.)</li>
+ <li>Click submit</li>
+</ul>
+</div>
+
+<div class="item">
+<a name="#invoicing"></a>
+<h2>Invoicing</h2>
+<img src="images/help/new_invoice_form.jpg" class="floatLeft">
+<h4>Creating an Invoice for a Client</h4>
+<ul>
+ <li>Click on the Invoice button at the top of the clients page</li>
+ <li><img src="images/help/new_invoice.jpg"></li>
+ <li>A choose client list appears</li>
+ <li>Select the client you wish to invoice, and click submit</li>
+ <li>A new invoice form appears</li>
+ <li>Fill out the details (the client address is automatically filled out)</li>
+ <li>Click Submit</li>
+</ul>
+<h4>Prining an Invoice</h4>
+<ul>
+ <li>Once you have created an invoice you can create a pdf (printable) invoice</li>
+ <li>If you are not on the invoice page (as above), goto to clients page and open the invoice you wish to print</li>
+ <li>Click on the Print button at the bottom: <img src="images/icons/16x16/pdf.png"></li>
+</ul>
+
+<h4>Recording Payments on Invoices</h4>
+<ul>
+ <li>When the invoice is paid, you can keep a record the payment details.</li> 
+ <li>If you are not on the invoice page (as above), goto to clients page and open the invoice you wish to print</li>
+ <li>Insert the date, value and payment type into the new payments section at the bottom of the invoice page</li>
+ <li>Click New Payment</li>
+</ul>
+</div>
+</fieldset>
+
+<div>
+</patTemplate:tmpl>

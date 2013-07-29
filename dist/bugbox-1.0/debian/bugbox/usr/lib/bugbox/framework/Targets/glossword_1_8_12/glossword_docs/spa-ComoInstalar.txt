@@ -1,0 +1,60 @@
+¿Cómo instalar Glossword?
+Desde el ordenador local a un alojamiento remoto
+
+    * Descomprima el paquete glossword-1.x.x.zip en la máquina local. Use una herramienta como 7-Zip para extraer los ficheros.
+    * Suba el contenido de la carpeta /glossword/1.x al alojamiento remoto.
+    * Establezca permisos de escritura para la carpeta /glossword/gw_temp y varias subcarpetas. Se puede hacer con cualquier software cliente de FTP o desde la línea de comandos:
+
+      # cd /usr/local/apache/htdocs/glossword 
+      # chmod 0777 gw_temp
+      # chmod 0777 gw_temp/t
+      # chmod 0777 gw_temp/a
+      # chmod 0777 gw_temp/gw_cache_sql
+      # chmod 0777 gw_temp/gw_export
+
+    * Establezca permisos de escritura para el fichero /db_config.php:
+
+      # chmod 0666 db_config.php
+
+      Raíz de /usr/local/apache/htdocs/glossword
+      Nombre de Fichero/Carpeta    valor chmod  Permisos
+      *      [DIR] gw_addon        -
+      *      [DIR] gw_admin        -
+      *      [DIR] gw_install      -
+      *      [DIR] gw_locale       -
+      *      [DIR] gw_temp         0777         drwxrwxrwx
+      *      [DIR] gw_xml          -
+      *      [DIR] img             -
+      *      [DIR] inc             -
+      *      [DIR] lib             -
+      *      [DIR] templates       -
+      *            .htaccess       -
+      *            favicon.ico     -
+      *            css.php         -
+      *            custom_vars.php -
+      *            db_config.php   0666         -rw-rw-rw-
+      *            gw_admin.php    -
+      *            gw_login.php    -
+      *            index.php       -
+      *            robots.txt      -
+
+
+    * Ahora, si su sitio es www.dominio.tld y Glossword se está instalando en el directorio raíz, el enlace a la instalación será http://www.dominio.tld/gw_install/. 
+
+Notas:
+
+    * Es posible usar otra carpeta temporal, pero debe ser legible por el servidor web y además debe estar establecida en el fichero /inc/config.inc.php. 
+
+    * Se requieren los niveles de chmod 0666 y 0777 a menos que su sistema use otros permisos. Por ejemplo, si usted utiliza CGIWrap que ejecuta sripts PHP con el UID del propietario del fichero en vez de con el UID del servidor, establezca chmod en 0644 y 0755. 
+
+Desde el ordenador local al ordenador local
+
+Instalación de Glossword en ordenadores locales con los sistemas operativos MS Windows 2000/XP/2003:
+
+    * Instale Glossword-WAMP.
+    * Descomprima el contenido del fichero glossword-1.x.x.zip en la carpeta C:\Archivos de programa\Glossword-WAMP\htdocs.
+    * Abra en un navegador el enlace http://localhost:81/glossword/gw_install/. 
+
+Siga las instrucciones del script de instalación. Éste creará todas las tablas de la base de datos y cuentas de administración necesarias.
+
+Ahora debería poder empezar a usar Glossword en su sitio inmediatamente.
