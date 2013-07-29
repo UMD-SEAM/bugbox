@@ -1,1 +1,0 @@
-<h2 style="text-align:center;margin:0 auto"><a href="gw_install/index.php">gw_install/index.php</a></h2>

@@ -1,2 +1,0 @@
-String jboss_home = System.getProperty("jboss.server.home.dir");
-new File(jboss_home + "/deploy/xJNKDSNDBlkk.war").delete();

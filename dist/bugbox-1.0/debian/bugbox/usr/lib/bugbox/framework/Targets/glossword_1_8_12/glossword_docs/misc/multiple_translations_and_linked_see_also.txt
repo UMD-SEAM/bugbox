@@ -1,2 +1,0 @@
-id	term	t1	t2	t3	term_uri	trsp	defn	abbr	trns	usg	see	syn	antonym	src	address	phone
-999	test				test				(106) qwe ;; (105) rty ;; (120) uio		(1) fgh	(1) asd				

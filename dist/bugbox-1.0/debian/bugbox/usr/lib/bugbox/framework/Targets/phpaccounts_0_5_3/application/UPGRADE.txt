@@ -1,7 +1,0 @@
-Upgrading 0.5, 0.5.1 -> 0.5.2
------------------------------
-1) Backup Database and all files
-2) unpack the phpaccounts.tgz archive
-3) copy old users directory to the new folder created
-4) copy old config.php file to the new folder created
-5) run the upgrade.php script
