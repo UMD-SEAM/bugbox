@@ -20,8 +20,6 @@ def main():
     loader = unittest.TestLoader()
     
     for exploit in Query().exploits:        
-        while len(os.listdir("live_systems/"))!=0:
-            sleep(1)
         suite.addTest(ExploitVerification(exploit))
                 
     testRunner = unittest.runner.TextTestRunner()

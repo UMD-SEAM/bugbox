@@ -1,0 +1,104 @@
+
+<patTemplate:tmpl name="view_invoices">
+
+<div class="centered">
+
+
+ <a href="?page=clients&action=list_clients"><img src="images/icons/arrowright-small.gif" class="inlineicon"> Back to client list</a> 
+
+<p>
+<table class="results">
+ <tr>
+  <td colspan="10" class="heading">
+     <a href="?page=clients&action=view_invoices&Client_ID={CLIENT_ID}&Period={PERIOD}&Start_Timestamp={LAST_PERIOD_START}&End_Timestamp={LAST_PERIOD_END}" title="last {PERIOD}"><img src="images/icons/arrow-left.gif"></a>
+	
+	{INVOICES} Invoices for {INVOICES_PERIOD} <a href="?page=clients&action=view_client&Client_ID={CLIENT_ID}"><span class="client">{CLIENT}</span></a> <a href="?page=clients&action=edit_invoice&Client_ID={CLIENT_ID}">New Invoice</a>
+	
+	<a href="?page=clients&action=view_invoices&Client_ID={CLIENT_ID}&Period={PERIOD}&Start_Timestamp={NEXT_PERIOD_START}&End_Timestamp={NEXT_PERIOD_END}" title="next {PERIOD}"><img src="images/icons/arrow-right.gif"></a>
+  </td>
+ </tr>
+ <tr>
+  <th class="cella">Ref</th>
+  <th class="cellb">Value</th>
+  <th class="cella">Payments</th>
+  <th class="cellb">Due</th>
+  <th class="cella">Date</th>
+  <th class="cellb">Client</th>
+  <th class="cella">Description</th>
+  <th class="cellb">View</th>
+  <th class="cella">Delete</th>
+  <th class="cellb">Print</th>
+  </tr>
+<patTemplate:link src="invoice_results" />
+ <tr>
+  <th class="cella">Total:</th>
+  <th class="cellb">_HTML_CURENCY_SYMBOL_{TOTAL}</th>
+  <th class="cella">Total Due:</th>
+  <th class="cellb"><span class="red">_HTML_CURENCY_SYMBOL_{TOTAL_DUE}</span></th>
+  <td colspan="5"></td>
+</table>
+</p>
+
+</div>
+</patTemplate:tmpl>
+
+
+<patTemplate:tmpl name="unpaid_invoices">
+
+<div class="centered">
+
+<h3>
+
+<a href="?page=clients&action=list_clients">Back to client list <img src="images/icons/32x32/undo.png" class="inlineicon"></a></h3>
+
+<p>
+<table class="results">
+ <tr>
+  <td colspan="10" class="heading">
+	
+	{INVOICES} Unpaid Invoices </td>
+ </tr>
+ <tr>
+  <th class="cella">Ref</th>
+  <th class="cellb">Value</th>
+  <th class="cella">Payments</th>
+  <th class="cellb">Due</th>
+  <th class="cella">Date</th>
+  <th class="cellb">Client</th>
+  <th class="cella">Description</th>
+  <th class="cellb">View</th>
+  <th class="cella">Delete</th>
+  <th class="cellb">Print</th>
+  </tr>
+<patTemplate:link src="invoice_results" />
+ <tr>
+  <th class="cella">Total:</th>
+  <th class="cellb">_HTML_CURENCY_SYMBOL_{TOTAL}</th>
+  <th class="cella">Total Due:</th>
+  <th class="cellb"><span class="red">_HTML_CURENCY_SYMBOL_{TOTAL_DUE}</span></th>
+  <td colspan="5"></td>
+</table>
+</p>
+
+<h3>
+<a href="?page=clients&action=list_clients">Back to client list <img src="images/icons/32x32/undo.png" class="inlineicon"></a></h3>
+
+</div>
+</patTemplate:tmpl>
+
+<patTemplate:tmpl name="invoice_results">
+ <tr>
+	 <td class="cell{I}a"><a title="view invoice" href="?page=clients&action=edit_invoice&Invoice_ID={ID}">{REFERENCE} {REPEAT_STATUS}</a></td>
+  <td class="cell{I}b">_HTML_CURENCY_SYMBOL_{VALUE}</td>
+  <td class="cell{I}a">{PAYMENTS}</td>
+  <td class="cell{I}b"><span class="red">_HTML_CURENCY_SYMBOL_{DUE}</span></td>
+  <td class="cell{I}a">{DATE}</td>
+  <td class="cell{I}b"><a href="?page=clients&action=view_client&Client_ID={CLIENT_ID}">{CLIENT}</a></td>
+  <td class="cell{I}a">{DESCRIPTION}</td>
+  <td class="cell{I}b"><a title="view invoice" href="?page=clients&action=edit_invoice&Invoice_ID={ID}"><img src="images/icons/16x16/viewmag.png"></a></td>
+  <td class="cell{I}a"><a title="delete invoice" href="?page=clients&action=delete_invoice&Invoice_ID={ID}&Client_ID={CLIENT_ID}"><img 
+  src="images/icons/gnome_small/stock/generic/stock_stop.png"></a></td>
+  <td class="cell{I}b"><a title="print pdf invoice" href="?page=clients&action=print_invoice&Invoice_ID={ID}&Client_ID={CLIENT_ID}"><img 
+  src="images/icons/16x16/pdf.png"></a></td>
+ </tr>
+</patTemplate:tmpl>

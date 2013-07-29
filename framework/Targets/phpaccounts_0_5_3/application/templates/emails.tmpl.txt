@@ -1,0 +1,10 @@
+<patTemplate:tmpl name="login_details">
+Your Login Details are as follows:
+
+Email: {EMAIL}
+Password: {PASSWORD}
+
+please go to http://www.simple-accounts.com to login
+
+Kind Regards
+</patTemplate:tmpl>

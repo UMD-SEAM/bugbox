@@ -1,0 +1,34 @@
+<patTemplate:tmpl name="invoice_wizard">
+<div class="centered">
+<form action="?page=clients&action=invoice_wizard" method="POST">
+<fieldset>
+<legend>Invoice Wizard</legend>
+<patTemplate:link src="choose_client" />
+<patTemplate:link src="form" />
+</fieldset>
+</form>
+<div>
+</patTemplate:tmpl>
+
+<patTemplate:tmpl name="choose_client" visibility="hidden">
+<h3>Choose Client</h3>
+{CLIENT_SELECT_LIST}
+<input type="submit" value="Go">
+</patTemplate:tmpl>
+
+
+
+<patTemplate:tmpl name="form" visibility="hidden">
+<input type="hidden" name="Client_ID" value="{CLIENT_ID}">
+<h3>Choose Project, Month and Detail level</h3>
+<label>Project:</label>
+{PROJECT_SELECT_LIST}
+<label title="Ignore dates, invoice for entire project">Complete Project</label> <input type="checkbox" name="Complete_Project" value="true" checked="checked">
+<label>Month:</label>
+{DATE_SELECT_LIST}
+<label>Detail:</label>
+<input type="radio" name="Detail" value="full" checked="checked"> full
+<input type="radio" name="Detail" value="summary"> summary 
+<input type="submit" name="submit" value="Generate Invoice">
+</patTemplate:tmpl>
+

@@ -1,0 +1,53 @@
+Nice Summary Page
+================
+Tasks?
+ -Payment (list outstanding invoices)
+ -New Expenditure
+ 
+Info
+ -Money Earnt this month
+ -Money Recieved
+ -Expenditure this month
+
+Database
+========
+Invoices can be per project
+Time selector
+Remove ID field from edit table
+
+
+Outgoings
+=========
+
+
+Email System
+============
+Send pdf invoices + statements
+
+
+New Users
+=========
+ -upload letter head
+
+Preferences / configuration
+===========================
+ -Date Format
+ -Email
+
+
+Invoices
+========
+Emailing invoices etc.
+
+NUMBERING!!!!
+Users need to have their own sequential numbering
+quote ref? - remove?
+
+PROBLEMS
+========
+Outgoings disappear on graph.
+Next + Previous a bit funny
+
+OTHER
+=====
+after actions, delete etc, returning to previous screen
