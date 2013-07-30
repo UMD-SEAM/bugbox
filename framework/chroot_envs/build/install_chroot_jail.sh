@@ -63,7 +63,12 @@ fi
 
 
 echo "Installing required packages"
-chroot $TARGET_DIR apt-get --yes install `cat $PACKAGES_FILE`
+chroot $TARGET_DIR dpkg --clear-selections
+chroot $TARGET_DIR dpkg --set-selections < $PACKAGES_FILE
+chroot $TARGET_DIR apt-get -y autoremove
+chroot $TARGET_DIR apt-get -y dselect-upgrade
+
+
 ret=$?
 if [[ $ret != 0 ]] ; then
     echo "apt-get failed to install packages"
@@ -80,5 +85,5 @@ umount $TARGET_DIR/dev
 if [ -e $PATCH_FILE ]
 then
     echo "Applying patch file $PATCH_FILE"
-    
+    (cd $TARGET_DIR && patch -p6 < $PATCH_FILE)
 fi

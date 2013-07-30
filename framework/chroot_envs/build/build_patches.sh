@@ -11,7 +11,7 @@ do
 	
     for FOLDER in ${FOLDERS[@]}
     do
-	diff -r -c $JAIL/etc/$FOLDER ~/vulncorpus/framework/chroot_envs/$JAIL/etc/$FOLDER >> $JAIL.patch
+	diff -ra $JAIL/etc/$FOLDER ~/vulncorpus/framework/chroot_envs/$JAIL/etc/$FOLDER >> $JAIL.patch
     done
     
 done
