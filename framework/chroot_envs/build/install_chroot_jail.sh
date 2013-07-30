@@ -68,10 +68,12 @@ fi
 
 
 echo "Installing required packages"
+chroot $TARGET_DIR apt-get -y install dselect
+#chroot $TARGET_DIR dselect access
+chroot $TARGET_DIR dselect update
 chroot $TARGET_DIR dpkg --clear-selections
 chroot $TARGET_DIR dpkg --set-selections < $PACKAGES_FILE
-chroot $TARGET_DIR apt-get -y autoremove
-chroot $TARGET_DIR apt-get -y dselect-upgrade
+chroot $TARGET_DIR apt-get -u -y dselect-upgrade
 
 
 ret=$?
