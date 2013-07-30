@@ -151,8 +151,12 @@ if __name__ == "__main__":
 
 
         elif sys.argv[2] == "running":
-            logger.warn("feature \"running\" not yet implemented")
-            pass
+            running = get_running()
+            if running:
+                logger.info("Running application %s", running)
+            else:
+                logger.info("No application currently running")
+            exit()
 
     elif sys.argv[1] == "info":
         from framework import Query
@@ -222,14 +226,18 @@ if __name__ == "__main__":
             exit()
 
         elif sys.argv[1] == "autorun":
-            logger.info("Autorun exploit %s", exploitname)
-            engine = Engine(Exploit(), config)        
-            engine.startup()
-            engine.xdebug_autotrace_on()
-            engine.exploit.exploit()
-            engine.xdebug_autotrace_off()
-            engine.shutdown()
-            exit()
+            if create_lockfile(exploitname):
+                logger.info("Autorun exploit %s", exploitname)
+                engine = Engine(Exploit(), config)        
+                engine.startup()
+                engine.xdebug_autotrace_on()
+                engine.exploit.exploit()
+                engine.xdebug_autotrace_off()
+                engine.shutdown()
+                exit()
+            else:
+                logger.error("An application is already running")
+                exit(-1)
 
     print usage() % (sys.argv[0],) 
     
