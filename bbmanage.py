@@ -7,6 +7,7 @@ import sys
 import bblogger
 import logging
 import readline
+import os
 
 logger = logging.getLogger("bbmanage")
 
@@ -21,18 +22,87 @@ def usage():
            "\tlist\t\t<exploits | targets | types | running>\n"         \
            "\tinfo\t\t<exploit_name>\n"                                 \
            "\tstart\t\t<exploit_name>\n"                                \
-           "\texploit\t\t--display --noverify <exploit_name>\n"   \
-           "\tstop\t\t<exploit_name>\n"                                 \
-           "\ttrace_on\t<exploit_name>\n"                               \
-           "\ttrace_off\t<exploit_name>\n"                              \
+           "\texploit\t\t--display --noverify <exploit_name>\n"         \
+           "\tstop\n"                                                   \
+           "\ttrace_on\n"                                               \
+           "\ttrace_off\n"                                              \
            "\tautorun\t\t<exploit_name>"
+
+def create_lockfile(exploit_name):
+    
+    try:
+        open('.lock')
+        return False
+    except IOError:
+        #lockfile does not yet exist, create it
+        fd = file('.lock','w')
+        fd.write(exploit_name)
+        fd.close()
+
+    return True
+
+def remove_lockfile():
+    os.remove('.lock')
+    return
+
+def get_running():
+
+    try:
+        fd = file('.lock', 'r')
+        running = fd.readline().rstrip('\n')
+        fd.close()
+        return running
+    except IOError:
+        return None
+        #lockfile does not yet exist, create it
+
+    return None
+    
+    
 
 if __name__ == "__main__":
     
-    if len(sys.argv) < 3:
+    if len(sys.argv) < 2:
         print usage() % (sys.argv[0],)
         exit(-1)
 
+    if len(sys.argv) == 2:
+
+        from framework import Query
+        from framework import Engine
+        import config
+
+        exploitname = get_running()
+        if not exploitname:
+            logger.error("Application %s is not currently running", exploitname)
+            exit(-1)
+
+        Exploit = Query().get_by_name(exploitname)
+        
+        if not Exploit:
+            logger.error("Unable to find exploit for session %s", exploitname)
+            exit(-1)
+
+        if sys.argv[1] == "stop":
+            logger.info("Stopping exploit instance (%s)", Exploit.attributes['Name'])
+            engine = Engine(Exploit(), config)        
+            engine.shutdown()
+            remove_lockfile()
+            exit()
+
+        elif sys.argv[1] == "trace_on":
+            logger.info("Trace on for exploit %s", exploitname)
+            engine = Engine(Exploit(), config)        
+            engine.xdebug_autotrace_on()
+            exit()
+            
+
+        elif sys.argv[1] == "trace_off":
+            logger.info("Trace off for exploit %s", exploitname)
+            engine = Engine(Exploit(), config)        
+            engine.xdebug_autotrace_off()
+            exit()
+            
         
     elif sys.argv[1] == "list":
         if sys.argv[2] == "exploits":
@@ -114,11 +184,15 @@ if __name__ == "__main__":
 
 
         if sys.argv[1] == "start":
-            logger.info("Starting exploit instance (%s)", Exploit.attributes['Name'])
-            engine = Engine(Exploit(), config)        
-            print "Description:\n", Exploit.attributes['Description']
-            engine.startup()
-            exit()
+            if create_lockfile(Exploit.attributes['Name']):
+                logger.info("Starting exploit instance (%s)", Exploit.attributes['Name'])
+                engine = Engine(Exploit(), config)        
+                print "Description:\n", Exploit.attributes['Description']
+                engine.startup()
+                exit()
+            else:
+                logger.error("An application is already running")
+                exit(-1)
 
         elif sys.argv[1] == "exploit":
             
@@ -147,25 +221,6 @@ if __name__ == "__main__":
                 
             exit()
 
-        elif sys.argv[1] == "stop":
-            logger.info("Stopping exploit instance (%s)", Exploit.attributes['Name'])
-            engine = Engine(Exploit(), config)        
-            engine.shutdown()
-            exit()
-
-        elif sys.argv[1] == "trace_on":
-            logger.info("Trace on for exploit %s", exploitname)
-            engine = Engine(Exploit(), config)        
-            engine.xdebug_autotrace_on()
-            exit()
-
-        elif sys.argv[1] == "trace_off":
-            logger.info("Trace off for exploit %s", exploitname)
-            engine = Engine(Exploit(), config)        
-            engine.xdebug_autotrace_off()
-            exit()
-
-            
         elif sys.argv[1] == "autorun":
             logger.info("Autorun exploit %s", exploitname)
             engine = Engine(Exploit(), config)        

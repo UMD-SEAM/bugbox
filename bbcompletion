@@ -15,7 +15,7 @@ _bbmanage ()
 	     list)
 	        opts="exploits targets types running"
 		;;
-	     info|exploit|start|stop|trace_on|trace_off|autorun|--display|--noverify)
+	     info|exploit|start|autorun|--display|--noverify)
 		opts=`cat framework/Exploits/*.py | grep "'Name'" | sed "s/.*'Name'.*:.*\"\([a-zA-Z0-9_].*\)\".*/\1/" | tr '\n' ' '`
 	        ;;
 

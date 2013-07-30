@@ -23,6 +23,11 @@ case "$1" in
     ;;
 esac
 
+if [ ! -e $PACKAGES_FILE ] ; then
+    echo "Package list $PACKAGES_FILE does not exist"
+    exit 1
+fi
+
 echo "Creating $TARGET_DIR directory"
 mkdir $TARGET_DIR
 echo "Building $DISTRIBUTION chroot jail"
