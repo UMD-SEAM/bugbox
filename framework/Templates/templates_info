@@ -1,0 +1,9 @@
+For the purposes of these templates anything inside square brackets [] and written in all caps with underscores is meant to be replaced.
+
+for example,
+[TARGET_NAME]
+would be replaced with 
+Wordpress 2.8.3
+if that was the target needed.
+
+The template for an exploit script is located in [EXPLOIT_NAME].py  in this directory.  The template for an new target/plugin is in the [TARGET_NAME] directory in this directory. The template for a new plugin is located in [TARGET_NAME]/plugins/[PLUGIN_NAME]. This attempts to duplicate the structure of a target with a plugin in the framework/Targets directory.
