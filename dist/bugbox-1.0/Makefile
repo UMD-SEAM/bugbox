@@ -20,10 +20,10 @@ package:
 	mkdir $(TARGET_DIR)/docs	
 	find $(SOURCE_DIR) -maxdepth 1 -type f  $(FILE_FILTER) -exec cp -t $(TARGET_DIR) {} \;
 	@echo "Copying framework..."
-	@(cd $(SOURCE_DIR) && find ./framework -type f  $(FILE_FILTER) ! -path '*/chroot_envs/*' ! -path '*/metasploit-framework/*' -exec cp -p --parents {} dist/bugbox-1.0/$(TARGET_DIR) \;)
+	(cd $(SOURCE_DIR) && find ./framework -type f  $(FILE_FILTER) ! -path '*/Debian?/*' ! -path '*/metasploit-framework/*' -exec cp -p --parents {} dist/bugbox-1.0/$(TARGET_DIR) \;)
 
 	@echo "Building deb"
-	#(cd .. && dpkg-deb -b $(PACKAGE_NAME))
+	debuild
 	@echo "Done building package"	
 
 install:
@@ -40,4 +40,6 @@ clean:
 	rm -rf $(BINDIR)
 
 .PHONY: package install uninstall clean
+
 #(cd $(SOURCE_DIR) && find usr -type f | xargs md5sum) > $(TARGET_DIR)/DEBIAN/md5sums
+#(cd .. && dpkg-deb -b $(PACKAGE_NAME))

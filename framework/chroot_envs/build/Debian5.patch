@@ -1,0 +1,98 @@
+diff -r -c Debian5/etc/apache2/apache2.conf /root/vulncorpus/framework/chroot_envs/Debian5/etc/apache2/apache2.conf
+*** Debian5/etc/apache2/apache2.conf	2012-02-05 16:04:36.000000000 -0500
+--- /root/vulncorpus/framework/chroot_envs/Debian5/etc/apache2/apache2.conf	2013-06-22 00:12:36.000000000 -0400
+***************
+*** 91,97 ****
+  
+  ##
+  ## Server-Pool Size Regulation (MPM specific)
+! ## 
+  
+  # prefork MPM
+  # StartServers: number of server processes to start
+--- 91,98 ----
+  
+  ##
+  ## Server-Pool Size Regulation (MPM specific)
+! ##
+! ServerName localhost 
+  
+  # prefork MPM
+  # StartServers: number of server processes to start
+diff -r -c Debian5/etc/php5/apache2/conf.d/xdebug.ini /root/vulncorpus/framework/chroot_envs/Debian5/etc/php5/apache2/conf.d/xdebug.ini
+*** Debian5/etc/php5/apache2/conf.d/xdebug.ini	2008-05-04 12:22:41.000000000 -0400
+--- /root/vulncorpus/framework/chroot_envs/Debian5/etc/php5/apache2/conf.d/xdebug.ini	2013-06-22 00:22:16.000000000 -0400
+***************
+*** 1 ****
+--- 1,5 ----
+  zend_extension=/usr/lib/php5/20060613+lfs/xdebug.so
++ xdebug.auto_trace=1
++ xdebug.trace_output_dir=/tmp/traces
++ xdebug.trace_output_name = trace.%c.%p
++ #xdebug.trace_enable_trigger=1
+diff -r -c Debian5/etc/php5/apache2/php.ini /root/vulncorpus/framework/chroot_envs/Debian5/etc/php5/apache2/php.ini
+*** Debian5/etc/php5/apache2/php.ini	2012-02-03 08:21:56.000000000 -0500
+--- /root/vulncorpus/framework/chroot_envs/Debian5/etc/php5/apache2/php.ini	2013-07-10 23:26:55.000000000 -0400
+***************
+*** 429,435 ****
+  ;       support by the security team.  For more information please
+  ;       see /usr/share/doc/php5-common/README.Debian.security
+  ;
+! register_globals = Off
+  
+  ; Whether or not to register the old-style input arrays, HTTP_GET_VARS
+  ; and friends.  If you're not using them, it's recommended to turn them off,
+--- 429,435 ----
+  ;       support by the security team.  For more information please
+  ;       see /usr/share/doc/php5-common/README.Debian.security
+  ;
+! register_globals = On
+  
+  ; Whether or not to register the old-style input arrays, HTTP_GET_VARS
+  ; and friends.  If you're not using them, it's recommended to turn them off,
+***************
+*** 439,445 ****
+  ; This directive tells PHP whether to declare the argv&argc variables (that
+  ; would contain the GET information).  If you don't use these variables, you
+  ; should turn it off for increased performance.
+! register_argc_argv = On
+  
+  ; When enabled, the SERVER and ENV variables are created when they're first
+  ; used (Just In Time) instead of when the script starts. If these variables
+--- 439,445 ----
+  ; This directive tells PHP whether to declare the argv&argc variables (that
+  ; would contain the GET information).  If you don't use these variables, you
+  ; should turn it off for increased performance.
+! register_argc_argv = Off
+  
+  ; When enabled, the SERVER and ENV variables are created when they're first
+  ; used (Just In Time) instead of when the script starts. If these variables
+***************
+*** 455,461 ****
+  ;
+  
+  ; Magic quotes for incoming GET/POST/Cookie data.
+! magic_quotes_gpc = On
+  
+  ; Magic quotes for runtime-generated data, e.g. data from SQL, from exec(), etc.
+  magic_quotes_runtime = Off
+--- 455,461 ----
+  ;
+  
+  ; Magic quotes for incoming GET/POST/Cookie data.
+! magic_quotes_gpc = Off
+  
+  ; Magic quotes for runtime-generated data, e.g. data from SQL, from exec(), etc.
+  magic_quotes_runtime = Off
+diff -r -c Debian5/etc/php5/conf.d/xdebug.ini /root/vulncorpus/framework/chroot_envs/Debian5/etc/php5/conf.d/xdebug.ini
+*** Debian5/etc/php5/conf.d/xdebug.ini	2008-05-04 12:22:41.000000000 -0400
+--- /root/vulncorpus/framework/chroot_envs/Debian5/etc/php5/conf.d/xdebug.ini	2013-06-22 00:22:16.000000000 -0400
+***************
+*** 1 ****
+--- 1,5 ----
+  zend_extension=/usr/lib/php5/20060613+lfs/xdebug.so
++ xdebug.auto_trace=1
++ xdebug.trace_output_dir=/tmp/traces
++ xdebug.trace_output_name = trace.%c.%p
++ #xdebug.trace_enable_trigger=1
+Only in /root/vulncorpus/framework/chroot_envs/Debian5/etc/php5: mods-available
