@@ -74,7 +74,7 @@ if __name__ == "__main__":
 
         exploitname = get_running()
         if not exploitname:
-            logger.error("Application %s is not currently running", exploitname)
+            logger.error("No application is currently running")
             exit(-1)
 
         Exploit = Query().get_by_name(exploitname)
