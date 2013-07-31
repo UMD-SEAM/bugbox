@@ -1,6 +1,7 @@
 #!/bin/bash
 
-INSTALL_ROOT=/usr/lib/bugbox/framework/chroot_envs/build
+CHROOT_ROOT=/usr/lib/bugbox/framework/chroot_envs
+INSTALL_ROOT=$CHROOT_ROOT/build
 
 case "$1" in
     Debian5)
@@ -95,5 +96,8 @@ then
     echo "Applying patch file $PATCH_FILE"
     (cd $TARGET_DIR && patch -f -p1 < $PATCH_FILE)
 fi
+
+echo "Copying chroot jail to $CHROOT_ROOT" 
+mv $TARGET_DIR $CHROOT_ROOT
 
 exit 0
