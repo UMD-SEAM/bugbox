@@ -1,0 +1,22 @@
+EasyProcess==0.1.6
+Magic-file-extensions==0.2
+PIL==1.1.7
+PyVirtualDisplay==0.1.2
+Pymacs==0.23
+SOAPpy==0.12.0
+argparse==1.2.1
+chardet==2.0.1
+devscripts==2.12.6
+## FIXME: could not find svn URL in dependency_links for this package:
+distribute==0.6.24dev-r0
+fpconst==0.7.2
+mercurial==2.2.2
+python-apt==0.8.8.1
+python-debian==0.1.21
+python-debianbts==1.11
+reportbug==6.4.3
+rope==0.9.2
+ropemacs==0.6c2
+selenium==2.31.0
+vboxapi==1.0
+wsgiref==0.1.2
