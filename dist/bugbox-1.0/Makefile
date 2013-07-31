@@ -39,6 +39,10 @@ clean:
 	@echo "Make clean"
 	rm -rf $(BINDIR)
 
+packageclean:
+	rm -rf data/*
+	rm -rf debian/bugbox
+
 .PHONY: package install uninstall clean
 
 #(cd $(SOURCE_DIR) && find usr -type f | xargs md5sum) > $(TARGET_DIR)/DEBIAN/md5sums

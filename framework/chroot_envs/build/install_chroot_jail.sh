@@ -92,5 +92,5 @@ umount $TARGET_DIR/dev
 if [ -e $PATCH_FILE ]
 then
     echo "Applying patch file $PATCH_FILE"
-    (cd $TARGET_DIR && patch -p6 < $PATCH_FILE)
+    (cd $TARGET_DIR && patch -f -p1 < $PATCH_FILE)
 fi
