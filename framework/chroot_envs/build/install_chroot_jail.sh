@@ -2,6 +2,7 @@
 
 CHROOT_ROOT=/usr/lib/bugbox/framework/chroot_envs
 INSTALL_ROOT=$CHROOT_ROOT/build
+PYTHON_DEPS=$INSTALL_ROOT/pythondeps.pip
 
 case "$1" in
     Debian5)
@@ -24,13 +25,25 @@ case "$1" in
     ;;
 esac
 
+echo "Setting up host system"
+
+pip install -r $PYTHON_DEPS
+
+if [[ $ret != 0 ]] ; then
+    echo "failed to install required python modules"
+    exit $ret
+fi
+
+
+echo "Setting up chroot jails"
+
 if [ ! -e $PACKAGES_FILE ] ; then
     echo "Package list $PACKAGES_FILE does not exist"
     exit 1
 fi
 
 echo "Creating $TARGET_DIR directory"
-1;3202;0cmkdir $TARGET_DIR
+mkdir $TARGET_DIR
 echo "Building $DISTRIBUTION chroot jail"
 debootstrap $DISTRIBUTION $TARGET_DIR $MIRROR
 ret=$?
@@ -86,10 +99,13 @@ fi
 
 rm $TARGET_DIR/usr/sbin/policy-rc.d 
 
+echo "Installing python dependencies"
+
 echo "Unmounting /dev, /dev/pts, /proc"
 umount $TARGET_DIR/proc
 umount $TARGET_DIR/dev/pts
 umount $TARGET_DIR/dev
+
 
 if [ -e $PATCH_FILE ]
 then
