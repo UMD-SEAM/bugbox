@@ -29,7 +29,7 @@ if [ ! -e $PACKAGES_FILE ] ; then
 fi
 
 echo "Creating $TARGET_DIR directory"
-mkdir $TARGET_DIR
+1;3202;0cmkdir $TARGET_DIR
 echo "Building $DISTRIBUTION chroot jail"
 debootstrap $DISTRIBUTION $TARGET_DIR $MIRROR
 ret=$?
@@ -71,7 +71,8 @@ echo "Installing required packages"
 chroot $TARGET_DIR apt-get -y install dselect
 #chroot $TARGET_DIR dselect access
 chroot $TARGET_DIR dselect update
-chroot $TARGET_DIR dpkg --clear-selections
+#chroot $TARGET_DIR dpkg --clear-selections
+chroot $TARGET_DIR apt-get -y upgrade
 chroot $TARGET_DIR dpkg --set-selections < $PACKAGES_FILE
 chroot $TARGET_DIR apt-get -u -y dselect-upgrade
 
@@ -94,3 +95,5 @@ then
     echo "Applying patch file $PATCH_FILE"
     (cd $TARGET_DIR && patch -f -p1 < $PATCH_FILE)
 fi
+
+exit 0

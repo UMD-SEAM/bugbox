@@ -1,4 +1,4 @@
-diff -Nrua Debian5/etc/apache2/apache2.conf /root/vulncorpus/framework/chroot_envs/Debian5/etc/apache2/apache2.conf
+diff -rua --unidirectional-new-file Debian5/etc/apache2/apache2.conf /root/vulncorpus/framework/chroot_envs/Debian5/etc/apache2/apache2.conf
 --- Debian5/etc/apache2/apache2.conf	2012-02-05 16:04:36.000000000 -0500
 +++ /root/vulncorpus/framework/chroot_envs/Debian5/etc/apache2/apache2.conf	2013-06-22 00:12:36.000000000 -0400
 @@ -91,7 +91,8 @@
@@ -11,7 +11,7 @@ diff -Nrua Debian5/etc/apache2/apache2.conf /root/vulncorpus/framework/chroot_en
  
  # prefork MPM
  # StartServers: number of server processes to start
-diff -Nrua Debian5/etc/php5/apache2/conf.d/xdebug.ini /root/vulncorpus/framework/chroot_envs/Debian5/etc/php5/apache2/conf.d/xdebug.ini
+diff -rua --unidirectional-new-file Debian5/etc/php5/apache2/conf.d/xdebug.ini /root/vulncorpus/framework/chroot_envs/Debian5/etc/php5/apache2/conf.d/xdebug.ini
 --- Debian5/etc/php5/apache2/conf.d/xdebug.ini	2008-05-04 12:22:41.000000000 -0400
 +++ /root/vulncorpus/framework/chroot_envs/Debian5/etc/php5/apache2/conf.d/xdebug.ini	2013-06-22 00:22:16.000000000 -0400
 @@ -1 +1,5 @@
@@ -20,7 +20,7 @@ diff -Nrua Debian5/etc/php5/apache2/conf.d/xdebug.ini /root/vulncorpus/framework
 +xdebug.trace_output_dir=/tmp/traces
 +xdebug.trace_output_name = trace.%c.%p
 +#xdebug.trace_enable_trigger=1
-diff -Nrua Debian5/etc/php5/apache2/php.ini /root/vulncorpus/framework/chroot_envs/Debian5/etc/php5/apache2/php.ini
+diff -rua --unidirectional-new-file Debian5/etc/php5/apache2/php.ini /root/vulncorpus/framework/chroot_envs/Debian5/etc/php5/apache2/php.ini
 --- Debian5/etc/php5/apache2/php.ini	2012-02-03 08:21:56.000000000 -0500
 +++ /root/vulncorpus/framework/chroot_envs/Debian5/etc/php5/apache2/php.ini	2013-07-10 23:26:55.000000000 -0400
 @@ -429,7 +429,7 @@
@@ -50,7 +50,7 @@ diff -Nrua Debian5/etc/php5/apache2/php.ini /root/vulncorpus/framework/chroot_en
  
  ; Magic quotes for runtime-generated data, e.g. data from SQL, from exec(), etc.
  magic_quotes_runtime = Off
-diff -Nrua Debian5/etc/php5/conf.d/xdebug.ini /root/vulncorpus/framework/chroot_envs/Debian5/etc/php5/conf.d/xdebug.ini
+diff -rua --unidirectional-new-file Debian5/etc/php5/conf.d/xdebug.ini /root/vulncorpus/framework/chroot_envs/Debian5/etc/php5/conf.d/xdebug.ini
 --- Debian5/etc/php5/conf.d/xdebug.ini	2008-05-04 12:22:41.000000000 -0400
 +++ /root/vulncorpus/framework/chroot_envs/Debian5/etc/php5/conf.d/xdebug.ini	2013-06-22 00:22:16.000000000 -0400
 @@ -1 +1,5 @@
@@ -59,7 +59,7 @@ diff -Nrua Debian5/etc/php5/conf.d/xdebug.ini /root/vulncorpus/framework/chroot_
 +xdebug.trace_output_dir=/tmp/traces
 +xdebug.trace_output_name = trace.%c.%p
 +#xdebug.trace_enable_trigger=1
-diff -Nrua Debian5/etc/php5/mods-available/xdebug.ini /root/vulncorpus/framework/chroot_envs/Debian5/etc/php5/mods-available/xdebug.ini
+diff -rua --unidirectional-new-file Debian5/etc/php5/mods-available/xdebug.ini /root/vulncorpus/framework/chroot_envs/Debian5/etc/php5/mods-available/xdebug.ini
 --- Debian5/etc/php5/mods-available/xdebug.ini	1969-12-31 19:00:00.000000000 -0500
 +++ /root/vulncorpus/framework/chroot_envs/Debian5/etc/php5/mods-available/xdebug.ini	2013-07-24 14:42:22.000000000 -0400
 @@ -0,0 +1,5 @@
@@ -68,7 +68,7 @@ diff -Nrua Debian5/etc/php5/mods-available/xdebug.ini /root/vulncorpus/framework
 +xdebug.trace_output_dir=/tmp/traces
 +xdebug.trace_output_name = trace.%c.%p
 +#xdebug.trace_enable_trigger=1
-diff -Nrua Debian5/etc/php5/mods-available/xdebug.ini.ucf-old /root/vulncorpus/framework/chroot_envs/Debian5/etc/php5/mods-available/xdebug.ini.ucf-old
+diff -rua --unidirectional-new-file Debian5/etc/php5/mods-available/xdebug.ini.ucf-old /root/vulncorpus/framework/chroot_envs/Debian5/etc/php5/mods-available/xdebug.ini.ucf-old
 --- Debian5/etc/php5/mods-available/xdebug.ini.ucf-old	1969-12-31 19:00:00.000000000 -0500
 +++ /root/vulncorpus/framework/chroot_envs/Debian5/etc/php5/mods-available/xdebug.ini.ucf-old	2013-06-22 00:13:55.000000000 -0400
 @@ -0,0 +1,5 @@
