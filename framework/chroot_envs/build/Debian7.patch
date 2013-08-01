@@ -28,19 +28,6 @@ diff -rua --unidirectional-new-file Debian7/etc/apache2/sites-available/default 
  		allow from all
  	</Directory>
 diff -rua --unidirectional-new-file Debian7/etc/apache2/sites-enabled/000-default /root/vulncorpus/framework/chroot_envs/Debian7/etc/apache2/sites-enabled/000-default
---- Debian7/etc/apache2/sites-enabled/000-default	2013-03-03 06:14:45.000000000 -0500
-+++ /root/vulncorpus/framework/chroot_envs/Debian7/etc/apache2/sites-enabled/000-default	2013-06-22 22:51:21.000000000 -0400
-@@ -8,7 +8,8 @@
- 	</Directory>
- 	<Directory /var/www/>
- 		Options Indexes FollowSymLinks MultiViews
--		AllowOverride None
-+		#AllowOverride None
-+		AllowOverride all
- 		Order allow,deny
- 		allow from all
- 	</Directory>
-diff -rua --unidirectional-new-file Debian7/etc/php5/apache2/conf.d/20-xdebug.ini /root/vulncorpus/framework/chroot_envs/Debian7/etc/php5/apache2/conf.d/20-xdebug.ini
 --- Debian7/etc/php5/apache2/conf.d/20-xdebug.ini	2013-07-31 00:06:03.000000000 -0400
 +++ /root/vulncorpus/framework/chroot_envs/Debian7/etc/php5/apache2/conf.d/20-xdebug.ini	2013-07-24 14:45:13.000000000 -0400
 @@ -1 +1,5 @@

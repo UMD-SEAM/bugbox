@@ -97,6 +97,16 @@ if [[ $ret != 0 ]] ; then
     exit $ret
 fi
 
+echo "Setting up traces folder"
+
+chroot $TARGET_DIR mkdir -p /tmp/traces
+chroot $TARGET_DIR chown www-data /tmp/traces
+chroot $TARGET_DIR chgrp www-data /tmp/traces
+
+echo "Setting up symlinks"
+
+chroot $TARGET_DIR ln -s ../mods-available/xdebug.ini /etc/php5/conf.d/20-xdebug.ini
+
 rm $TARGET_DIR/usr/sbin/policy-rc.d 
 
 echo "Installing python dependencies"
@@ -112,6 +122,8 @@ then
     echo "Applying patch file $PATCH_FILE"
     (cd $TARGET_DIR && patch -f -p1 < $PATCH_FILE)
 fi
+
+
 
 echo "Copying chroot jail to $CHROOT_ROOT" 
 mv $TARGET_DIR $CHROOT_ROOT

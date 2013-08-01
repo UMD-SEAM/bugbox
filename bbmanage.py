@@ -234,6 +234,7 @@ if __name__ == "__main__":
                 engine.exploit.exploit()
                 engine.xdebug_autotrace_off()
                 engine.shutdown()
+                remove_lockfile()
                 exit()
             else:
                 logger.error("An application is already running")
