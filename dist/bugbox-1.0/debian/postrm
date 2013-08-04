@@ -21,8 +21,24 @@ set -e
 
 case "$1" in
     purge|remove|upgrade|failed-upgrade|abort-install|abort-upgrade|disappear)
+	
 	echo "Deleting chroot jails"
 	rm -rf /usr/lib/bugbox
+	
+	echo "Removing selenium service"
+	insserv --dryrun -r selenium
+	
+	if [[ $? != 0 ]] ; then
+	    insserv -r selenium
+            rm /etc/init.d/selenium
+        fi
+
+	if [ -e /etc/bash_completion.d/bbcompletion ] ; then
+	    echo "Removing bash completion file"
+	    rm /etc/bash_completion.d/bbcompletion
+	fi
+
+	
     ;;
 	
     *)

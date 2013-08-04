@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 # postinst script for bugbox
 #
 # see: dh_installdeb(1)
@@ -17,8 +17,10 @@ set -e
 # for details, see http://www.debian.org/doc/debian-policy/ or
 # the debian-policy package
 
-CHROOT_JAILS=(Debian5 Debian7);
-CHROOT_ROOT=/usr/lib/bugbox/framework/chroot_envs
+CHROOT_JAILS=(Debian5 Debian7)
+BUGBOX_ROOT=/usr/lib/bugbox
+RESOURCES=$BUGBOX_ROOT/framework/chroot_envs/build/resources
+CHROOT_ROOT=$BUGBOX_ROOT/framework/chroot_envs
 
 
 case "$1" in
@@ -28,6 +30,26 @@ configure)
     do
 	$CHROOT_ROOT/build/install_chroot_jail.sh $JAIL
     done
+
+    if [ -e /etc/bash_completion.d ] ; then
+	echo "Installing bash completion file"
+	cp $RESOURCES/bbcompletion /etc/bash_completion.d
+    fi
+
+    echo "Installing selenium service"
+    cp $RESOURCES/selenium /etc/init.d
+    insserv selenium
+
+    if [[ ! -e /var/run/selenium.pid ]] ; then
+	/etc/init.d/selenium start
+    fi
+
+    echo "Setting application permissions"
+    find $BUGBOX_ROOT/framework/Targets -type d \( -path '*/application' -o -path '*/plugins/*/plugin' \) -exec chown -R www-data:www-data {} \;
+
+	
+	
+    exit 0
 ;;
 
 abort-upgrade|abort-remove|abort-deconfigure)

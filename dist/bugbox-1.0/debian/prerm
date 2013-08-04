@@ -16,9 +16,22 @@ set -e
 # for details, see http://www.debian.org/doc/debian-policy/ or
 # the debian-policy package
 
+BUGBOX_ROOT=/usr/lib/bugbox
 
 case "$1" in
     remove|upgrade|deconfigure)
+	
+	if [ -e $BUGBOX_ROOT/.lock ] ; then
+	    
+	    echo "A BugBox application is currently running, shutting it down"
+	    /usr/lib/bugbox/bbmanage stop
+	    
+	    if [ $? != 0 ] ; then
+		echo "Problem terminating application"
+		exit 1
+	    fi
+	    
+	fi
     ;;
 
     failed-upgrade)

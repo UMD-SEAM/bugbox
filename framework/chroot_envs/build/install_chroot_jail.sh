@@ -2,20 +2,21 @@
 
 CHROOT_ROOT=/usr/lib/bugbox/framework/chroot_envs
 INSTALL_ROOT=$CHROOT_ROOT/build
-PYTHON_DEPS=$INSTALL_ROOT/pythondeps.pip
+RESOURCES_ROOT=$INSTALL_ROOT/resources
+PYTHON_DEPS=$RESOURCES_ROOT/pythondeps.pip
 
 case "$1" in
     Debian5)
 	TARGET_DIR=$INSTALL_ROOT/Debian5
-	PACKAGES_FILE=$INSTALL_ROOT/debian5_packages.txt
-	PATCH_FILE=$INSTALL_ROOT/Debian5.patch
+	PACKAGES_FILE=$RESOURCES_ROOT/debian5_packages.txt
+	PATCH_FILE=$RESOURCES_ROOT/Debian5.patch
 	DISTRIBUTION=lenny
 	MIRROR=http://archive.debian.org/debian
     ;;
     Debian7)
 	TARGET_DIR=$INSTALL_ROOT/Debian7
-	PACKAGES_FILE=$INSTALL_ROOT/debian7_packages.txt
-	PATCH_FILE=$INSTALL_ROOT/Debian7.patch
+	PACKAGES_FILE=$RESOURCES_ROOT/debian7_packages.txt
+	PATCH_FILE=$RESOURCES_ROOT/Debian7.patch
 	DISTRIBUTION=wheezy
 	MIRROR=http://debian.lcs.mit.edu/debian/
     ;;
@@ -27,8 +28,8 @@ esac
 
 echo "Setting up host system"
 
-pip install -r $PYTHON_DEPS
-
+pip install --exists-action=i -r $PYTHON_DEPS
+ret=$?
 if [[ $ret != 0 ]] ; then
     echo "failed to install required python modules"
     exit $ret
