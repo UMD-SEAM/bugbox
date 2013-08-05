@@ -28,6 +28,7 @@ esac
 
 echo "Setting up host system"
 
+echo "Installing python dependencies"
 pip install --exists-action=i -r $PYTHON_DEPS
 ret=$?
 if [[ $ret != 0 ]] ; then
@@ -108,9 +109,12 @@ echo "Setting up symlinks"
 
 chroot $TARGET_DIR ln -s ../mods-available/xdebug.ini /etc/php5/conf.d/20-xdebug.ini
 
+echo "Configuring xdebug"
+extension_dir=`chroot $TARGET_DIR find /usr/lib/php5 -name 'xdebug.so'`
+chroot $TARGET_DIR (cat /etc/php5/mods-available/xdebug.ini | sed 's/zend_extension=\/usr\/lib\/php5\/.\+\/xdebug.so/$extension_dir/g' > /etc/php5/mods-available/xdebug.ini)
+
 rm $TARGET_DIR/usr/sbin/policy-rc.d 
 
-echo "Installing python dependencies"
 
 echo "Unmounting /dev, /dev/pts, /proc"
 umount $TARGET_DIR/proc

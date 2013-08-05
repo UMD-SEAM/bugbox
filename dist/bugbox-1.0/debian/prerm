@@ -24,7 +24,7 @@ case "$1" in
 	if [ -e $BUGBOX_ROOT/.lock ] ; then
 	    
 	    echo "A BugBox application is currently running, shutting it down"
-	    /usr/lib/bugbox/bbmanage stop
+	    (cd $BUGBOX_ROOT && ./bbmanage.py stop)
 	    
 	    if [ $? != 0 ] ; then
 		echo "Problem terminating application"

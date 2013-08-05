@@ -21,6 +21,7 @@ package:
 	find $(SOURCE_DIR) -maxdepth 1 -type f  $(FILE_FILTER) -exec cp -t $(TARGET_DIR) {} \;
 	@echo "Copying framework..."
 	(cd $(SOURCE_DIR) && cp -R ./lib dist/bugbox-1.0/$(TARGET_DIR))
+	(cd $(SOURCE_DIR) && cp -R ./tests dist/bugbox-1.0/$(TARGET_DIR))
 	(cd $(SOURCE_DIR) && find ./framework -type f  $(FILE_FILTER) ! -path '*/Debian?/*' ! -path '*/metasploit-framework/*' -exec cp -p --parents {} dist/bugbox-1.0/$(TARGET_DIR) \;)
 
 	@echo "Building deb"
@@ -28,7 +29,7 @@ package:
 	@echo "Done building package"	
 
 install:
-	@echo "INSTALLING MOFO"
+	@echo "INSTALLING"
 	mkdir -p $(BINDIR)
 	cp -R data/* $(BINDIR)
 
