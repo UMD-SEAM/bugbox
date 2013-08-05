@@ -111,7 +111,22 @@ chroot $TARGET_DIR ln -s ../mods-available/xdebug.ini /etc/php5/conf.d/20-xdebug
 
 echo "Configuring xdebug"
 extension_dir=`chroot $TARGET_DIR find /usr/lib/php5 -name 'xdebug.so'`
-chroot $TARGET_DIR (cat /etc/php5/mods-available/xdebug.ini | sed 's/zend_extension=\/usr\/lib\/php5\/.\+\/xdebug.so/$extension_dir/g' > /etc/php5/mods-available/xdebug.ini)
+
+case "$1" in
+    Debian5)
+	chroot $TARGET_DIR cat /etc/php5/apache2/conf.d/xdebug.ini | sed 's/zend_extension=\/usr\/lib\/php5\/.\+\/xdebug.so/zend_extension=$extension_dir/g' > $TARGET_DIR/etc/php5/apache2/conf.d/xdebug.ini
+	cp $TARGET_DIR/etc/php5/apache2/conf.d/xdebug.ini $TARGET_DIR/etc/php5/mods-available/xdebug.ini
+	;;
+    Debian7)
+	chroot $TARGET_DIR cat /etc/php5/mods-available/xdebug.ini | sed 's/zend_extension=\/usr\/lib\/php5\/.\+\/xdebug.so/zend_extension=$extension_dir/g' > $TARGET_DIR/etc/php5/mods-available/xdebug.ini
+
+    ;;
+    *)
+	exit 1
+    ;;
+esac
+
+
 
 rm $TARGET_DIR/usr/sbin/policy-rc.d 
 

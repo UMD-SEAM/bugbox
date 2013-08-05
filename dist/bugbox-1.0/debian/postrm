@@ -26,9 +26,9 @@ case "$1" in
 	rm -rf /usr/lib/bugbox
 	
 	echo "Removing selenium service"
-	insserv --dryrun -r selenium
 	
-	if [[ $? != 0 ]] ; then
+	
+	if [ ! insserv --dryrun -r selenium ] ; then
 	    insserv -r selenium
             rm /etc/init.d/selenium
         fi
