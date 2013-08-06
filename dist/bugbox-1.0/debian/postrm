@@ -28,7 +28,7 @@ case "$1" in
 	echo "Removing selenium service"
 	
 	
-	if [ ! insserv --dryrun -r selenium ] ; then
+	if ! insserv --dryrun -r selenium ; then
 	    insserv -r selenium
             rm /etc/init.d/selenium
         fi

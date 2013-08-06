@@ -2,7 +2,7 @@ TARGET_ROOT = data
 TARGET_DIR = $(TARGET_ROOT)
 SOURCE_DIR = ../..
 PACKAGE_NAME = bugbox-1.0
-FILE_FILTER = ! -iname '*.pyc' -and ! -iname '.git*'
+FILE_FILTER = ! -name '*.pyc' -and ! -name '.git*'
 
 BINDIR = $(DESTDIR)/usr/lib/bugbox
 

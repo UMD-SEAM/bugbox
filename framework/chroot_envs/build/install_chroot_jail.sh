@@ -105,36 +105,7 @@ chroot $TARGET_DIR mkdir -p /tmp/traces
 chroot $TARGET_DIR chown www-data /tmp/traces
 chroot $TARGET_DIR chgrp www-data /tmp/traces
 
-echo "Setting up symlinks"
-
-chroot $TARGET_DIR ln -s ../mods-available/xdebug.ini /etc/php5/conf.d/20-xdebug.ini
-
-echo "Configuring xdebug"
-extension_dir=`chroot $TARGET_DIR find /usr/lib/php5 -name 'xdebug.so'`
-
-case "$1" in
-    Debian5)
-	chroot $TARGET_DIR cat /etc/php5/apache2/conf.d/xdebug.ini | sed 's/zend_extension=\/usr\/lib\/php5\/.\+\/xdebug.so/zend_extension=$extension_dir/g' > $TARGET_DIR/etc/php5/apache2/conf.d/xdebug.ini
-	cp $TARGET_DIR/etc/php5/apache2/conf.d/xdebug.ini $TARGET_DIR/etc/php5/mods-available/xdebug.ini
-	;;
-    Debian7)
-	chroot $TARGET_DIR cat /etc/php5/mods-available/xdebug.ini | sed 's/zend_extension=\/usr\/lib\/php5\/.\+\/xdebug.so/zend_extension=$extension_dir/g' > $TARGET_DIR/etc/php5/mods-available/xdebug.ini
-
-    ;;
-    *)
-	exit 1
-    ;;
-esac
-
-
-
 rm $TARGET_DIR/usr/sbin/policy-rc.d 
-
-
-echo "Unmounting /dev, /dev/pts, /proc"
-umount $TARGET_DIR/proc
-umount $TARGET_DIR/dev/pts
-umount $TARGET_DIR/dev
 
 
 if [ -e $PATCH_FILE ]
@@ -144,6 +115,47 @@ then
 fi
 
 
+echo "Configuring xdebug"
+#extension_dir=`chroot $TARGET_DIR find /usr/lib/php5 -name 'xdebug.so'`
+#extension_dir=${extension_dir//\//\\\/} # escape for sed
+#sed_expr='s/zend_extension=\/usr\/lib\/php5\/.\+\/xdebug.so/zend_extension=$extension_dir/g'
+
+case "$1" in
+    Debian5)
+
+	echo "Setting xdebug.ini up symlinks"
+	mkdir $TARGET_DIR/etc/php5/mods-available
+	mv $TARGET_DIR/etc/php5/apache2/conf.d/xdebug.ini $TARGET_DIR/etc/php5/mods-available/xdebug.ini
+	rm $TARGET_DIR/etc/php5/conf.d/xdebug.ini
+	chroot $TARGET_DIR ln -s /etc/php5/mods-available/xdebug.ini /etc/php5/conf.d/xdebug.ini
+	chroot $TARGET_DIR ln -s /etc/php5/mods-available/xdebug.ini /etc/php5/apache2/conf.d/xdebug.ini
+
+	#echo "Doing Debian 5 specific xdebug configuration"
+	#chroot $TARGET_DIR cat /etc/php5/apache2/conf.d/xdebug.ini | sed $sed_expr > $TARGET_DIR/etc/php5/apache2/conf.d/xdebug.ini
+	#cp $TARGET_DIR/etc/php5/apache2/conf.d/xdebug.ini $TARGET_DIR/etc/php5/mods-available/xdebug.ini
+	#echo "resulting config file for $extension_dir"
+	#cat $TARGET_DIR/etc/php5/mods-available/xdebug.ini
+	;;
+
+    Debian7)
+
+	#echo "Doing Debian 7 specific xdebug configuration"
+	#cat $TARGET_DIR/etc/php5/mods-available/xdebug.ini
+	#chroot $TARGET_DIR cat /etc/php5/mods-available/xdebug.ini | sed $sed_expr > $TARGET_DIR/etc/php5/mods-available/xdebug.ini
+	#echo "resulting config file for $extension_dir"
+	#echo "location: $TARGET_DIR/etc/php5/mods-available/xdebug.ini"
+	#cat $TARGET_DIR/etc/php5/mods-available/xdebug.ini
+	
+    ;;
+    *)
+	exit 1
+    ;;
+esac
+
+echo "Unmounting /dev, /dev/pts, /proc"
+umount $TARGET_DIR/proc
+umount $TARGET_DIR/dev/pts
+umount $TARGET_DIR/dev
 
 echo "Copying chroot jail to $CHROOT_ROOT" 
 mv $TARGET_DIR $CHROOT_ROOT

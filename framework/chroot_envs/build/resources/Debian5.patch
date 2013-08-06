@@ -50,30 +50,3 @@ diff -rua --unidirectional-new-file Debian5/etc/php5/apache2/php.ini /root/vulnc
  
  ; Magic quotes for runtime-generated data, e.g. data from SQL, from exec(), etc.
  magic_quotes_runtime = Off
-diff -rua --unidirectional-new-file Debian5/etc/php5/conf.d/xdebug.ini /root/vulncorpus/framework/chroot_envs/Debian5/etc/php5/conf.d/xdebug.ini
---- Debian5/etc/php5/conf.d/xdebug.ini	2008-05-04 12:22:41.000000000 -0400
-+++ /root/vulncorpus/framework/chroot_envs/Debian5/etc/php5/conf.d/xdebug.ini	2013-06-22 00:22:16.000000000 -0400
-@@ -1 +1,5 @@
- zend_extension=/usr/lib/php5/20060613+lfs/xdebug.so
-+xdebug.auto_trace=1
-+xdebug.trace_output_dir=/tmp/traces
-+xdebug.trace_output_name = trace.%c.%p
-+#xdebug.trace_enable_trigger=1
-diff -rua --unidirectional-new-file Debian5/etc/php5/mods-available/xdebug.ini /root/vulncorpus/framework/chroot_envs/Debian5/etc/php5/mods-available/xdebug.ini
---- Debian5/etc/php5/mods-available/xdebug.ini	1969-12-31 19:00:00.000000000 -0500
-+++ /root/vulncorpus/framework/chroot_envs/Debian5/etc/php5/mods-available/xdebug.ini	2013-07-24 14:42:22.000000000 -0400
-@@ -0,0 +1,5 @@
-+zend_extension=/usr/lib/php5/20060613+lfs/xdebug.so
-+xdebug.auto_trace=0
-+xdebug.trace_output_dir=/tmp/traces
-+xdebug.trace_output_name = trace.%c.%p
-+#xdebug.trace_enable_trigger=1
-diff -rua --unidirectional-new-file Debian5/etc/php5/mods-available/xdebug.ini.ucf-old /root/vulncorpus/framework/chroot_envs/Debian5/etc/php5/mods-available/xdebug.ini.ucf-old
---- Debian5/etc/php5/mods-available/xdebug.ini.ucf-old	1969-12-31 19:00:00.000000000 -0500
-+++ /root/vulncorpus/framework/chroot_envs/Debian5/etc/php5/mods-available/xdebug.ini.ucf-old	2013-06-22 00:13:55.000000000 -0400
-@@ -0,0 +1,5 @@
-+zend_extension=/usr/lib/php5/20060613+lfs/xdebug.so
-+xdebug.auto_trace=1
-+xdebug.trace_output_dir=/tmp/traces
-+xdebug.trace_output_name = trace.%c.%p
-+#xdebug.trace_enable_trigger=1
