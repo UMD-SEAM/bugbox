@@ -153,6 +153,7 @@ case "$1" in
 	;;
 esac
 
+
 echo "Unmounting /dev, /dev/pts, /proc"
 umount $TARGET_DIR/proc
 umount $TARGET_DIR/dev/pts
