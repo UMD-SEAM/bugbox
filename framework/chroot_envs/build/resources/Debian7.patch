@@ -27,12 +27,3 @@ diff -rua --unidirectional-new-file Debian7/etc/apache2/sites-available/default 
  		Order allow,deny
  		allow from all
  	</Directory>
-diff -rua --unidirectional-new-file Debian7/etc/php5/mods-available/xdebug.ini /root/vulncorpus/framework/chroot_envs/Debian7/etc/php5/mods-available/xdebug.ini
---- Debian7/etc/php5/mods-available/xdebug.ini	2013-07-31 00:06:03.000000000 -0400
-+++ /root/vulncorpus/framework/chroot_envs/Debian7/etc/php5/mods-available/xdebug.ini	2013-07-24 14:45:13.000000000 -0400
-@@ -1,1 +1,5 @@
- zend_extension=/usr/lib/php5/20100525+lfs/xdebug.so
-+xdebug.auto_trace=0
-+xdebug.trace_output_dir=/tmp/traces
-+xdebug.trace_output_name = trace.%c.%p
-+#xdebug.trace_enable_trigger=1

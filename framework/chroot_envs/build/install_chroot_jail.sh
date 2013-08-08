@@ -1,4 +1,7 @@
 #!/bin/bash
+# Copyright 2013 University of Maryland.  All rights reserved.
+# Use of this source code is governed by a BSD-style
+# license that can be found in the LICENSE.TXT file.
 
 CHROOT_ROOT=/usr/lib/bugbox/framework/chroot_envs
 INSTALL_ROOT=$CHROOT_ROOT/build
@@ -116,13 +119,12 @@ fi
 
 
 echo "Configuring xdebug"
-#extension_dir=`chroot $TARGET_DIR find /usr/lib/php5 -name 'xdebug.so'`
-#extension_dir=${extension_dir//\//\\\/} # escape for sed
-#sed_expr='s/zend_extension=\/usr\/lib\/php5\/.\+\/xdebug.so/zend_extension=$extension_dir/g'
+
 
 case "$1" in
     Debian5)
-
+	
+	echo "Doing Debian 5 specific xdebug configuration"
 	echo "Setting xdebug.ini up symlinks"
 	mkdir $TARGET_DIR/etc/php5/mods-available
 	mv $TARGET_DIR/etc/php5/apache2/conf.d/xdebug.ini $TARGET_DIR/etc/php5/mods-available/xdebug.ini
@@ -130,26 +132,25 @@ case "$1" in
 	chroot $TARGET_DIR ln -s /etc/php5/mods-available/xdebug.ini /etc/php5/conf.d/xdebug.ini
 	chroot $TARGET_DIR ln -s /etc/php5/mods-available/xdebug.ini /etc/php5/apache2/conf.d/xdebug.ini
 
-	#echo "Doing Debian 5 specific xdebug configuration"
-	#chroot $TARGET_DIR cat /etc/php5/apache2/conf.d/xdebug.ini | sed $sed_expr > $TARGET_DIR/etc/php5/apache2/conf.d/xdebug.ini
-	#cp $TARGET_DIR/etc/php5/apache2/conf.d/xdebug.ini $TARGET_DIR/etc/php5/mods-available/xdebug.ini
-	#echo "resulting config file for $extension_dir"
-	#cat $TARGET_DIR/etc/php5/mods-available/xdebug.ini
 	;;
 
     Debian7)
 
-	#echo "Doing Debian 7 specific xdebug configuration"
+	echo "Doing Debian 7 specific xdebug configuration"
+	#extension_dir=`chroot $TARGET_DIR find /usr/lib/php5 -name 'xdebug.so'`
+	#extension_dir=${extension_dir//\//\\\/} # escape for sed
+	#sed_expr="s/zend_extension=\/usr\/lib\/php5\/.\+\/xdebug.so/zend_extension=$extension_dir/g"
+	#echo "Before change"
 	#cat $TARGET_DIR/etc/php5/mods-available/xdebug.ini
 	#chroot $TARGET_DIR cat /etc/php5/mods-available/xdebug.ini | sed $sed_expr > $TARGET_DIR/etc/php5/mods-available/xdebug.ini
-	#echo "resulting config file for $extension_dir"
-	#echo "location: $TARGET_DIR/etc/php5/mods-available/xdebug.ini"
+	#echo "After change"
 	#cat $TARGET_DIR/etc/php5/mods-available/xdebug.ini
-	
-    ;;
+	echo -e "xdebug.auto_trace=0\nxdebug.trace_output_dir=/tmp/traces\nxdebug.trace_output_name = trace.%c.%p\n" >> $TARGET_DIR/etc/php5/mods-available/xdebug.ini
+
+	;;
     *)
 	exit 1
-    ;;
+	;;
 esac
 
 echo "Unmounting /dev, /dev/pts, /proc"

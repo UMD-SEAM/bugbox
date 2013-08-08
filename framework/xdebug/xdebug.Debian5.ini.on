@@ -1,5 +1,0 @@
-zend_extension=/usr/lib/php5/20060613+lfs/xdebug.so
-xdebug.auto_trace=1
-xdebug.trace_output_dir=/tmp/traces
-xdebug.trace_output_name = trace.%c.%p
-#xdebug.trace_enable_trigger=1
