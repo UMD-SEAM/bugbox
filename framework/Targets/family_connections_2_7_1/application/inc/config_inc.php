@@ -1,1 +1,1 @@
-<?php $cfg_mysql_host = '127.0.0.1'; $cfg_mysql_db = 'family_connections_2_7_1'; $cfg_mysql_user = 'familyadmin'; $cfg_mysql_pass = 'familypw21'; ?>
+<?php $cfg_mysql_host = '127.0.0.1'; $cfg_mysql_db = 'family_connections_2_7_1'; $cfg_mysql_user = 'root'; $cfg_mysql_pass = 'connection452'; ?>
