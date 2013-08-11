@@ -12,12 +12,22 @@ import logging
 
 GRAY = '\033[90m'
 ENDC = '\033[0m'
+ERROR = '\033[91m'
 
 OKLVL = 22
 logger = logging.getLogger("Engine")
 
+
+
 class Engine:
-    
+
+    class StartUpException(Exception):
+        pass
+
+    class ShutDownException(Exception):
+        pass
+
+                
     def __init__(self, exploit, config):
 
         self.chroot_dirs = config.chroot_dirs
@@ -43,13 +53,6 @@ class Engine:
         self.application_dir_mapping = self.target_app.application_dir_mapping
         self.application_dir = self.target_app.application_dir
 
-        #try:
-        #    self.database_restore_file = self.target_app.database_filename
-        #    self.database_name = self.target_app.database_name
-        #except AttributeError:
-        #    self.database_restore_file = None
-        #    self.database_name = None
-
         if self.exploit.attributes.has_key('Plugin'):
             try:
                 pname = self.exploit.attributes['Plugin']
@@ -63,7 +66,8 @@ class Engine:
         return
 
     def startup(self):
-        logger.info("Running application startup")
+
+        logger.info("Running application startup for exploit %s", self.exploit)
         if self.none_running():
             start_script = ["mkdir %s"                              %(self.target_system_dir,),
                             "mount --bind %s/%s %s"                 %(self.chroot_dirs, 
@@ -87,7 +91,9 @@ class Engine:
             logger.info("Running exploit setup")
             self.exploit.setup(self.target_system_dir)
         else:
+            
             logger.error("There is already a system running under %s", self.live_systems_dir)
+            raise StartupException("Problem starting application")
             
         return
 
@@ -121,6 +127,7 @@ class Engine:
 
         else:
             logger.error("attempting to shutdown a system that is not running.")
+            raise ShutDownException("Problem during application shutdown")
 
         return
 
@@ -173,7 +180,7 @@ class Engine:
 
             self.execute_commands(autotrace_on_script)
         else:
-            print "[%sError%s]: attempting to turn off autotrace for a system that is not running" % (FAIL, ENDC)
+            print "[%sError%s]: attempting to turn off autotrace for a system that is not running" % (ERROR, ENDC)
 
         return
 

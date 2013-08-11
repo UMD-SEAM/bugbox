@@ -47,12 +47,15 @@ configure)
     echo "Setting application permissions"
     find $BUGBOX_ROOT/framework/Targets -type d \( -path '*/application' -o -path '*/plugins/*/plugin' \) -exec chown -R www-data:www-data {} \;
 
+    MSF_DIR=$BUGBOX_ROOT/lib/metasploit-framework
+    PATCH_FILE=$BUGBOX_ROOT/lib/msf.diff
+
     echo "Cloning Metasploit repository"
-    mkdir $BUGBOX_ROOT/framework/Exploits/metasploit-framework
-    MSF_DIR=$BUGBOX_ROOT/framework/Exploits/metasploit-framework
+    mkdir $MSF_DIR
     git clone https://github.com/rapid7/metasploit-framework.git $MSF_DIR
     (cd $MSF_DIR && git checkout 40e801d345ecf4ddc233b26c6bc2aac6741556d1)
-	
+    (cd $MSF_DIR && patch -f -R -p1 < $PATCH_FILE)
+    
 	
     exit 0
 ;;

@@ -20,7 +20,8 @@ package:
 	mkdir $(TARGET_DIR)/docs	
 	find $(SOURCE_DIR) -maxdepth 1 -type f  $(FILE_FILTER) -exec cp -t $(TARGET_DIR) {} \;
 	@echo "Copying framework..."
-	(cd $(SOURCE_DIR) && cp -R ./lib dist/bugbox-1.0/$(TARGET_DIR))
+	mkdir $(TARGET_DIR)/lib
+	(cd $(SOURCE_DIR) && cp -R ./lib/*.* dist/bugbox-1.0/$(TARGET_DIR)/lib)
 	(cd $(SOURCE_DIR) && cp -R ./tests dist/bugbox-1.0/$(TARGET_DIR))
 	(cd $(SOURCE_DIR) && find ./framework -type f  $(FILE_FILTER) ! -path '*/Debian?/*' ! -path '*/metasploit-framework/*' -exec cp -p --parents {} dist/bugbox-1.0/$(TARGET_DIR) \;)
 
