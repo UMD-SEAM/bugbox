@@ -2,7 +2,7 @@
 /* Database settings for Glossword */
 define('GW_DB_HOST', '127.0.0.1');
 define('GW_DB_DATABASE', 'glossword_1_8_12');
-define('GW_DB_USER', 'root');
+define('GW_DB_USER', 'dbroot');
 define('GW_DB_PASSWORD', 'connection452');
 $sys['tbl_prefix'] = 'gw_';
 $sys['db_type'] = 'mysql';

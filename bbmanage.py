@@ -28,22 +28,6 @@ def usage():
            "\ttrace_off\n"                                              \
            "\tautorun\t\t<exploit_name>"
 
-def create_lockfile(exploit_name):
-    
-    try:
-        open('.lock')
-        return False
-    except IOError:
-        #lockfile does not yet exist, create it
-        fd = file('.lock','w')
-        fd.write(exploit_name)
-        fd.close()
-
-    return True
-
-def remove_lockfile():
-    os.remove('.lock')
-    return
 
 def get_running():
 
@@ -57,7 +41,6 @@ def get_running():
         #lockfile does not yet exist, create it
 
     return None
-    
     
 
 if __name__ == "__main__":
@@ -87,7 +70,6 @@ if __name__ == "__main__":
             logger.info("Stopping exploit instance (%s)", Exploit.attributes['Name'])
             engine = Engine(Exploit(), config)        
             engine.shutdown()
-            remove_lockfile()
             exit()
 
         elif sys.argv[1] == "trace_on":
@@ -188,15 +170,12 @@ if __name__ == "__main__":
 
 
         if sys.argv[1] == "start":
-            if create_lockfile(Exploit.attributes['Name']):
-                logger.info("Starting exploit instance (%s)", Exploit.attributes['Name'])
-                engine = Engine(Exploit(), config)        
-                print "Description:\n", Exploit.attributes['Description']
-                engine.startup()
-                exit()
-            else:
-                logger.error("An application is already running")
-                exit(-1)
+
+            logger.info("Starting exploit instance (%s)", Exploit.attributes['Name'])
+            engine = Engine(Exploit(), config)        
+            print "Description:\n", Exploit.attributes['Description']
+            engine.startup()
+            exit()
 
         elif sys.argv[1] == "exploit":
             
@@ -226,20 +205,15 @@ if __name__ == "__main__":
             exit()
 
         elif sys.argv[1] == "autorun":
-            if create_lockfile(exploitname):
-                logger.info("Autorun exploit %s", exploitname)
-                engine = Engine(Exploit(), config)        
-                engine.startup()
-                engine.xdebug_autotrace_on()
-                engine.exploit.exploit()
-                engine.xdebug_autotrace_off()
-                engine.shutdown()
-                remove_lockfile()
-                exit()
-            else:
-                logger.error("An application is already running")
-                exit(-1)
-
+            logger.info("Autorun exploit %s", exploitname)
+            engine = Engine(Exploit(), config)        
+            engine.startup()
+            engine.xdebug_autotrace_on()
+            engine.exploit.exploit()
+            engine.xdebug_autotrace_off()
+            engine.shutdown()
+            exit()
+            
     print usage() % (sys.argv[0],) 
     
         

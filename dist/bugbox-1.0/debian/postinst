@@ -55,7 +55,10 @@ configure)
     git clone https://github.com/rapid7/metasploit-framework.git $MSF_DIR
     (cd $MSF_DIR && git checkout 40e801d345ecf4ddc233b26c6bc2aac6741556d1)
     (cd $MSF_DIR && patch -f -R -p1 < $PATCH_FILE)
-    
+
+    echo "Configuring MYSQL"
+    echo "You will be asked for the root password so that a superuser can be added to the mysql server"
+    echo -e "CREATE USER 'dbroot'@'localhost' IDENTIFIED BY 'connection452';\nGRANT ALL PRIVILEGES ON *.* TO 'dbroot'@'localhost' WITH GRANT OPTION;" | mysql -uroot -p 
 	
     exit 0
 ;;

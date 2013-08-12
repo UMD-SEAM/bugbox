@@ -206,7 +206,7 @@ $databases = array (
     'default' => 
     array (
       'database' => 'drupal_7_14',
-      'username' => 'root',
+      'username' => 'dbroot',
       'password' => 'connection452',
       'host' => '127.0.0.1',
       'port' => '',

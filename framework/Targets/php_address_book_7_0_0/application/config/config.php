@@ -3,7 +3,7 @@
   // Database access definition
   $dbname     = "php_address_book_7_0_0"; 
   $dbserver   = "127.0.0.1"; 
-  $dbuser     = "root"; 
+  $dbuser     = "dbroot"; 
   $dbpass     = "connection452"; 
 
   // Define table prefix

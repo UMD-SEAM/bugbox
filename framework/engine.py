@@ -17,6 +17,35 @@ ERROR = '\033[91m'
 OKLVL = 22
 logger = logging.getLogger("Engine")
 
+def create_lockfile(exploit_name):
+    
+    try:
+        open('.lock')
+        return False
+    except IOError:
+        #lockfile does not yet exist, create it
+        fd = file('.lock','w')
+        fd.write(exploit_name)
+        fd.close()
+
+    return True
+
+def remove_lockfile():
+    os.remove('.lock')
+    return
+
+def get_running():
+
+    try:
+        fd = file('.lock', 'r')
+        running = fd.readline().rstrip('\n')
+        fd.close()
+        return running
+    except IOError:
+        return None
+        #lockfile does not yet exist, create it
+
+    return None
 
 
 class Engine:
@@ -67,8 +96,9 @@ class Engine:
 
     def startup(self):
 
-        logger.info("Running application startup for exploit %s", self.exploit)
-        if self.none_running():
+        logger.info("Running application startup for exploit %s", self.exploitname)
+        if not get_running():
+            create_lockfile(self.exploitname)
             start_script = ["mkdir %s"                              %(self.target_system_dir,),
                             "mount --bind %s/%s %s"                 %(self.chroot_dirs, 
                                                                       self.chroot_environment, 
@@ -93,7 +123,7 @@ class Engine:
         else:
             
             logger.error("There is already a system running under %s", self.live_systems_dir)
-            raise StartupException("Problem starting application")
+            raise StartUpException("Problem starting application")
             
         return
 
@@ -102,7 +132,8 @@ class Engine:
 
     def shutdown(self):
         
-        if self.is_running():
+        if get_running() == self.exploitname:
+            remove_lockfile()
             if self.check_chroot_in_use():
                 logger.error("Shutdown failed: one or more processes is using a resource in %s", self.target_system_dir)
                 exit(-1)
@@ -137,13 +168,6 @@ class Engine:
             logger.error("Verify failed: exploit did not succeed")
 	return
 
-    def is_running(self):
-        return os.path.isdir(self.target_system_dir)
-    
-    def none_running(self):
-        return len(os.listdir(self.live_systems_dir)) == 0
-
-
     def check_chroot_in_use(self):
         checkcmd = "if [ ! -z `lsof -Fcp +D %s | tr '\\n' ' ' | "           \
                    "sed -e 's/p\\([0-9]\\+\\) c\\([^ ]\\+\\)/\\2(\\1) /g' " \
@@ -156,7 +180,7 @@ class Engine:
 
     def xdebug_autotrace_on(self):
 
-        if self.is_running():
+        if get_running():
             autotrace_on_script = ["sed -i 's/xdebug\.auto_trace=0/xdebug\.auto_trace=1/' " \
                                    "%s/etc/php5/mods-available/xdebug.ini" % (self.target_system_dir),
                                    "chroot %s /etc/init.d/apache2 restart" %(self.target_system_dir,)]
@@ -168,7 +192,7 @@ class Engine:
 
 
     def xdebug_autotrace_off(self):
-        if self.is_running():
+        if get_running():
             datestr = datetime.datetime.now().strftime('%Y_%m_%d')
             movetodir = "%s/%s_%s" %(self.traces_dir, self.exploitname, datestr)
             autotrace_on_script = ["mkdir -p %s" % (movetodir,),

@@ -38,6 +38,8 @@ case "$1" in
 	    rm /etc/bash_completion.d/bbcompletion
 	fi
 
+	echo "Removing Mysql superuser"
+	echo "DROP USER 'dbroot'@'localhost';" | mysql -udbroot -pconnection452
 	
     ;;
 	
