@@ -14,18 +14,26 @@ logger = logging.getLogger("SeleniumDriver")
 class SeleniumDriver (webdriver.Firefox):
     """This is a class that encapsulates the selenium webdriver, adding some useful functionality."""
 
-    def __init__(self, visible=False, javascript=True):
+    def __init__(self, visible=False, javascript=True, user_agent=None):
         self.display = None
         if not visible:
             self.display = Display(visible=0, size=(800, 600))
             self.display.start()
 
+        webdriver.Firefox.__init__(self)
+        fp = webdriver.FirefoxProfile()
+        
+        # disable javascript
         if javascript:
-            webdriver.Firefox.__init__(self)
-        else:
-            fp = webdriver.FirefoxProfile()
             fp.set_preference("javascript.enabled", False)
-            webdriver.Firefox.__init__(self, firefox_profile=fp)
+
+        # set user-agent string
+        if user_agent:
+            fp.set_preference("general.useragent.override", user_agent)
+
+        webdriver.Firefox.__init__(self, firefox_profile=fp)
+
+            
         return
 
     def get_element(self, by_xpath=None, by_class=None, by_id=None, by_link_text=None, attempts=4, delay=4):

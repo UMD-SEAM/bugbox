@@ -123,7 +123,7 @@ class Engine:
         else:
             
             logger.error("There is already a system running under %s", self.live_systems_dir)
-            raise StartUpException("Problem starting application")
+            raise self.StartUpException("Problem starting application")
             
         return
 
@@ -151,14 +151,15 @@ class Engine:
                             "&& echo \"Directory not empty!\" "
                             "&& exit 1 "
                             "|| rm -rf %s"                       %(self.target_system_dir, 
-                                                                   self.target_system_dir)]
+                                                                   self.target_system_dir),
+                            "rm -rf .tmpbuff"]
 
 
             self.execute_commands(stop_script)
 
         else:
             logger.error("attempting to shutdown a system that is not running.")
-            raise ShutDownException("Problem during application shutdown")
+            raise self.ShutDownException("Problem during application shutdown")
 
         return
 

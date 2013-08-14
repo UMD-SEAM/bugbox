@@ -16,4 +16,4 @@ class Target(ApacheTarget):
     application_dir_mapping = [get_path("application"), "/var/www"]
     database_filename = None #get_path("database.sql")
     database_name = None #"drupal_6_14"
-    chroot_environment = "Debian5"
+    chroot_environment = "Debian7"

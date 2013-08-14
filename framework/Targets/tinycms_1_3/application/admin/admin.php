@@ -80,9 +80,9 @@
     
     <!-- Admin Panel Links -->
     <h2 style="font-size:14px;">Admin Options</h2>
-    <a href="?view=admin&do=pages&create=new" rel="modal" tooltip="Create a new page"><img src="ico/new_page.png"></a>
-    <a href="?view=admin&do=pages" rel="modal" tooltip="View a list of pages and manage site pages"><img src="ico/pages.png"></a>
-    <a href="?view=admin&do=settings" rel="modal" tooltip="Modify site settings"><img src="ico/settings.png"></a>
+    <a href="?view=admin&do=pages&create=new" rel="modal" tooltip="Create a new page"><img src="admin/ico/new_page.png"></a>
+    <a href="?view=admin&do=pages" rel="modal" tooltip="View a list of pages and manage site pages"><img src="admin/ico/pages.png"></a>
+    <a href="?view=admin&do=settings" rel="modal" tooltip="Modify site settings"><img src="admin/ico/settings.png"></a>
     
     <!-- TinyCMS News -->
     <h2 style="font-size:14px;">TinyCMS News</h2>

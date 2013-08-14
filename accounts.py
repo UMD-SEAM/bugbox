@@ -7,4 +7,5 @@ accounts = {'wordpress_2_8_3' :      (("admin", "wpadminpw21"),),
 	    'phpaccounts_0_5_3' :    (("phpaccounts@umd.edu", "phpaccountspw21"),),
 	    'phpaddressbook_7_0_0' : (("admin", "secret"),
 				      ("view", "apassword")),
-	    'drupal_7_14' :          (("drupaladmin", "drupaladminpw21"),)}
+	    'drupal_7_14' :          (("drupaladmin", "drupaladminpw21"),),
+	    'tinycms_1_3' :          (("admin", "pass"),)}
