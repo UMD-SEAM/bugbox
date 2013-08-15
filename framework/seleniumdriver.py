@@ -25,7 +25,7 @@ class SeleniumDriver (webdriver.Firefox):
         
         # disable javascript
         if javascript:
-            fp.set_preference("javascript.enabled", False)
+            fp.set_preference("javascript.enabled", True)
 
         # set user-agent string
         if user_agent:
@@ -39,6 +39,8 @@ class SeleniumDriver (webdriver.Firefox):
     def get_element(self, by_xpath=None, by_class=None, by_id=None, by_link_text=None, attempts=4, delay=4):
         #alternatively I could use selenium.webdriver.support.ui import WebDriverWait
 
+        query = ""
+
         if not (by_xpath or by_id or by_link_text or by_class):
             logger.error("get_element missing parameter")
             return
@@ -47,21 +49,25 @@ class SeleniumDriver (webdriver.Firefox):
 
             try:
                 if by_xpath:
+                    query = by_xpath
                     elem = self.find_element_by_xpath(by_xpath)
                     logger.info("Found %s element", by_xpath)
                     return elem
 
                 elif by_class:
+                    query = by_class
                     elem = self.find_element_by_class_name(by_class)
                     logger.info("Found %s element", by_class)
                     return elem
 
                 elif by_id:
+                    query = by_id
                     elem = self.find_element_by_id(by_id)
                     logger.info("Found %s element", by_id)
                     return elem
                 
                 elif by_link_text:
+                    query = by_link_text
                     elem = self.find_element_by_link_text(by_link_text)
                     logger.info("Found %s element", by_link_text)
                     return elem
@@ -73,7 +79,7 @@ class SeleniumDriver (webdriver.Firefox):
                 time.sleep(delay)
 
     
-        raise selenium.common.exceptions.NoSuchElementException
+        raise selenium.common.exceptions.NoSuchElementException("Element not found: %s" % (query,))
 
     def get_alert(self, attempts=4, delay=4):
 
