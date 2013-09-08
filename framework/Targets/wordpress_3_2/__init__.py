@@ -48,9 +48,9 @@ class Target(ApacheTarget):
                 get_path("plugins/cms_tree_page_view_0_8_8"),
                 get_path("plugins/cms_tree_page_view_0_8_8/database.sql"),
                 "/var/www/wordpress/wp-content/plugins/cms-tree-page-view"],
-               ["WP DS FAQ 1.3.2",
-                get_path("plugins/wp_ds_faq_1_3_2"),
-                get_path("plugins/wp_ds_faq_1_3_2/database.sql"),
-                "/var/www/wordpress/wp-content/plugins/wp-ds-faq"]]
+               ["yolink Search Plugin 1.1.4",
+                get_path("plugins/yolink_1_1_4"), 
+                get_path("plugins/yolink_1_1_4/database.sql"),
+                "/var/www/wordpress/wp-content/plugins/yolink-search"]]
 
     chroot_environment = "Debian7"
