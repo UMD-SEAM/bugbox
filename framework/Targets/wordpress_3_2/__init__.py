@@ -51,6 +51,11 @@ class Target(ApacheTarget):
                ["yolink Search Plugin 1.1.4",
                 get_path("plugins/yolink_1_1_4"), 
                 get_path("plugins/yolink_1_1_4/database.sql"),
-                "/var/www/wordpress/wp-content/plugins/yolink-search"]]
+                "/var/www/wordpress/wp-content/plugins/yolink-search"],
+               ["SH Slideshow Plugin 3.1.4",
+                get_path("plugins/sh_slideshow_4_1"),
+                get_path("plugins/sh_slideshow_4_1/database.sql"),
+                "/var/www/wordpress/wp-content/plugins/sh-slideshow"]]
+
 
     chroot_environment = "Debian7"
