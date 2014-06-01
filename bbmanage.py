@@ -17,7 +17,7 @@ logger = logging.getLogger("bbmanage")
 if (hasattr(sys.stdout, 'isatty') and sys.stdout.isatty()):
     ULINE = '\033[4m'
     ENDC = '\033[0m'
-else
+else:
     ULINE = ''
     ENDC = ''
 

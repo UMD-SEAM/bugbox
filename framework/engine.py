@@ -10,9 +10,14 @@ import Targets
 import datetime
 import logging
 
-GRAY = '\033[90m'
-ENDC = '\033[0m'
-ERROR = '\033[91m'
+if (hasattr(sys.stdout, 'isatty') and sys.stdout.isatty()):
+    GRAY = '\033[90m'
+    ENDC = '\033[0m'
+    ERROR = '\033[91m'
+else:
+    GRAY = ''
+    ENDC = ''
+    ERROR = ''
 
 OKLVL = 22
 logger = logging.getLogger("Engine")

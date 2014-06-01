@@ -9,18 +9,32 @@ class ColoredFormatter(logging.Formatter):
 
     def __init__(self, msg):
         logging.Formatter.__init__(self, msg)
-        
-        self.COLORS = {
-            'WARNING' :  '\033[33m',
-            'INFO' :     '\033[34m',
-            'DEBUG' :    '\033[34m',
-            'CRITICAL' : '\033[33m',
-            'ERROR' :    '\033[91m',
-            'OK' :       '\033[92m',
-            'GRAY' :     '\033[90m',
-            'ULINE' :    '\033[4m',
-            'ENDC' :     '\033[0m'
-            }
+
+        if (hasattr(sys.stdout, 'isatty') and sys.stdout.isatty()):
+            self.COLORS = {
+                'WARNING' :  '\033[33m',
+                'INFO' :     '\033[34m',
+                'DEBUG' :    '\033[34m',
+                'CRITICAL' : '\033[33m',
+                'ERROR' :    '\033[91m',
+                'OK' :       '\033[92m',
+                'GRAY' :     '\033[90m',
+                'ULINE' :    '\033[4m',
+                'ENDC' :     '\033[0m'
+                }
+        else:
+            self.COLORS = {
+                'WARNING' :  '',
+                'INFO' :     '',
+                'DEBUG' :    '',
+                'CRITICAL' : '',
+                'ERROR' :    '',
+                'OK' :       '',
+                'GRAY' :     '',
+                'ULINE' :    '',
+                'ENDC' :     ''
+                }
+
         return
 
     def format(self, record):
