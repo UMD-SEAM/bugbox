@@ -4,6 +4,7 @@
 # license that can be found in the LICENSE.TXT file.
 
 import logging
+import sys
 
 class ColoredFormatter(logging.Formatter):
 
