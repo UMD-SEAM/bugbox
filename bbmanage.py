@@ -11,8 +11,15 @@ import os
 
 logger = logging.getLogger("bbmanage")
 
-ULINE = '\033[4m'
-ENDC = '\033[0m'
+# TODO: There is a cleaner way to do this, I am sure.
+# See http://nullege.com/codes/show/src%40g%40r%40grin-1.2.1%40examples%40grinpython.py/111/sys.stdout.isatty/python for one example.
+# Also see https://code.djangoproject.com/ticket/6223
+if (hasattr(sys.stdout, 'isatty') and sys.stdout.isatty()):
+    ULINE = '\033[4m'
+    ENDC = '\033[0m'
+else
+    ULINE = ''
+    ENDC = ''
 
 def usage():
     
