@@ -4,4 +4,4 @@
 # license that can be found in the LICENSE.TXT file.
 
 
-from exploit_verification import ExploitVerification;
+from exploit_verification import ExploitVerification

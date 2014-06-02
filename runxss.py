@@ -19,6 +19,3 @@ for Exploit in Query().get_by_type('XSS'):
     engine.exploit.exploit()
     engine.xdebug_autotrace_off()
     engine.shutdown()
-
-
-

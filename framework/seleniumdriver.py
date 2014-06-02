@@ -11,6 +11,7 @@ import logging
 
 logger = logging.getLogger("SeleniumDriver")
 
+
 class SeleniumDriver (webdriver.Firefox):
     """This is a class that encapsulates the selenium webdriver, adding some useful functionality."""
 
@@ -22,7 +23,7 @@ class SeleniumDriver (webdriver.Firefox):
 
         webdriver.Firefox.__init__(self)
         fp = webdriver.FirefoxProfile()
-        
+
         # disable javascript
         if javascript:
             fp.set_preference("javascript.enabled", True)
@@ -33,11 +34,8 @@ class SeleniumDriver (webdriver.Firefox):
 
         webdriver.Firefox.__init__(self, firefox_profile=fp)
 
-            
-        return
-
     def get_element(self, by_xpath=None, by_class=None, by_id=None, by_link_text=None, attempts=4, delay=4):
-        #alternatively I could use selenium.webdriver.support.ui import WebDriverWait
+        # alternatively I could use selenium.webdriver.support.ui import WebDriverWait
 
         query = ""
 
@@ -65,7 +63,7 @@ class SeleniumDriver (webdriver.Firefox):
                     elem = self.find_element_by_id(by_id)
                     logger.info("Found %s element", by_id)
                     return elem
-                
+
                 elif by_link_text:
                     query = by_link_text
                     elem = self.find_element_by_link_text(by_link_text)
@@ -73,16 +71,14 @@ class SeleniumDriver (webdriver.Firefox):
                     return elem
 
                 break
-            
+
             except selenium.common.exceptions.NoSuchElementException:
                 logger.warning("Element not found... try again (%s)", attempts-i)
                 time.sleep(delay)
 
-    
         raise selenium.common.exceptions.NoSuchElementException("Element not found: %s" % (query,))
 
     def get_alert(self, attempts=4, delay=4):
-
         for i in range(0, attempts):
             alert = self.switch_to_alert()
             try:
@@ -94,12 +90,9 @@ class SeleniumDriver (webdriver.Firefox):
 
         raise selenium.common.exceptions.NoAlertPresentException
 
-
     def cleanup(self):
         self.quit()
-        #self.close()
+        # self.close()
         if self.display:
             self.display.stop()
         return
-
-

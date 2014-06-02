@@ -5,25 +5,27 @@
 # license that can be found in the LICENSE.TXT file.
 
 
-import unittest,os
+import unittest
+import os
 from tests import ExploitVerification
 from framework import Query
 import bblogger
 
-import logging 
+import logging
 
 logging = logging.getLogger("testbb")
+
 
 def main():
 
     suite = unittest.TestSuite()
     loader = unittest.TestLoader()
-    
-    for exploit in Query().exploits:        
+
+    for exploit in Query().exploits:
         suite.addTest(ExploitVerification(exploit))
-                
+
     testRunner = unittest.runner.TextTestRunner()
     testRunner.run(suite)
-    
+
 if __name__ == "__main__":
     main()

@@ -11,7 +11,7 @@ import logging
 
 logger = logging.getLogger("runall")
 
-for Exploit in Query().get_by_re('Type','.*'):
+for Exploit in Query().get_by_re('Type', '.*'):
     logger.info("Starting exploit %s", Exploit.attributes['Name'])
     engine = Engine(Exploit(), config)
     engine.startup()
@@ -19,6 +19,3 @@ for Exploit in Query().get_by_re('Type','.*'):
     engine.exploit.exploit()
     engine.xdebug_autotrace_off()
     engine.shutdown()
-
-
-
