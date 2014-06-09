@@ -198,7 +198,7 @@ class Engine:
             print "[%sError%s]: attempting to turn off autotrace for a system that is not running" % (ERROR, ENDC)
 
     def execute_command(self, command):
-        logger.info("EXEC: %s%s%s", GRAY, cmd, ENDC)
+        logger.info("EXEC: %s%s%s", GRAY, command, ENDC)
         return os.system(command)
 
     def execute_commands(self, cmdlist):
