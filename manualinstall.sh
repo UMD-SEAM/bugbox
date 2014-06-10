@@ -45,6 +45,7 @@ git clone https://github.com/rapid7/metasploit-framework.git $MSF_DIR
 (cd $MSF_DIR && patch -f -R -p1 < $PATCH_FILE)
 
 echo "Configuring MYSQL"
-RAND_PASSWORD=`date +%s | sha256sum | base64 | head -c 16`
+#RAND_PASSWORD=`date +%s | sha256sum | base64 | head -c 16`
+RAND_PASSWORD=connection452
 echo $RAND_PASSWORD > .mysqlpass
 echo -e "CREATE USER 'dbroot'@'localhost' IDENTIFIED BY '$RAND_PASSWORD';\nGRANT ALL PRIVILEGES ON *.* TO 'dbroot'@'localhost' WITH GRANT OPTION;" | mysql --defaults-file=/etc/mysql/debian.cnf
