@@ -3,3 +3,6 @@
 *.pyc
 framework/chroot_envs
 traces/*
+.lock
+.mysqlpass
+live_systems/*
