@@ -105,7 +105,6 @@ class Engine:
         # before we try to start ours.
         # TODO: Architecturally, this isn't the best place - but it fits best for now...
         retvalue = os.system("sudo service apache2 status")
-        print retvalue
         if retvalue == 0:
             logger.error("There is already a web server running! You need to stop your web server.")
             logger.error("This program will not stop your existing webserver, because that is a Very Bad Idea (TM)")
