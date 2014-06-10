@@ -11,6 +11,14 @@ import os
 
 logger = logging.getLogger("bbmanage")
 
+# Make sure we have permission to do the stuff we want!
+euid = os.geteuid()
+if euid != 0:
+    logger.info("Script not started as root. Running sudo..")
+    args = ['sudo', sys.executable] + sys.argv + [os.environ]
+    # the next line replaces the currently-running process with the sudo
+    os.execlpe('sudo', *args)
+
 # TODO: There is a cleaner way to do this, I am sure.
 # See http://nullege.com/codes/show/src%40g%40r%40grin-1.2.1%40examples%40grinpython.py/111/sys.stdout.isatty/python for one example.
 # Also see https://code.djangoproject.com/ticket/6223
