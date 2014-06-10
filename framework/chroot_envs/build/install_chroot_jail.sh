@@ -3,7 +3,15 @@
 # Use of this source code is governed by a BSD-style
 # license that can be found in the LICENSE.TXT file.
 
-CHROOT_ROOT=/usr/lib/bugbox/framework/chroot_envs
+CHROOT_ROOT_DEFAULT=/usr/lib/bugbox/framework/chroot_envs
+
+if [ $# -eq 2 ]
+then
+    CHROOT_ROOT=$2
+else
+    CHROOT_ROOT=CHROOT_ROOT_DEFAULT
+fi
+
 INSTALL_ROOT=$CHROOT_ROOT/build
 RESOURCES_ROOT=$INSTALL_ROOT/resources
 PYTHON_DEPS=$RESOURCES_ROOT/pythondeps.pip
