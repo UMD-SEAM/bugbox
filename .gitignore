@@ -2,6 +2,7 @@
 
 *.pyc
 framework/chroot_envs
+!framework/chroot_envs/build
 traces/*
 .lock
 .mysqlpass
