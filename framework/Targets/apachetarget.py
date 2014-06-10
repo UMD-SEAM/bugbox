@@ -47,6 +47,8 @@ class ApacheTarget(Target):
 
     def get_start_service_script(self, target_system_dir):
 
+        import config
+
 	if not (target_system_dir and 
 		self.application_dir_mapping):
 	    raise ValueError
@@ -61,9 +63,9 @@ class ApacheTarget(Target):
 			"while [ \"`pgrep apache2`\" = \"\" ]; do sleep 0.5; done;"] # wait for apache
         
         if self.plugin_db:
-            start_script += ["mysql -u dbroot -pconnection452 < %s" %(self.plugin_db,)]
+            start_script += ["mysql -u dbroot -p%s < %s" %(config.mysql_password, self.plugin_db,)]
         elif self.database_name:
-            start_script += ["mysql -u dbroot -pconnection452 < %s" %(self.database_filename,)]
+            start_script += ["mysql -u dbroot -p%s < %s" %(config.mysql_password, self.database_filename,)]
 
         if self.plugin_src: 
             start_script += ["mkdir %s/%s"            %(target_system_dir,

@@ -17,3 +17,7 @@ xdebug_dir =  bugbox_root + "/framework/xdebug"
 
 # The desired location of xdebug traces
 traces_dir = bugbox_root + "/traces"
+
+# The generated and stored MySQL password
+with open(".mysqlpass") as mypass:
+    mysql_password = next(mypass).rstrip()
