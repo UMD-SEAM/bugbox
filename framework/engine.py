@@ -100,6 +100,18 @@ class Engine:
 
     def startup(self):
         logger.info("Running application startup for exploit %s", self.exploitname)
+
+        # Check to make sure that the System's Apache server isn't running
+        # before we try to start ours.
+        # TODO: Architecturally, this isn't the best place - but it fits best for now...
+        retvalue = os.system("sudo service apache2 status")
+        print retvalue
+        if retvalue == 0:
+            logger.error("There is already a web server running! You need to stop your web server.")
+            logger.error("This program will not stop your existing webserver, because that is a Very Bad Idea (TM)")
+            raise self.StartUpException("Problem starting application")
+
+
         if not get_running():
             create_lockfile(self.exploitname)
             start_script = ["mkdir %s"                              % (self.target_system_dir,),
