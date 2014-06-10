@@ -8,6 +8,26 @@ if (( $EUID != 0 )); then
     exit
 fi
 
+# First, check for packaged dependencies...
+
+check_pkg ()
+{
+    PKG_OK=$(dpkg-query -W --showformat='${Status}\n' $1 | grep "install ok installed")
+    echo Checking for "$1": $PKG_OK
+    if [ "" = "$PKG_OK" ]; then
+        echo -e "Dependency \"$1\" not found! Installing..."
+        apt-get --force-yes --yes install $1
+    fi
+}
+
+PACKAGES=( "python2.7-minimal" "mysql-server-5.5" "debootstrap" "python-pip" "openjdk-6-jre" "xvfb" "iceweasel" "git" )
+
+for p in "${PACKAGES[@]}"; do
+    check_pkg $p
+done
+
+# Now that we know we have our dependencies, let's get started...
+
 CHROOT_JAILS=(Debian5 Debian7)
 BUGBOX_ROOT=$( cd "$( dirname "$0" )" && pwd )
 RESOURCES=$BUGBOX_ROOT/framework/chroot_envs/build/resources
